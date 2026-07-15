@@ -1,0 +1,74 @@
+# Chinawheely robots.txt - Security Enhanced
+# Last updated: 2026-07-09
+
+User-agent: *
+Allow: /
+
+# Crawl-delay for slower bots
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://www.Chinawheely.com/sitemap.xml
+
+# === SECURITY: Disallow sensitive paths ===
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /api
+Disallow: /.env
+Disallow: /.git/
+Disallow: /.git
+Disallow: /.svn/
+Disallow: /.svn
+Disallow: /.htaccess
+Disallow: /.htpasswd
+Disallow: /config/
+Disallow: /config
+Disallow: /test/
+Disallow: /test
+Disallow: /tmp/
+Disallow: /tmp
+Disallow: /backup/
+Disallow: /backup
+Disallow: /cgi-bin/
+Disallow: /cgi-bin
+Disallow: /php/
+Disallow: /php
+Disallow: /wp-admin/
+Disallow: /wp-admin
+Disallow: /wp-login.php
+Disallow: /xmlrpc.php
+Disallow: /server-status
+Disallow: /server-info
+Disallow: /error/
+Disallow: /logs/
+Disallow: /private/
+
+# === Allow main pages for indexing ===
+Allow: /index.html
+Allow: /services.html
+Allow: /about.html
+Allow: /contact.html
+Allow: /booking.html
+Allow: /help.html
+Allow: /cancellation.html
+Allow: /partners.html
+Allow: /privacy.html
+Allow: /terms.html
+Allow: /cookies.html
+
+# === Block bad bots ===
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /

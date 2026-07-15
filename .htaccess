@@ -1,0 +1,91 @@
+# Chinawheely Apache Security Configuration
+# Place this file in the root directory of your website
+
+# === HTTPS REDIRECT ===
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+# === SECURITY HEADERS ===
+<IfModule mod_headers.c>
+  # Content Security Policy
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;"
+  
+  # Prevent XSS attacks
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Prevent content type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Prevent clickjacking
+  Header always set X-Frame-Options "DENY"
+  
+  # Referrer policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Permissions policy
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+  
+  # HSTS (HTTP Strict Transport Security)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  
+  # Remove server info
+  Header always unset X-Powered-By
+  Header always unset Server
+</IfModule>
+
+# === HIDE SERVER INFO ===
+ServerTokens Prod
+ServerSignature Off
+
+# === DISABLE SERVER-SIDE INCLUDES ===
+Options -Includes
+
+# === PREVENT DIRECTORY LISTING ===
+Options -Indexes
+
+# === BLOCK SENSITIVE FILES ===
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|git|svn|htaccess|htpasswd|log|sh|bak|config|inc|sql|sqlite)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# === BLOCK COMMON ATTACK PATHS ===
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_URI} (php|asp|aspx|jsp|cgi|pl) [NC]
+  RewriteRule .* - [F,L]
+  
+  # Block SQL injection attempts
+  RewriteCond %{QUERY_STRING} (%27|%22|%3B|<script>|union|select|insert|update|delete|drop|create) [NC]
+  RewriteRule .* - [F,L]
+  
+  # Block path traversal
+  RewriteCond %{REQUEST_URI} \.\./ [NC]
+  RewriteRule .* - [F,L]
+</IfModule>
+
+# === CACHE CONTROL ===
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 1 hour"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpg "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# === COMPRESSION ===
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json
+</IfModule>

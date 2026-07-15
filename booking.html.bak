@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Private Car & Airport Transfer in China | Chinawheely</title>
+  <meta name="description" content="Book your airport transfer or private car in China in under 2 minutes. Fixed price, English-speaking driver, free flight tracking. No account required.">
+  <meta name="keywords" content="book private car China, airport transfer booking, China car service reservation, Beijing airport pickup book, Shanghai private driver hire">
+  <link rel="canonical" href="https://www.Chinawheely.com/booking.html">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Book Private Car & Airport Transfer in China | Chinawheely">
+  <meta property="og:description" content="Book airport transfer or private car service in China in under 2 minutes. English-speaking driver, fixed price, free flight tracking.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.Chinawheely.com/booking.html">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Book Private Car & Airport Transfer in China | Chinawheely">
+  <meta name="twitter:description" content="Book airport transfer or private car service in China in under 2 minutes. English-speaking driver, fixed price, free flight tracking.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Book Private Car & Airport Transfer in China",
+    "description": "Book airport transfer or private car service in China in under 2 minutes. English-speaking driver, fixed price, free flight tracking.",
+    "url": "https://www.Chinawheely.com/booking.html",
+    "mainEntity": {
+      "@type": "Service",
+      "name": "China Private Car Booking",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Chinawheely",
+        "telephone": "+86-155-2777-1775",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Wuhan",
+          "addressRegion": "Hubei",
+          "addressCountry": "CN"
+        }
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "China"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Private Car Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Airport Transfers",
+              "description": "Private airport pickup and drop-off"
+            },
+            "price": "51.00",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "City Charter Car",
+              "description": "Full day private car with driver"
+            },
+            "price": "345.00",
+            "priceCurrency": "USD"
+          }
+        ]
+      }
+    }
+  }
+  </script>
+  <style>
+    /* ===== Payment Modal ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: var(--space-4);
+    }
+    .modal-overlay.active { display: flex; }
+    .payment-modal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+    .payment-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-6) var(--space-4);
+      border-bottom: 1px solid var(--color-gray-100);
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 2;
+    }
+    .payment-modal-header h3 {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin: 0;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--color-gray-400);
+      line-height: 1;
+      padding: 0;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+      transition: background var(--transition-fast);
+    }
+    .modal-close:hover { background: var(--color-gray-100); color: var(--color-gray-700); }
+    .payment-modal-body { padding: var(--space-5) var(--space-6); }
+
+    /* Order summary */
+    .order-summary {
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+    .order-summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--text-sm);
+      color: var(--color-gray-600);
+      padding: var(--space-1) 0;
+    }
+    .order-summary-row.total {
+      font-weight: 700;
+      color: var(--color-gray-900);
+      font-size: var(--text-base);
+      border-top: 1px dashed var(--color-gray-200);
+      margin-top: var(--space-2);
+      padding-top: var(--space-2);
+    }
+
+    /* Price display */
+    .price-display {
+      text-align: center;
+      margin-bottom: var(--space-5);
+    }
+    .price-usd {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+    .price-cny {
+      font-size: var(--text-lg);
+      color: var(--color-gray-500);
+      margin-top: var(--space-1);
+    }
+    .price-cny .cny-amount { font-weight: 700; color: var(--color-gray-700); }
+
+    /* Payment tabs */
+    .payment-tabs {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+    .payment-tab {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      background: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: var(--text-sm);
+      text-align: center;
+      transition: all var(--transition-fast);
+    }
+    .payment-tab.active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-50);
+      color: var(--color-primary);
+    }
+    .payment-tab:hover:not(.active) { border-color: var(--color-gray-300); }
+    .payment-tab-content { display: none; }
+    .payment-tab-content.active { display: block; }
+
+    /* QR section */
+    .qr-section {
+      text-align: center;
+      padding: var(--space-4);
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+    }
+    .qr-section img {
+      width: 180px; height: 180px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+    }
+    .qr-note {
+      background: #fff9c4;
+      border-left: 4px solid #f9a825;
+      padding: var(--space-3) var(--space-4);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: var(--text-sm);
+      color: var(--color-gray-700);
+      margin-top: var(--space-3);
+      text-align: left;
+    }
+
+    /* WhatsApp in modal */
+    .modal-whatsapp {
+      margin-top: var(--space-5);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--color-gray-100);
+      text-align: center;
+    }
+    .modal-whatsapp img {
+      width: 120px; height: 120px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+    }
+    .modal-whatsapp p { font-size: var(--text-sm); color: var(--color-gray-600); margin: var(--space-1) 0; }
+    .modal-whatsapp a { color: var(--color-primary); font-weight: 600; }
+
+    /* Contact info */
+    .modal-contact {
+      margin-top: var(--space-4);
+      padding: var(--space-3);
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      text-align: center;
+      font-size: var(--text-sm);
+      color: var(--color-gray-600);
+    }
+    .modal-contact a { color: var(--color-primary); font-weight: 600; }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      margin-top: var(--space-4);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;">
+        <span class="nav-brand-text">之二虫<sup>®</sup></span>
+        <span class="nav-brand-sep">|</span>
+        <span>Chinawheely</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#cities">Cities</a></li>
+        <li><a href="index.html#how-it-works">How It Works</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-cta">
+        <span class="nav-phone">+86-15527771775</span>
+      </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" style="display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);z-index:999;padding:2rem;flex-direction:column;gap:1.5rem;">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="index.html#cities">Cities</a>
+  <a href="booking.html">Book Now</a>
+</div>
+
+  <!-- Booking Section -->
+  <section class="booking-section">
+    <div class="container booking-container">
+      <!-- Booking Form -->
+      <div class="booking-form-card">
+        <h2 style="margin-bottom:var(--space-2);">Book Your Ride</h2>
+        <p style="color:var(--color-gray-500);margin-bottom:var(--space-8);">Fill in your details below. You'll get a fixed price instantly.</p>
+
+        <form id="bookingForm" action="https://formsubmit.co/ef5e07ff710b617bdc42401c730e609b" method="POST" novalidate>
+          <input type="hidden" name="_next" value="https://www.Chinawheely.com/thank-you.html">
+          <input type="hidden" name="_subject" value="New Booking - Chinawheely">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="price" id="formPrice" value="">
+          <input type="hidden" name="routeSummary" id="formRouteSummary" value="">
+          <input type="hidden" name="serviceTypeLabel" id="formServiceType" value="">
+          <input type="hidden" name="vehicleLabel" id="formVehicleLabel" value="">
+          <!-- Honeypot field - hidden from humans, traps bots -->
+          <div style="position:absolute;left:-9999px;opacity:0;">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <!-- Service Type -->
+          <div class="form-group">
+            <label class="form-label">Service Type</label>
+            <div class="form-row" style="gap:var(--space-3);">
+              <label class="service-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="serviceType" value="airport" checked style="display:none;" onchange="updateForm()">
+                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">✈</div>
+                  <div style="font-weight:600;font-size:var(--text-sm);">Airport Transfer</div>
+                </div>
+              </label>
+              <label class="service-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="serviceType" value="city" style="display:none;" onchange="updateForm()">
+                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">🚗</div>
+                  <div style="font-weight:600;font-size:var(--text-sm);">City / Hourly</div>
+                </div>
+              </label>
+              <label class="service-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="serviceType" value="intercity" style="display:none;" onchange="updateForm()">
+                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">🌄</div>
+                  <div style="font-weight:600;font-size:var(--text-sm);">Intercity</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- City -->
+          <div class="form-group">
+            <label class="form-label" for="city">City</label>
+            <select class="form-select" id="city" name="city" required onchange="updateAirportInfo()">
+              <option value="" disabled selected>Select your city</option>
+              <optgroup label="Top Entry Points (Most Popular)">
+                <option value="shanghai">Shanghai — #1 International Entry</option>
+                <option value="beijing">Beijing — Capital & Great Wall</option>
+                <option value="xian">Xi'an — Terracotta Warriors</option>
+                <option value="chengdu">Chengdu — Pandas & Culture</option>
+                <option value="guangzhou">Guangzhou — Canton & Business</option>
+                <option value="hangzhou">Hangzhou — West Lake</option>
+                <option value="shenzhen">Shenzhen — Tech Hub</option>
+                <option value="wuhan">Wuhan — Central China Hub</option>
+              </optgroup>
+              <optgroup label="Other Major Cities">
+                <option value="nanjing">Nanjing</option>
+                <option value="chongqing">Chongqing</option>
+                <option value="suzhou">Suzhou</option>
+                <option value="qingdao">Qingdao</option>
+                <option value="xiamen">Xiamen</option>
+                <option value="kunming">Kunming</option>
+                <option value="tianjin">Tianjin</option>
+                <option value="dalian">Dalian</option>
+                <option value="changsha">Changsha</option>
+                <option value="zhengzhou">Zhengzhou</option>
+                <option value="harbin">Harbin</option>
+                <option value="jinan">Jinan</option>
+                <option value="wenzhou">Wenzhou</option>
+                <option value="changchun">Changchun</option>
+                <option value="shijiazhuang">Shijiazhuang</option>
+                <option value="changzhou">Changzhou</option>
+                <option value="quanzhou">Quanzhou</option>
+                <option value="nanning">Nanning</option>
+                <option value="guiyang">Guiyang</option>
+                <option value="nanchang">Nanchang</option>
+                <option value="nantong">Nantong</option>
+                <option value="jinhua">Jinhua</option>
+                <option value="xuzhou">Xuzhou</option>
+                <option value="taiyuan">Taiyuan</option>
+                <option value="jiaxing">Jiaxing</option>
+                <option value="yantai">Yantai</option>
+                <option value="baoding">Baoding</option>
+                <option value="zhuhai">Zhuhai</option>
+                <option value="zhongshan">Zhongshan</option>
+                <option value="lanzhou">Lanzhou</option>
+                <option value="linyi">Linyi</option>
+                <option value="weifang">Weifang</option>
+                <option value="shaoxing">Shaoxing</option>
+                <option value="huizhou">Huizhou</option>
+            </optgroup>
+            </select>
+          </div>
+
+          <!-- Airport Fields -->
+          <div class="form-group" id="airportFields">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="airport">Airport *</label>
+                <select class="form-select" id="airport" name="airport" required onchange="updateAirportInfo()">
+                  <option value="" disabled selected>Select airport</option>
+                </select>
+                <p class="text-small" id="airportDistanceInfo" style="color:var(--color-gray-400);margin-top:var(--space-1);margin-bottom:0;"></p>
+              </div>
+              <div>
+                <label class="form-label" for="transferDirection">Transfer Direction *</label>
+                <select class="form-select" id="transferDirection" name="transferDirection" required onchange="updateForm()">
+                  <option value="" disabled selected>Select direction</option>
+                  <option value="airport-to-hotel">Airport → Hotel (Pickup)</option>
+                  <option value="hotel-to-airport">Hotel → Airport (Drop-off)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:var(--space-4);">
+              <label class="form-label" for="hotelAddress">Hotel / Destination Address *</label>
+              <input type="text" class="form-input" id="hotelAddress" name="hotelAddress" required placeholder="Hotel name or full address (e.g., Park Hyatt Shanghai, 100 Century Avenue)" oninput="updateForm()" onchange="updateForm()">
+            </div>
+            <div class="form-group" style="margin-top:var(--space-4);">
+              <label class="form-label" for="distanceRange">Approximate Distance (km) *</label>
+              <select class="form-select" id="distanceRange" name="distanceRange" required onchange="this.dataset.userChanged='true'; updateForm();">
+                <option value="" disabled selected>Select distance range</option>
+                <option value="0-30">0–30 km (≈ $35–$50 Economy)</option>
+                <option value="30-50">30–50 km (≈ $45–$65 Economy)</option>
+                <option value="50-80">50–80 km (≈ $55–$80 Economy)</option>
+                <option value="80+">80+ km (≈ $70–$100 Economy)</option>
+              </select>
+              <p class="text-small" style="color:var(--color-gray-400);margin-top:var(--space-1);">Distance is pre-filled based on airport. Adjust if your hotel is far from the city center.</p>
+            </div>
+          </div>
+
+          <div class="form-group" id="cityFields" style="display:none;">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="hours">Hours Needed</label>
+                <select class="form-select" id="hours" name="hours" onchange="updateForm()">
+                  <option value="4">4 hours</option>
+                  <option value="8" selected>8 hours</option>
+                  <option value="12">12 hours</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="cityDistanceRange">Trip Distance (km)</label>
+                <select class="form-select" id="cityDistanceRange" name="cityDistanceRange" onchange="updateForm()">
+                  <option value="0-150" selected>Within City (0–150 km)</option>
+                  <option value="150-300">Suburban (150–300 km)</option>
+                  <option value="300-500">Outside City (300–500 km)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:var(--space-4);">
+              <div style="flex:1;">
+                <label class="form-label" for="cityRoute">Route / Area</label>
+                <input type="text" class="form-input" id="cityRoute" name="cityRoute" placeholder="e.g., Downtown sightseeing, Great Wall, Zhouzhuang">
+                <p class="text-small" style="color:var(--color-gray-400);margin-top:var(--space-1);">Tell us where you're going and we'll estimate the distance range.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" id="intercityFields" style="display:none;">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="fromCity">From</label>
+                <input type="text" class="form-input" id="fromCity" name="fromCity" placeholder="e.g., Beijing">
+              </div>
+              <div>
+                <label class="form-label" for="toCity">To</label>
+                <input type="text" class="form-input" id="toCity" name="toCity" placeholder="e.g., Great Wall">
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Address (conditional) -->
+          <div class="form-group" id="customAddressGroup" style="display:none;">
+            <label class="form-label" for="customAddress">Custom Address</label>
+            <input type="text" class="form-input" id="customAddress" name="customAddress" placeholder="Hotel name or full address">
+          </div>
+
+          <!-- Date & Time -->
+          <div class="form-group">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="date">Date</label>
+                <input type="date" class="form-input" id="date" name="date" required>
+              </div>
+              <div>
+                <label class="form-label" for="time">Time</label>
+                <input type="time" class="form-input" id="time" name="time" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vehicle Type -->
+          <div class="form-group">
+            <label class="form-label">Vehicle Type</label>
+            <div class="form-row" style="gap:var(--space-3);">
+              <label class="vehicle-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="vehicle" value="economy" checked style="display:none;" onchange="updateForm()">
+                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">Economy</div>
+                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Sedan · 3 pax · 2 bags</div>
+                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="50">From $50</div>
+                </div>
+              </label>
+              <label class="vehicle-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="vehicle" value="business" style="display:none;" onchange="updateForm()">
+                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">Business</div>
+                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Premium · 3 pax · 2 bags</div>
+                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="80">From $80</div>
+                </div>
+              </label>
+              <label class="vehicle-option" style="flex:1;cursor:pointer;">
+                <input type="radio" name="vehicle" value="mpv" style="display:none;" onchange="updateForm()">
+                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
+                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">MPV</div>
+                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Van · 6 pax · 4 bags</div>
+                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="105">From $105</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Passenger Details -->
+          <div class="form-group">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="passengers">Passengers</label>
+                <select class="form-select" id="passengers" name="passengers">
+                  <option value="1">1</option>
+                  <option value="2" selected>2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7+">7+</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="luggage">Large Bags</label>
+                <select class="form-select" id="luggage" name="luggage">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2" selected>2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flight Details (conditional) -->
+          <div class="form-group" id="flightGroup">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="flightNumber">Flight Number (optional)</label>
+                <input type="text" class="form-input" id="flightNumber" name="flightNumber" placeholder="e.g., CA981">
+              </div>
+              <div>
+                <label class="form-label" for="airline">Airline (optional)</label>
+                <input type="text" class="form-input" id="airline" name="airline" placeholder="e.g., Air China">
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Details -->
+          <div class="form-group">
+            <h4 style="margin-bottom:var(--space-4);font-size:var(--text-lg);">Contact Information</h4>
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="firstName">First Name *</label>
+                <input type="text" class="form-input" id="firstName" name="firstName" required placeholder="John">
+              </div>
+              <div>
+                <label class="form-label" for="lastName">Last Name *</label>
+                <input type="text" class="form-input" id="lastName" name="lastName" required placeholder="Smith">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-row">
+              <div>
+                <label class="form-label" for="email">Email *</label>
+                <input type="email" class="form-input" id="email" name="email" required placeholder="15527771775@qq.com">
+              </div>
+              <div>
+                <label class="form-label" for="phone">Phone / WhatsApp *</label>
+                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="+1 234 567 8900">
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Requests -->
+          <div class="form-group">
+            <label class="form-label" for="notes">Special Requests (optional)</label>
+            <textarea class="form-textarea" id="notes" name="notes" placeholder="Child seat needed, wheelchair accessibility, specific meeting point, etc."></textarea>
+          </div>
+
+          <!-- Extras -->
+          <div class="form-group">
+            <label class="form-label">Add-ons</label>
+            <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
+                <input type="checkbox" name="extras" value="childseat" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
+                <span>Child / Baby Seat <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Free)</span></span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
+                <input type="checkbox" name="extras" value="meetgreet" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
+                <span>Name Board Meet & Greet <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Included)</span></span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
+                <input type="checkbox" name="extras" value="wifi" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
+                <span>In-Car WiFi <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Business+ only, Free)</span></span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-large" style="width:100%;margin-top:var(--space-4);">
+            Book
+          </button>
+          <p class="text-small text-center" style="margin-top:var(--space-4);color:var(--color-gray-400);">
+            Pay with PayPal, Alipay, or Alipay. No credit card required. <br>
+            CNY pricing available for domestic Chinese payments.
+          </p>
+        </form>
+      </div>
+
+      <!-- Booking Summary -->
+      <div class="booking-summary">
+        <h3>Booking Summary</h3>
+        <div id="summaryContent">
+          <div class="booking-summary-item">
+            <span>Service</span>
+            <span id="summaryService">Airport Transfer</span>
+          </div>
+          <div class="booking-summary-item">
+            <span>City</span>
+            <span id="summaryCity">-</span>
+          </div>
+          <div class="booking-summary-item">
+            <span>Route</span>
+            <span id="summaryRoute">-</span>
+          </div>
+          <div class="booking-summary-item">
+            <span>Date & Time</span>
+            <span id="summaryDateTime">-</span>
+          </div>
+          <div class="booking-summary-item">
+            <span>Vehicle</span>
+            <span id="summaryVehicle">Economy</span>
+          </div>
+          <div class="booking-summary-item">
+            <span>Passengers</span>
+            <span id="summaryPassengers">2</span>
+          </div>
+          <div class="booking-summary-item" id="summaryExtrasRow" style="display:none;">
+            <span>Add-ons</span>
+            <span id="summaryExtras">-</span>
+          </div>
+        </div>
+        <div class="booking-summary-total">
+          <span>Estimated Total</span>
+          <span id="summaryPrice">$50</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:rgba(255,255,255,0.6);margin-top:var(--space-4);">
+          Final quote confirmed after booking. PayPal, Alipay & Alipay accepted.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+    <!-- Travel Essentials -->
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Travel Essentials for Your China Trip</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Make your journey smoother with these essential services.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-accent);">
+          <div style="font-size:3rem;margin-bottom:var(--space-4);">📶</div>
+          <h4>Mobile Pocket Wi-Fi</h4>
+          <p style="margin-top:var(--space-3);">Stay connected anywhere in China with a pocket Wi-Fi device. Pre-book online and pick up at the airport or have it delivered to your hotel.</p>
+          <a href="https://www.chinawifigo.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Wi-Fi at ChinaWiFiGo</a>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-primary);">
+          <div style="font-size:3rem;margin-bottom:var(--space-4);">🗣️</div>
+          <h4>English-Speaking Guide</h4>
+          <p style="margin-top:var(--space-3);">Explore China with a professional English-speaking guide. Custom tours, skip-the-line access, and insider knowledge.</p>
+          <a href="https://www.vipchinaguide.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Guide at VIPChinaGuide</a>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-info);">
+          <div style="font-size:3rem;margin-bottom:var(--space-4);">🏥</div>
+          <h4>Medical Services</h4>
+          <p style="margin-top:var(--space-3);">Add a health checkup, dental cleaning, or TCM treatment to your trip. China medical services cost 70% less than in the US or Europe.</p>
+          <a href="https://www.mediescortchina.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Medical at MediEscortChina</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <div class="footer-brand-icon">CW</div>
+            <span>Chinawheely</span>
+          </div>
+          <p class="footer-desc">Professional airport transfers and private car service across China. Licensed by 武汉市之二虫文旅有限公司.</p>
+        </div>
+        <div>
+          <div class="footer-title">Quick Links</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Contact</div>
+          <ul class="footer-links">
+            <li><a href="mailto:15527771775@qq.com">15527771775@qq.com</a></li>
+            <li><a href="tel:+86-15527771775">+86-15527771775</a></li>
+            <li><a href="#" data-action="open-whatsapp">WhatsApp</a></li>
+            <li><a href="#">WeChat</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-links-bar" style="margin-bottom:var(--space-8);border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--space-8);">
+        <div class="footer-title" style="margin-bottom:var(--space-3);">Friendly Links</div>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-4) var(--space-6);">
+          <a href="https://www.vipchinaguide.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">VIPChinaGuide导游服务</a>
+          <a href="https://www.Chinawheely.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">Chinawheely用车服务</a>
+          <a href="https://www.MediEscortChina.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">MediEscortChina入境医疗服务</a>
+          <a href="https://www.ChinaWiFiGo.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">ChinaWiFiGo中国口袋Wi-Fi服务</a>
+          <a href="https://www.wuhan.video" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">武汉视频指南</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyright">© 2026 Chinawheely. Operated by 武汉市之二虫文旅有限公司. All rights reserved. License: L-HUB-101603.</div>
+        <div class="footer-legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastMessage">Message</span></div>
+
+  <!-- Payment Modal -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="payment-modal">
+      <div class="payment-modal-header">
+        <h3>Complete Your Booking</h3>
+        <button type="button" class="modal-close" data-action="close-payment">&times;</button>
+      </div>
+      <div class="payment-modal-body">
+        <!-- Order Summary -->
+        <div class="order-summary" id="modalOrderSummary">
+          <div class="order-summary-row"><span>Service</span><span id="modalService">-</span></div>
+          <div class="order-summary-row"><span>City</span><span id="modalCity">-</span></div>
+          <div class="order-summary-row"><span>Route</span><span id="modalRoute">-</span></div>
+          <div class="order-summary-row"><span>Date & Time</span><span id="modalDateTime">-</span></div>
+          <div class="order-summary-row"><span>Vehicle</span><span id="modalVehicle">-</span></div>
+          <div class="order-summary-row"><span>Passengers</span><span id="modalPassengers">-</span></div>
+          <div class="order-summary-row total"><span>Estimated Total</span><span id="modalPrice">-</span></div>
+        </div>
+
+        <!-- Price Display -->
+        <div class="price-display">
+          <div class="price-usd" id="modalPriceUsd">$0</div>
+          <div class="price-cny">≈ <span class="cny-amount" id="modalPriceCny">¥0</span> CNY</div>
+        </div>
+
+        <!-- Payment Tabs -->
+        <div class="payment-tabs">
+          <button type="button" class="payment-tab active" data-action="switch-payment" data-tab="paypal">PayPal</button>
+          <button type="button" class="payment-tab" data-action="switch-payment" data-tab="alipay">Alipay</button>
+        </div>
+
+        <!-- PayPal Content -->
+        <div class="payment-tab-content active" id="tab-paypal">
+          <div class="qr-section">
+            <img loading="lazy" src="images/pay-paypal-qr.png" alt="PayPal QR Code">
+            <p style="font-size:var(--text-sm);color:var(--color-gray-600);">Scan with PayPal app to pay</p>
+            <div class="qr-note">
+              <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
+            </div>
+          </div>
+        </div>
+
+        <!-- Alipay Content -->
+        <div class="payment-tab-content" id="tab-alipay">
+          <div class="qr-section">
+            <img loading="lazy" src="images/pay-alipay-qr.png" alt="Alipay QR Code">
+            <p style="font-size:var(--text-sm);color:var(--color-gray-600);">Scan with Alipay app to pay</p>
+            <div class="qr-note">
+              <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp Section -->
+        <div class="modal-whatsapp">
+          <p><strong>Need help?</strong> Chat with us on WhatsApp</p>
+          <img loading="lazy" src="images/whatsapp-qr.png" alt="WhatsApp QR Code">
+          <p>📱 Scan to chat with us on WhatsApp</p>
+          <p>Or click to open: <a href="https://wa.me/8615527771775" target="_blank">https://wa.me/8615527771775</a></p>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="modal-contact">
+          <p><strong>Contact Us</strong></p>
+          <p>📞 <a href="tel:+86-155-2777-1775">+86-155-2777-1775</a></p>
+          <p>✉️ <a href="mailto:15527771775@qq.com">15527771775@qq.com</a></p>
+        </div>
+
+        <!-- Final Submit -->
+        <button type="button" class="btn btn-primary btn-large btn-submit" data-action="submit-booking">
+          I've Completed Payment — Confirm Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp QR Modal -->
+  <div class="whatsapp-modal-overlay" id="whatsappModal">
+    <div class="whatsapp-modal-box">
+      <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
+      <h3 style="margin-bottom:var(--space-2);">Chat on WhatsApp</h3>
+      <img loading="lazy" src="images/whatsapp-qr.png" alt="WhatsApp QR Code">
+      <p>📱 Scan to chat with us on WhatsApp</p>
+      <p>Or add us directly: <strong>+86-155-2777-1775</strong></p><p>✨ Feel free to send your inquiry anytime!</p>
+    <div style="margin-top:20px;"><a href="https://wa.me/8615527771775" target="_blank" style="display:inline-block; padding:12px 24px; background:#25d366; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">Open WhatsApp Chat</a></div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp Button -->
+  <button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+    <img loading="lazy" src="images/whatsapp-btn.png" alt="WhatsApp">
+  </button>
+
+  <script src="scripts.js"></script>
+  <script src="js/distance-db.js"></script>
+  <script>
+    // ========== CITY TIER PRICING ==========
+    const TIER1 = ['beijing','shanghai','guangzhou','shenzhen'];     // 1.0
+    const TIER2 = ['chengdu','hangzhou','wuhan','chongqing','nanjing','suzhou','tianjin','xian','qingdao','xiamen','dalian','changsha','zhengzhou','harbin','jinan']; // 0.85
+    function getCityTierMultiplier(city) {
+      if (!city) return 1.0;
+      if (TIER1.includes(city)) return 1.0;
+      if (TIER2.includes(city)) return 0.85;
+      return 0.70; // Tier 3 — all other cities
+    }
+
+    // ========== BASE PRICES ==========
+    const basePrices = { economy: 50, business: 80, mpv: 105 };
+
+    // Update airport dropdown based on city
+    function updateAirportInfo() {
+      const city = document.getElementById('city').value;
+      const airportSelect = document.getElementById('airport');
+      const infoEl = document.getElementById('airportDistanceInfo');
+      const distRange = document.getElementById('distanceRange');
+
+      if (!airportSelect) return;
+      const currentVal = airportSelect.value;
+
+      // Rebuild options using distance-db.js
+      airportSelect.innerHTML = '<option value="" disabled selected>Select airport</option>';
+      const airports = getAirportsForCity(city); // from distance-db.js
+      airports.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.code;
+        opt.textContent = a.name;
+        airportSelect.appendChild(opt);
+      });
+
+      // Restore selection if possible
+      if (currentVal && airports.find(a => a.code === currentVal)) {
+        airportSelect.value = currentVal;
+      }
+
+      // Auto-populate distance range based on selected airport
+      if (airportSelect.value && distRange) {
+        const a = airports.find(x => x.code === airportSelect.value);
+        if (a) {
+          let range = '0-30';
+          if (a.dist > 80) range = '80+';
+          else if (a.dist > 50) range = '50-80';
+          else if (a.dist > 30) range = '30-50';
+          distRange.value = range;
+          if (infoEl) infoEl.textContent = a.name + ' — ~' + a.dist + ' km to city center';
+        }
+      } else if (infoEl) {
+        infoEl.textContent = '';
+      }
+      updateForm();
+    }
+
+    // ========== MAIN UPDATE FORM ==========
+    function updateForm() {
+      const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+      const city = document.getElementById('city').value;
+      const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const passengers = document.getElementById('passengers').value;
+      const hours = document.getElementById('hours').value;
+      const fromCity = document.getElementById('fromCity').value;
+      const toCity = document.getElementById('toCity').value;
+      const airport = document.getElementById('airport').value;
+      const transferDirection = document.getElementById('transferDirection').value;
+      const hotelAddress = document.getElementById('hotelAddress').value;
+      const distanceRange = document.getElementById('distanceRange').value;
+      const cityRoute = document.getElementById('cityRoute').value;
+
+      // Toggle fields
+      document.getElementById('airportFields').style.display = serviceType === 'airport' ? 'block' : 'none';
+      document.getElementById('cityFields').style.display = serviceType === 'city' ? 'block' : 'none';
+      document.getElementById('intercityFields').style.display = serviceType === 'intercity' ? 'block' : 'none';
+      document.getElementById('flightGroup').style.display = serviceType === 'airport' ? 'block' : 'none';
+
+      // ====== SMART DISTANCE ESTIMATION (from distance-db.js) ======
+      if (serviceType === 'airport' && city && airport && hotelAddress) {
+        const estimate = smartDistanceEstimate(hotelAddress, city, airport);
+        if (estimate) {
+          const infoEl = document.getElementById('airportDistanceInfo');
+          if (infoEl) {
+            infoEl.innerHTML = '<span style="color:var(--color-primary);">✓</span> ' +
+              'Detected: ' + estimate.zone + ' — ~' + estimate.totalDist + ' km total';
+          }
+          // Auto-update distance range if not manually changed by user
+          const distRange = document.getElementById('distanceRange');
+          if (distRange && !distRange.dataset.userChanged) {
+            distRange.value = estimate.range;
+          }
+        }
+      }
+
+      // Update airport info when city changes
+      if (serviceType === 'airport') {
+        const airportSelect = document.getElementById('airport');
+        const infoEl = document.getElementById('airportDistanceInfo');
+        const airports = getAirportsForCity(city); // from distance-db.js
+        if (airport && airportSelect) {
+          const a = airports.find(x => x.code === airport);
+          if (a && infoEl && !hotelAddress) infoEl.textContent = a.name + ' — ~' + a.dist + ' km to city center';
+        }
+      }
+
+      // Update summary text
+      document.getElementById('summaryService').textContent =
+        serviceType === 'airport' ? 'Airport Transfer' :
+        serviceType === 'city' ? 'City Car Service' : 'Intercity Trip';
+
+      document.getElementById('summaryCity').textContent = city ?
+        city.charAt(0).toUpperCase() + city.slice(1) : '-';
+
+      let routeText = '-';
+      if (serviceType === 'airport' && airport && transferDirection) {
+        const dir = transferDirection === 'airport-to-hotel' ? 'Pickup' : 'Drop-off';
+        routeText = `${airport} ${dir}`;
+        if (hotelAddress) routeText += ` → ${hotelAddress.substring(0, 30)}${hotelAddress.length > 30 ? '...' : ''}`;
+        if (distanceRange) routeText += ` (${getDistanceRangeLabel(distanceRange)})`;
+      } else if (serviceType === 'city') {
+        routeText = `${hours} hours`;
+        const cityDistRange = document.getElementById('cityDistanceRange').value;
+        const distLabel = { '0-150': 'Within City', '150-300': 'Suburban', '300-500': 'Outside City' };
+        routeText += ` (${distLabel[cityDistRange] || 'Within City'})`;
+        if (cityRoute) routeText += ` — ${cityRoute}`;
+      } else if (serviceType === 'intercity' && fromCity && toCity) {
+        routeText = `${fromCity} → ${toCity}`;
+      }
+      document.getElementById('summaryRoute').textContent = routeText;
+
+      document.getElementById('summaryDateTime').textContent = (date && time) ? `${date} ${time}` : '-';
+      document.getElementById('summaryVehicle').textContent = vehicle.charAt(0).toUpperCase() + vehicle.slice(1);
+      document.getElementById('summaryPassengers').textContent = passengers;
+
+      // ====== PRICE CALCULATION ======
+      let price = basePrices[vehicle] || 51;
+      const cityMult = getCityTierMultiplier(city);
+      price *= cityMult;
+
+      if (serviceType === 'airport') {
+        // Airport: base × city × distance multiplier
+        const distMult = getDistanceMultiplier(distanceRange);
+        price *= distMult;
+      } else if (serviceType === 'city') {
+        // City: base × city × hour multiplier × distance multiplier
+        const hourMult = { '4': 1.0, '8': 1.8, '12': 2.5, 'custom': 2.0 };
+        price *= (hourMult[hours] || 1.8);
+        const cityDistRange = document.getElementById('cityDistanceRange').value;
+        const distMult = { '0-150': 1.0, '150-300': 2.0, '300-500': 4.0 };
+        price *= (distMult[cityDistRange] || 1.0);
+      } else if (serviceType === 'intercity') {
+        // Intercity: base × 1.5 (fixed)
+        price *= 1.5;
+      }
+
+      // Round to nearest 5
+      price = Math.round(price / 5) * 5;
+      document.getElementById('summaryPrice').textContent = `$${price}`;
+
+      // Update vehicle price labels (show min price for this city & service)
+      document.querySelectorAll('.vehicle-price').forEach(el => {
+        const base = parseInt(el.dataset.base);
+        let vPrice = base * cityMult;
+        if (serviceType === 'airport') {
+          // Use shortest distance (0-30 = 1.0) for the "From" price label
+          vPrice *= 1.0;
+        } else if (serviceType === 'city') {
+          vPrice *= 1.0; // 4h minimum
+          vPrice *= 1.0; // within city (0-150km) minimum
+        } else if (serviceType === 'intercity') {
+          vPrice *= 1.5;
+        }
+        vPrice = Math.round(vPrice / 5) * 5;
+        el.textContent = `From $${vPrice}`;
+      });
+
+      // Extras
+      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(el => {
+        const map = { childseat: 'Child Seat', meetgreet: 'Meet & Greet', wifi: 'WiFi' };
+        return map[el.value];
+      });
+      if (extras.length > 0) {
+        document.getElementById('summaryExtrasRow').style.display = 'flex';
+        document.getElementById('summaryExtras').textContent = extras.join(', ');
+      } else {
+        document.getElementById('summaryExtrasRow').style.display = 'none';
+      }
+    }
+
+    // Set default date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
+    document.getElementById('time').value = '10:00';
+
+    // ========== FORM SUBMISSION ==========
+    let currentPrice = 0;
+    let exchangeRate = 7.25;
+
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Honeypot
+      const honeypot = document.getElementById('website');
+      if (honeypot && honeypot.value) {
+        showToast('An error occurred. Please try again.', 'error');
+        return;
+      }
+      // Rate limit
+      if (window.ChinawheelySecurity && !window.ChinawheelySecurity.rateLimiter.check('booking')) {
+        showToast('Too many attempts. Please wait a minute.', 'error');
+        return;
+      }
+      // Required fields validation
+      const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+      if (!document.getElementById('city').value) {
+        showToast('Please select a city', 'error');
+        return;
+      }
+      if (serviceType === 'airport') {
+        if (!document.getElementById('airport').value) {
+          showToast('Please select an airport', 'error');
+          return;
+        }
+        if (!document.getElementById('transferDirection').value) {
+          showToast('Please select transfer direction', 'error');
+          return;
+        }
+        if (!document.getElementById('hotelAddress').value) {
+          showToast('Please enter your hotel address', 'error');
+          return;
+        }
+        if (!document.getElementById('distanceRange').value) {
+          showToast('Please select approximate distance', 'error');
+          return;
+        }
+      }
+      if (serviceType === 'intercity') {
+        if (!document.getElementById('fromCity').value || !document.getElementById('toCity').value) {
+          showToast('Please enter both origin and destination cities', 'error');
+          return;
+        }
+      }
+      if (!document.getElementById('firstName').value || !document.getElementById('lastName').value) {
+        showToast('Please enter your full name', 'error');
+        return;
+      }
+      if (!document.getElementById('email').value || !document.getElementById('phone').value) {
+        showToast('Please enter your contact details', 'error');
+        return;
+      }
+
+      // Security checks
+      const formFields = ['firstName','lastName','email','phone','hotelAddress','fromCity','toCity','cityRoute','cityDistanceRange'];
+      for (const fieldId of formFields) {
+        const field = document.getElementById(fieldId);
+        if (field && field.value && window.ChinawheelySecurity && window.ChinawheelySecurity.hasSuspiciousPattern(field.value)) {
+          showToast('Invalid characters detected. Please check your input.', 'error');
+          return;
+        }
+      }
+      const emailField = document.getElementById('email');
+      if (emailField && window.ChinawheelySecurity && !window.ChinawheelySecurity.isValidEmail(emailField.value)) {
+        showToast('Please enter a valid email address', 'error');
+        return;
+      }
+
+      // === Compute price ===
+      const city = document.getElementById('city').value;
+      const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const passengers = document.getElementById('passengers').value;
+      const hours = document.getElementById('hours').value;
+      const fromCity = document.getElementById('fromCity').value;
+      const toCity = document.getElementById('toCity').value;
+      const airport = document.getElementById('airport').value;
+      const transferDirection = document.getElementById('transferDirection').value;
+      const hotelAddress = document.getElementById('hotelAddress').value;
+      const distanceRange = document.getElementById('distanceRange').value;
+      const cityRoute = document.getElementById('cityRoute').value;
+
+      let price = basePrices[vehicle] || 51;
+      const cityMult = getCityTierMultiplier(city);
+      price *= cityMult;
+
+      if (serviceType === 'airport') {
+        price *= getDistanceMultiplier(distanceRange);
+      } else if (serviceType === 'city') {
+        const hourMult = { '4': 1.0, '8': 1.8, '12': 2.5, 'custom': 2.0 };
+        price *= (hourMult[hours] || 1.8);
+        const cityDistRange = document.getElementById('cityDistanceRange').value;
+        const distMult = { '0-150': 1.0, '150-300': 2.0, '300-500': 4.0 };
+        price *= (distMult[cityDistRange] || 1.0);
+      } else if (serviceType === 'intercity') {
+        price *= 1.5;
+      }
+      currentPrice = Math.round(price / 5) * 5;
+
+      // Populate modal
+      document.getElementById('modalService').textContent =
+        serviceType === 'airport' ? 'Airport Transfer' :
+        serviceType === 'city' ? 'City Car Service' : 'Intercity Trip';
+      document.getElementById('modalCity').textContent = city ? city.charAt(0).toUpperCase() + city.slice(1) : '-';
+
+      let routeText = '-';
+      if (serviceType === 'airport' && airport && transferDirection) {
+        const dir = transferDirection === 'airport-to-hotel' ? 'Pickup' : 'Drop-off';
+        routeText = `${airport} ${dir}`;
+        if (hotelAddress) routeText += ` → ${hotelAddress.substring(0, 30)}${hotelAddress.length > 30 ? '...' : ''}`;
+        if (distanceRange) routeText += ` (${getDistanceRangeLabel(distanceRange)})`;
+      } else if (serviceType === 'city') {
+        routeText = `${hours} hours`;
+        const cityDistRange = document.getElementById('cityDistanceRange').value;
+        const distLabel = { '0-150': 'Within City', '150-300': 'Suburban', '300-500': 'Outside City' };
+        routeText += ` (${distLabel[cityDistRange] || 'Within City'})`;
+        if (cityRoute) routeText += ` — ${cityRoute}`;
+      } else if (serviceType === 'intercity' && fromCity && toCity) {
+        routeText = `${fromCity} → ${toCity}`;
+      }
+      document.getElementById('modalRoute').textContent = routeText;
+      document.getElementById('modalDateTime').textContent = (date && time) ? `${date} ${time}` : '-';
+      document.getElementById('modalVehicle').textContent = vehicle.charAt(0).toUpperCase() + vehicle.slice(1);
+      document.getElementById('modalPassengers').textContent = passengers;
+      document.getElementById('modalPrice').textContent = `$${currentPrice}`;
+      document.getElementById('modalPriceUsd').textContent = `$${currentPrice}`;
+      document.getElementById('modalPriceCny').textContent = `¥${Math.round(currentPrice * exchangeRate)}`;
+
+      fetch('https://open.er-api.com/v6/latest/USD')
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.rates && data.rates.CNY) {
+            exchangeRate = data.rates.CNY;
+            document.getElementById('modalPriceCny').textContent = `¥${Math.round(currentPrice * exchangeRate)}`;
+          }
+        })
+        .catch(() => {});
+
+      document.getElementById('paymentModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function switchPaymentTab(tab) {
+      document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.payment-tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.payment-tab[data-action="switch-payment"][data-tab="${tab}"]`).classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function openWhatsappModal() {
+      document.getElementById('whatsappModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWhatsappModal() {
+      document.getElementById('whatsappModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function submitBooking() {
+      // Populate hidden fields with computed data so formsubmit.co email includes full details
+      document.getElementById('formPrice').value = '$' + currentPrice + ' USD';
+      document.getElementById('formRouteSummary').value = document.getElementById('modalRoute').textContent;
+      document.getElementById('formServiceType').value = document.getElementById('modalService').textContent;
+      document.getElementById('formVehicleLabel').value = document.getElementById('modalVehicle').textContent + ' (' + document.getElementById('modalPassengers').textContent + ' pax)';
+      document.getElementById('bookingForm').submit();
+    }
+
+    // Close modals on overlay click
+    document.getElementById('paymentModal').addEventListener('click', function(e) {
+      if (e.target === this) closePaymentModal();
+    });
+    document.getElementById('whatsappModal').addEventListener('click', function(e) {
+      if (e.target === this) closeWhatsappModal();
+    });
+
+    // Close modals on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePaymentModal();
+        closeWhatsappModal();
+      }
+    });
+
+    // Initialize
+    updateForm();
+  </script>
+
+<script src="js/security.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Chinawheely</title>
+  <meta property="og:title" content="Admin Dashboard | Chinawheely">
+  <meta property="og:description" content="Book private airport transfer and car service in China with English-speaking drivers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.chinawheely.com/admin.html">
+  <meta property="og:site_name" content="Chinawheely">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Admin Dashboard | Chinawheely">
+  <meta name="twitter:description" content="Book private airport transfer and car service in China with English-speaking drivers.">
+  <link rel="canonical" href="https://www.chinawheely.com/admin.html">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="120x120" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="mask-icon" href="favicon.png" color="#E63946">
+  <link rel="shortcut icon" href="favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="120x120" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="mask-icon" href="favicon.png" color="#E63946">
+  <link rel="shortcut icon" href="favicon.png">
+  <link rel="stylesheet" href="admin-styles.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Admin Dashboard | Chinawheely",
+    "description": "Book private airport transfer and car service in China with English-speaking drivers.",
+    "url": "https://www.chinawheely.com/admin.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Chinawheely",
+      "url": "https://www.chinawheely.com/"
+    }
+  }
+  </script>
+</head>
+<body class="admin-body">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <img loading="lazy" src="images/logo.png" alt="Chinawheely" style="height:32px;width:auto;">
+      <span>Chinawheely</span>
+    </div>
+    <ul class="admin-nav">
+      <li><a href="#" class="active">📋 Bookings</a></li>
+      <li><a href="#">👤 Customers</a></li>
+      <li><a href="#">🚗 Drivers</a></li>
+      <li><a href="#">💰 Payments</a></li>
+      <li><a href="#">📊 Analytics</a></li>
+      <li><a href="#">⚙️ Settings</a></li>
+      <li><a href="index.html">🏠 Back to Site</a></li>
+    </ul>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Dashboard</h1>
+      <div style="display:flex;align-items:center;gap:var(--space-4);">
+        <span style="color:var(--color-gray-500);font-size:var(--text-sm);">Welcome, CC</span>
+        <button class="admin-btn admin-btn-outline">Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-stats">
+      <div class="admin-stat-card">
+        <h3>Today's Bookings</h3>
+        <div class="stat-value">12</div>
+      </div>
+      <div class="admin-stat-card">
+        <h3>Pending Confirmation</h3>
+        <div class="stat-value">5</div>
+      </div>
+      <div class="admin-stat-card">
+        <h3>Monthly Revenue</h3>
+        <div class="stat-value">$4,280</div>
+      </div>
+      <div class="admin-stat-card">
+        <h3>Active Customers</h3>
+        <div class="stat-value">87</div>
+      </div>
+    </div>
+
+    <div class="admin-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#CW-2026-001</td>
+            <td>James Davidson<br><span style="color:var(--color-gray-400);font-size:var(--text-xs);">15527771775@qq.com</span></td>
+            <td>Airport Transfer</td>
+            <td>PEK → Beijing CBD</td>
+            <td>Jun 15, 2026<br>10:00 AM</td>
+            <td><span class="badge-status badge-confirmed">Confirmed</span></td>
+            <td>$52</td>
+            <td>
+              <button class="admin-btn admin-btn-sm admin-btn-outline">View</button>
+              <button class="admin-btn admin-btn-sm admin-btn-primary">Assign</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#CW-2026-002</td>
+            <td>Sarah & Family<br><span style="color:var(--color-gray-400);font-size:var(--text-xs);">15527771775@qq.com</span></td>
+            <td>City Tour (8h)</td>
+            <td>Shanghai Downtown</td>
+            <td>Jun 16, 2026<br>09:00 AM</td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td>$345</td>
+            <td>
+              <button class="admin-btn admin-btn-sm admin-btn-outline">View</button>
+              <button class="admin-btn admin-btn-sm admin-btn-primary">Confirm</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#CW-2026-003</td>
+            <td>Michael K.<br><span style="color:var(--color-gray-400);font-size:var(--text-xs);">15527771775@qq.com</span></td>
+            <td>Intercity</td>
+            <td>Beijing → Great Wall</td>
+            <td>Jun 17, 2026<br>08:00 AM</td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td>$120</td>
+            <td>
+              <button class="admin-btn admin-btn-sm admin-btn-outline">View</button>
+              <button class="admin-btn admin-btn-sm admin-btn-primary">Confirm</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+<script src="js/security.js"></script>
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,54,93,0.95);z-index:200;padding:80px 24px 24px;overflow-y:auto;">
+    <button style="position:absolute;top:20px;right:20px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;" aria-label="Close">&times;</button>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="index.html#cities">Cities</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById('mobileMenu');
+      if (menu.style.display === 'none') {
+        menu.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      } else {
+        menu.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+    // Close menu on link click
+    document.querySelectorAll('#mobileMenu a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('mobileMenu').style.display = 'none';
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+
+<script src="scripts.js"></script>
+<script src="js/security.js"></script>
+
+<!-- WhatsApp QR Modal -->
+<div id="whatsappModal" class="whatsapp-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;" data-action="close-whatsapp">
+  <div class="whatsapp-modal-box" style="background:#fff; border-radius:16px; padding:32px; max-width:360px; width:90%; text-align:center; position:relative; cursor:default;" data-action="stop-propagation">
+    <button data-action="close-whatsapp" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:24px; cursor:pointer; color:#94a3b8;"></body>times;</button>
+    <img loading="lazy" src="images/whatsapp-qr.png" alt="WhatsApp QR Code" style="width:200px; height:200px; border-radius:12px; margin:16px auto; display:block;">
+    <p>📱 Scan to chat with us on WhatsApp</p>
+    <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
+    <p>✨ Feel free to send your inquiry anytime!</p>
+    <div style="margin-top:20px;">
+      <a href="https://wa.me/8615527771775" target="_blank" style="display:inline-block; padding:12px 24px; background:#25d366; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">Open WhatsApp Chat</a>
+    </div>
+  </div>
+</div>
+
+<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp" style="position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:#25d366; color:#fff; border:none; box-shadow:0 4px 12px rgba(37,211,102,0.4); cursor:pointer; z-index:999; display:flex; align-items:center; justify-content:center; font-size:24px; transition:transform 0.3s, box-shadow 0.3s;">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-4.995-1.356l-.357-.214-3.689.967.985-3.593-.233-.377a9.862 9.862 0 01-1.52-5.262 9.876 9.876 0 019.871-9.871c2.635 0 5.111 1.026 6.975 2.89a9.845 9.845 0 012.89 6.975c-.004 5.447-4.435 9.876-9.873 9.876" fill="currentColor"/>
+  </svg>
+</button>
+
+</body>
+</html>
