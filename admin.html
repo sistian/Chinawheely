@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="120x120" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -55,7 +56,7 @@
 <body class="admin-body">
   <aside class="admin-sidebar">
     <div class="admin-sidebar-logo">
-      <img loading="lazy" src="images/logo.png" alt="Chinawheely" style="height:32px;width:auto;">
+      <picture><source srcset="images/logo.webp" type="image/webp"><img loading="lazy" width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely" style="height:32px;width:auto;"></picture>
       <span>Chinawheely</span>
     </div>
     <ul class="admin-nav">
@@ -192,24 +193,20 @@
 <script src="js/security.js"></script>
 
 <!-- WhatsApp QR Modal -->
-<div id="whatsappModal" class="whatsapp-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;" data-action="close-whatsapp">
-  <div class="whatsapp-modal-box" style="background:#fff; border-radius:16px; padding:32px; max-width:360px; width:90%; text-align:center; position:relative; cursor:default;" data-action="stop-propagation">
-    <button data-action="close-whatsapp" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:24px; cursor:pointer; color:#94a3b8;"></body>times;</button>
-    <img loading="lazy" src="images/whatsapp-qr.png" alt="WhatsApp QR Code" style="width:200px; height:200px; border-radius:12px; margin:16px auto; display:block;">
-    <p>📱 Scan to chat with us on WhatsApp</p>
+<div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
+  <div class="whatsapp-modal-box" data-action="stop-propagation">
+    <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
+    <h3>Chat on WhatsApp</h3>
+    <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
+    <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
     <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
-    <p>✨ Feel free to send your inquiry anytime!</p>
-    <div style="margin-top:20px;">
-      <a href="https://wa.me/8615527771775" target="_blank" style="display:inline-block; padding:12px 24px; background:#25d366; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">Open WhatsApp Chat</a>
-    </div>
+    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp" style="display:inline-flex;padding:var(--space-3) var(--space-6);border-radius:var(--radius-md);font-weight:600;text-decoration:none;">Open WhatsApp Chat</a>
   </div>
 </div>
 
-<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp" style="position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:#25d366; color:#fff; border:none; box-shadow:0 4px 12px rgba(37,211,102,0.4); cursor:pointer; z-index:999; display:flex; align-items:center; justify-content:center; font-size:24px; transition:transform 0.3s, box-shadow 0.3s;">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-4.995-1.356l-.357-.214-3.689.967.985-3.593-.233-.377a9.862 9.862 0 01-1.52-5.262 9.876 9.876 0 019.871-9.871c2.635 0 5.111 1.026 6.975 2.89a9.845 9.845 0 012.89 6.975c-.004 5.447-4.435 9.876-9.873 9.876" fill="currentColor"/>
-  </svg>
+<!-- Floating WhatsApp Button -->
+<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+  <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
-
 </body>
 </html>
