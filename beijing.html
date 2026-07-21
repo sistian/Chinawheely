@@ -32,6 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
@@ -101,7 +102,7 @@
   <nav class="nav" id="navbar">
     <div class="container nav-inner">
       <a href="index.html" class="nav-logo">
-        <img src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;">
+        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
         <span class="nav-brand-text">Chinawheely</span>
       </a>
       <ul class="nav-links">
@@ -315,6 +316,111 @@
     </div>
   </section>
 
+  <!-- Getting to Beijing: Airports & Railway Stations -->
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Getting to Beijing: Airports & Railway Stations</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Everything you need to know about arriving in Beijing and reaching your hotel.</p>
+      </div>
+
+      <h3 style="margin-bottom:var(--space-4);">✈️ Airports</h3>
+      <div class="grid grid-2" style="gap: var(--space-6); margin-bottom:var(--space-10);">
+        <div class="card" style="padding:var(--space-6); border-left:4px solid var(--color-primary);">
+          <h4>Beijing Capital International Airport (PEK)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Northeast of the city · 27 km to Tiananmen</p>
+          <p>PEK is China's busiest international gateway. It has two operational passenger terminals: <strong>Terminal 2</strong> (many domestic and some international flights) and <strong>Terminal 3</strong> (Air China, Star Alliance, and most long-haul international flights). Terminal 1 is currently closed. To reach the city center, the Airport Express train takes about 20 minutes to Dongzhimen, but with luggage after a long flight, a private car is the most comfortable option. By road, expect <strong>45–60 minutes</strong> to Dongcheng or Chaoyang districts, depending on traffic.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-left:4px solid var(--color-accent);">
+          <h4>Beijing Daxing International Airport (PKX)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">South of the city · 46 km to Tiananmen</p>
+          <p>Opened in September 2019, PKX is one of the world's largest single-terminal airports and serves as the hub for China Southern, China Eastern, and their partners. The iconic starfish-shaped terminal is stunning, but it is far from downtown. The Daxing Airport Express reaches Caoqiao in about 20 minutes, yet transferring to a taxi with luggage can be tiring. Our private car service is the fastest door-to-door solution, typically taking <strong>60–90 minutes</strong> to central Beijing hotels.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom:var(--space-4);">🚄 Railway Stations</h3>
+      <div class="grid grid-3" style="gap: var(--space-6);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Beijing South Station</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">High-speed hub · 30 min to Tiananmen</p>
+          <p>The main station for high-speed trains to Shanghai, Tianjin, Jinan, Nanjing, and Hangzhou. The station itself is modern and efficient. A private car pickup is recommended, as taxi queues can be long during peak hours.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Beijing West Station</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Long-distance & HSR · 25 min to Tiananmen</p>
+          <p>The gateway to western and southern China by train, with high-speed services to Xi'an, Guangzhou, Wuhan, Chengdu, Zhengzhou, and Kunming. It is one of China's largest railway stations, so pre-booking a pickup with a clear meeting point saves time.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Beijing Station</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Historic central station · 10 min to Tiananmen</p>
+          <p>Located near Jianguomen and the CBD, this is the city's oldest main station. It mainly serves conventional trains to Northeast China, coastal cities, and some international routes to Mongolia and Russia. Its central location makes hotel transfers quick.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Beijing North Station</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Suburban trains · Near Xizhimen</p>
+          <p>Used mainly for suburban trains, including the S2 line to Badaling Great Wall and the high-speed rail to Zhangjiakou. The station building is a historic European-style structure originally opened in 1909.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Beijing Chaoyang Station</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Newest station · Northeast Beijing</p>
+          <p>Opened in 2021, this station mainly serves high-speed trains to Northeast China, including Harbin, Shenyang, and Changchun. It is located in the Chaoyang district, convenient for hotels in the east of the city.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); display:flex; align-items:center; justify-content:center; text-align:center;">
+          <div>
+            <div style="font-size:3rem; margin-bottom:var(--space-3);">🚗</div>
+            <h4>Need a Station Pickup?</h4>
+            <p style="margin-bottom:var(--space-4);">We meet you at the exit with a name board and help with luggage.</p>
+            <a href="booking.html?city=Beijing" class="btn btn-primary">Book Station Transfer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beijing's Best Photo Spots -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Beijing's Best Photo Spots</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Capture the city from the most iconic and photogenic angles.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🌅 Jingshan Park Pavilion</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at sunrise</p>
+          <p>Climb to the Wanchun Pavilion for the classic panoramic view over the golden rooftops of the Forbidden City. On clear days, you can see the CCTV tower and the western mountains in the distance. Arrive early to beat the crowds.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🏯 Forbidden City Corner Tower</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at dusk</p>
+          <p>The northwest corner tower reflected in the moat is one of Beijing's most photographed scenes. The sunset glow turns the water gold and the tower silhouette dramatic. Your driver can drop you at the northeast or northwest corner for the perfect shot.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🛶 Shichahai Hutongs</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best in late afternoon</p>
+          <p>The lakeside hutongs around Houhai and Qianhai offer a charming mix of old Beijing life, willow trees, and red lanterns. Take a rickshaw ride or wander the narrow alleys, then capture the golden hour light on the water.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🏙️ CCTV Headquarters</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at blue hour</p>
+          <p>Also known as the "Big Pants," this modern architectural icon in the CBD looks best from the plaza below or from across the Third Ring Road. At night, the building is illuminated and reflected in the surrounding towers.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🧱 Great Wall at Jinshanling</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best in early morning mist</p>
+          <p>For photographers seeking a dramatic, less-crowded Great Wall shot, Jinshanling is unmatched. The wild, unrestored sections and watchtowers winding over mountain ridges create unforgettable sunrise and fog images.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🎨 798 Art District</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best on a sunny afternoon</p>
+          <p>Colorful murals, industrial brick buildings, and quirky sculptures make 798 a favorite for creative portraits. Every corner offers a different backdrop, from Soviet-era slogans to contemporary street art.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Food & Shopping -->
   <section class="section" style="background:var(--color-gray-100);">
     <div class="container">
@@ -360,11 +466,286 @@
             <h5>Panjiayuan Antique Market</h5>
             <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The largest antique market in China, open on weekends. Hundreds of stalls selling ceramics, jade, calligraphy, and Mao memorabilia. A fascinating cultural experience, best visited early morning with a private car for the 30-minute drive from downtown.</p>
           </div>
+          <h4 style="margin-top:var(--space-8); margin-bottom:var(--space-4);">🎁 What to Buy in Beijing</h4>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Cloisonné (Jingtailan)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Beijing's most iconic craft. Look for vases, bracelets, and small boxes with intricate copper-wire patterns and brilliant enamel colors. The best pieces are sold at the Cloisonné Factory or reputable shops in Wangfujing.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Peking Opera Masks</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Hand-painted masks representing different characters in traditional opera. Each color has a meaning: red for loyalty, black for integrity, white for treachery. Great as wall art or gifts.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Chinese Tea & Teaware</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Beijing tea houses stock jasmine tea, pu'er, and oolong from across China. Pair your tea with a Yixing clay teapot or porcelain gaiwan for an authentic gift set.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Silk, Paper-Cuts & Calligraphy</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Soft silk scarves, red paper-cuttings, and hand-brushed calligraphy scrolls are lightweight, meaningful souvenirs. Silk Street and Liulichang are reliable shopping areas.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Intangible Cultural Heritage & Living Crafts -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Intangible Cultural Heritage &amp; Living Crafts of Beijing</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Meet the traditional arts that have defined Beijing for centuries — and the artisans keeping them alive.</p>
+      </div>
+      <div class="grid grid-2" style="gap: var(--space-8);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🎭 Peking Opera (Jingju)</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>UNESCO-listed intangible heritage</strong>. With roots in the 18th century, Peking Opera combines singing, mime, dance, acrobatics, and stylized combat. The elaborate face painting and costumes make every performance a visual feast.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Where to experience it:</strong> Liyuan Theatre, Zhengyici Theatre, or Huguang Guild Hall. Ask your driver to book tickets in advance.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🏺 Cloisonné Enamel (Jingtailan)</h4>
+          <p style="margin-bottom:var(--space-3);">A Beijing specialty since the Yuan dynasty, cloisonné involves soldering copper wires onto a metal body, filling the compartments with enamel, and firing multiple times. The result is luminous, jewel-like tableware and art pieces.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Living master:</strong> Master Zhang Tonglu, a national-level inheritor, has devoted over 60 years to cloisonné design. His studio creates museum-quality pieces that preserve the imperial tradition while introducing contemporary forms.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>✂️ Beijing Paper-Cutting (Jianzhi)</h4>
+          <p style="margin-bottom:var(--space-3);">Red paper-cuttings of flowers, animals, and auspicious symbols are pasted on windows during Spring Festival. Beijing's style is bold and symmetrical, often featuring the city's landmark architecture alongside traditional motifs.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Where to find it:</strong> workshops in hutongs, Panjiayuan Market, and the Beijing Folk Art Museum.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🪁 Kite Making (Shayan Kite)</h4>
+          <p style="margin-bottom:var(--space-3);">Traditional Beijing kites are framed with bamboo and painted with birds, butterflies, or characters from folklore. The Shayan kite tradition, passed down through generations of craftsmen, is known for its perfect balance and elegant designs.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Where to find it:</strong> Look for kite craftsmen at the Temple Fair during Spring Festival, or visit traditional craft shops near Shichahai.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🎨 Inside-Bottle Painting</h4>
+          <p style="margin-bottom:var(--space-3);">An astonishing art form where artists paint miniature landscapes, figures, and animals on the inside surface of tiny glass bottles using a bent brush. It requires years of steady hands and deep concentration.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Where to find it:</strong> Liulichang Cultural Street and the Beijing Enamel Factory have shops and demonstrations.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🎤 Storytelling & Acrobatics (Pingshu & Acrobatics)</h4>
+          <p style="margin-bottom:var(--space-3);">Traditional Beijing storytelling (pingshu) and acrobatics have entertained locals in teahouses for centuries. Acrobatics troupes perform breathtaking feats of balance, juggling, and contortion nightly.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);"><strong>Where to see it:</strong> Chaoyang Theatre Acrobatics Show, Laoshe Teahouse, or Tianqiao Acrobatics Theatre.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beijing Local Secrets -->
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Beijing Local Secrets</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Insider tips to help you experience Beijing like a local.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🌅</div>
+          <h4>Beat the Crowds at the Forbidden City</h4>
+          <p>Enter through the <strong>Gate of Divine Prowess (Shenwu Men)</strong> at opening time and walk the opposite direction of the tour groups. The central axis is busiest, but the side halls are quieter and equally beautiful.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🍜</div>
+          <h4>Eat Breakfast Like a Beijinger</h4>
+          <p>Start with a <strong>jianbing</strong> from a street cart, then try <strong>douzhi</strong> (fermented mung bean milk) and <strong>jiaoquan</strong> (crispy fried dough rings) at a traditional hutong shop. The flavor is polarizing — but it's the real Beijing.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🚲</div>
+          <h4>Explore the Hutongs by Bike or on Foot</h4>
+          <p>Skip the crowded Nanluoguxiang and explore <strong>Beixinqiao, Guozijian, or Wudaoying Hutong</strong> instead. These alleys still have family courtyards, independent cafés, and old Beijing charm.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🌸</div>
+          <h4>Seasonal Highlights</h4>
+          <p><strong>Spring:</strong> Cherry blossoms at Yuyuantan Park. <strong>Summer:</strong> Lotus flowers at Beihai Park. <strong>Autumn:</strong> Golden ginkgo avenues at Ditan Park. <strong>Winter:</strong> Skating on the frozen lakes of Shichahai.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🏛️</div>
+          <h4>Book the Forbidden City a Week Ahead</h4>
+          <p>Tickets sell out, especially in peak season. Book online exactly <strong>7 days before</strong> at 8 PM Beijing time. A Monday afternoon or a rainy day is usually less crowded.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6); border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem; margin-bottom:var(--space-3);">🚗</div>
+          <h4>Use a Private Car for the Great Wall</h4>
+          <p>Public buses to Mutianyu or Badaling are crowded and slow. A private car lets you leave at 6 AM, arrive before the crowds, and visit a less-touristy section like Jinshanling or Simatai.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Day Trips from Beijing -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Day Trips from Beijing</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Explore beyond the capital with a private car and English-speaking driver.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:180px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:3rem;">🧱</span>
+          </div>
+          <div style="padding:var(--space-6);">
+            <h4>Great Wall at Mutianyu</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~70 km · 90 min drive · UNESCO World Heritage</p>
+            <p style="margin-top:var(--space-3);">The most scenic and less-crowded section of the Great Wall. Your driver picks you up at 6 AM, arrives before the tour buses, and waits while you hike. Cable car and toboggan options available.</p>
+            <p style="font-size:var(--text-lg);color:var(--color-primary);font-weight:700;margin-top:var(--space-4);">From $90</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:180px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:3rem;">🏞️</span>
+          </div>
+          <div style="padding:var(--space-6);">
+            <h4>Chengde Summer Mountain Resort</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~230 km · 3 hr drive · Imperial Summer Retreat</p>
+            <p style="margin-top:var(--space-3);">A vast imperial garden and palace complex where Qing emperors escaped the summer heat. Explore lakes, temples, and the beautiful mountain scenery. A full-day adventure with your private driver.</p>
+            <p style="font-size:var(--text-lg);color:var(--color-primary);font-weight:700;margin-top:var(--space-4);">From $180</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:180px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:3rem;">🏘️</span>
+          </div>
+          <div style="padding:var(--space-6);">
+            <h4>Gubei Water Town</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~140 km · 2 hr drive · Ancient Canal Town</p>
+            <p style="margin-top:var(--space-3);">A beautifully restored ancient water town at the foot of the Simatai Great Wall. Stroll the canals, visit traditional workshops, and take a night tour of the illuminated Great Wall.</p>
+            <p style="font-size:var(--text-lg);color:var(--color-primary);font-weight:700;margin-top:var(--space-4);">From $130</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:180px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:3rem;">🏙️</span>
+          </div>
+          <div style="padding:var(--space-6);">
+            <h4>Tianjin</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~120 km · 90 min drive · Historic Port City</p>
+            <p style="margin-top:var(--space-3);">Explore Tianjin's colonial architecture along the Hai River, visit the Italian Style Town, and sample famous Goubuli baozi. Your driver handles the highway tolls and navigation.</p>
+            <p style="font-size:var(--text-lg);color:var(--color-primary);font-weight:700;margin-top:var(--space-4);">From $120</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-1" style="margin-top:var(--space-8);">
+        <div class="card" style="text-align:center;padding:var(--space-8);background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));color:white;">
+          <h3 style="color:white;margin-bottom:var(--space-4);">Plan Your Day Trip</h3>
+          <p style="color:rgba(255,255,255,0.85);margin-bottom:var(--space-6);">Custom itineraries, flexible timing, and door-to-door service with an English-speaking driver.</p>
+          <a href="booking.html?city=Beijing" class="btn btn-accent btn-large">Book a Beijing Day Trip</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Time to Visit Beijing -->
+  <section class="section" style="background:var(--color-gray-100);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Best Time to Visit Beijing</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Each season offers a different side of China's capital.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);">🌸</div>
+          <h4>Spring</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Mar–May · 10–22°C</p>
+          <p>Mild and pleasant with occasional dust storms. Cherry blossoms at Yuyuantan Park. Moderate crowds.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Forbidden City gardens, Temple of Heaven park</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);">☀️</div>
+          <h4>Summer</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Jun–Aug · 22–32°C</p>
+          <p>Hot and humid with occasional heavy rain. Air conditioning is essential. Peak domestic tourist season.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Summer Palace lotus, evening hutong walks</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);">🍂</div>
+          <h4>Autumn</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Sep–Nov · 8–20°C</p>
+          <p>Clear skies, crisp air, and golden ginkgo trees. The most popular and comfortable season to visit.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Great Wall hiking, Ditan Park ginkgo</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);">❄️</div>
+          <h4>Winter</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Dec–Feb · -6–5°C</p>
+          <p>Cold and dry with occasional snow. Fewer tourists and lower hotel prices. Indoor heating is excellent.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Frozen Shichahai skating, hot pot dinners</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Useful Chinese Phrases for Beijing -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Useful Chinese Phrases for Beijing</h2>
+        <div class="divider"></div>
+        <p class="text-lead">A few words go a long way with your driver and locals.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>👋 Nǐ hǎo</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">你好</p>
+          <p>Hello — The universal greeting. Your driver will appreciate the effort.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🙏 Xièxiè</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">谢谢</p>
+          <p>Thank you — Use it often. Chinese people value politeness highly.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🚗 Wǒ xiǎng qù...</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">我想去...</p>
+          <p>I want to go to... — Essential for telling your driver the destination.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>💰 Duōshao qián?</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">多少钱？</p>
+          <p>How much is this? — Useful for shopping and street food.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>🚽 Cèsuǒ zài nǎlǐ?</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">厕所在哪里？</p>
+          <p>Where is the bathroom? — Always good to know when exploring.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Popular Long-tail Routes -->
+  <section class="section" style="background:var(--color-gray-50);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Popular Beijing Airport Transfer Routes</h2>
+        <div class="divider"></div>
+        <p>Direct private transfers from Beijing airport to top attractions and hotels. Fixed price, English-speaking driver, easy booking.</p>
+      </div>
+      <div class="grid grid-3" style="max-width:1000px;margin:0 auto;">
+        
+      <div class="card" style="padding:var(--space-6);">
+        <h4>🚗 Beijing Airport Transfer to Great Wall</h4>
+        <p>Direct private transfer from PEK or PKX to the Great Wall. Skip the crowded tour buses.</p>
+        <a href="beijing-airport-transfer-to-great-wall.html" class="btn btn-outline" style="margin-top:var(--space-3);">View Details & Book →</a>
+      </div>
+      <div class="card" style="padding:var(--space-6);">
+        <h4>🚗 Beijing Airport Transfer to Forbidden City</h4>
+        <p>Airport pickup to the heart of Beijing. Walk straight into the Forbidden City.</p>
+        <a href="beijing-airport-transfer-to-forbidden-city.html" class="btn btn-outline" style="margin-top:var(--space-3);">View Details & Book →</a>
+      </div>
+      <div class="card" style="padding:var(--space-6);">
+        <h4>🚗 Beijing Airport Transfer to Tiananmen Square</h4>
+        <p>Fixed-price transfer from Beijing airport to Tiananmen and nearby landmarks.</p>
+        <a href="beijing-airport-transfer-to-tiananmen.html" class="btn btn-outline" style="margin-top:var(--space-3);">View Details & Book →</a>
+      </div>
+      </div>
+    </div>
+  </section>
   <!-- Service CTA -->
   <section class="section" style="background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));text-align:center;">
     <div class="container">
@@ -412,8 +793,8 @@
       <div class="footer-grid">
         <div>
           <div class="footer-brand">
-            <img loading="lazy" src="images/logo.png" alt="Chinawheely" style="height:32px;width:auto;">
-            <span>Chinawheely</span>
+            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
+            <span>之二虫<sup>®</sup></span><span>|</span><span>Chinawheely</span>
           </div>
           <p class="footer-desc">Professional airport transfers and private car service across China. English-speaking drivers, fixed prices.</p>
         </div>
@@ -425,13 +806,18 @@
             <li><a href="services.html#intercity">Intercity Trips</a></li>
           </ul>
         </div>
-        <div>
+        <div class="footer-cities" style="min-width:220px;">
           <div class="footer-title">Cities</div>
           <ul class="footer-links">
             <li><a href="beijing.html">Beijing</a></li>
             <li><a href="shanghai.html">Shanghai</a></li>
+            <li><a href="guangzhou.html">Guangzhou</a></li>
+            <li><a href="shenzhen.html">Shenzhen</a></li>
             <li><a href="xian.html">Xi'an</a></li>
             <li><a href="chengdu.html">Chengdu</a></li>
+            <li><a href="hangzhou.html">Hangzhou</a></li>
+            <li><a href="wuhan.html">Wuhan</a></li>
+            <li><a href="index.html#cities">All Cities →</a></li>
           </ul>
         </div>
         <div>
@@ -443,33 +829,43 @@
           </ul>
         </div>
       </div>
-      <div class="footer-bottom">
+      <div class="footer-license" style="margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);">
+        <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
+          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" style="height:80px;width:auto;border-radius:var(--radius-md);"></picture>
+          <div style="flex:1;min-width:220px;">
+            <p style="margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600;">Licensed Travel Agency</p>
+            <p style="margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5;">License No. L-HUB-101603. Wuhan City Zhierchong Culture & Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People's Republic of China to operate domestic and inbound tourism services. Issued July 7, 2025.</p>
+          </div>
+        </div>
+      </div>
+<div class="footer-bottom">
         <div class="footer-copyright">© 2026 之二虫® Chinawheely. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <script src="scripts.js"></script>
-</body>
-</html>
 
 <!-- WhatsApp QR Modal -->
-<div id="whatsappModal" class="whatsapp-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;" data-action="close-whatsapp">
-  <div class="whatsapp-modal-box" style="background:#fff; border-radius:16px; padding:32px; max-width:360px; width:90%; text-align:center; position:relative; cursor:default;" data-action="stop-propagation">
-    <button data-action="close-whatsapp" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:24px; cursor:pointer; color:#94a3b8;">&times;</button>
-    <img loading="lazy" src="images/whatsapp-qr.png" alt="WhatsApp QR Code" style="width:200px; height:200px; border-radius:12px; margin:16px auto; display:block;">
-    <p>📱 Scan to chat with us on WhatsApp</p>
+<div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
+  <div class="whatsapp-modal-box" data-action="stop-propagation">
+    <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
+    <h3>Chat on WhatsApp</h3>
+    <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
+    <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
     <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
-    <p>✨ Feel free to send your inquiry anytime!</p>
-    <div style="margin-top:20px;">
-      <a href="https://wa.me/8615527771775" target="_blank" style="display:inline-block; padding:12px 24px; background:#25d366; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">Open WhatsApp Chat</a>
-    </div>
+    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp" style="display:inline-flex;padding:var(--space-3) var(--space-6);border-radius:var(--radius-md);font-weight:600;text-decoration:none;">Open WhatsApp Chat</a>
   </div>
 </div>
 
-<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp" style="position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:#25d366; color:#fff; border:none; box-shadow:0 4px 12px rgba(37,211,102,0.4); cursor:pointer; z-index:999; display:flex; align-items:center; justify-content:center; font-size:24px; transition:transform 0.3s, box-shadow 0.3s;">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-4.995-1.356l-.357-.214-3.689.967.985-3.593-.233-.377a9.862 9.862 0 01-1.52-5.262 9.876 9.876 0 019.871-9.871c2.635 0 5.111 1.026 6.975 2.89a9.845 9.845 0 012.89 6.975c-.004 5.447-4.435 9.876-9.873 9.876" fill="currentColor"/>
-  </svg>
+<!-- Floating WhatsApp Button -->
+<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+  <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
+</body>
 </html>

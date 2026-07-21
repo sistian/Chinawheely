@@ -1,5 +1,5 @@
-# Chinawheely robots.txt - Security Enhanced
-# Last updated: 2026-07-09
+# Chinawheely robots.txt - SEO Optimized
+# Last updated: 2026-07-17
 
 User-agent: *
 Allow: /
@@ -8,7 +8,7 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://www.Chinawheely.com/sitemap.xml
+Sitemap: https://www.chinawheely.com/sitemap.xml
 
 # === SECURITY: Disallow sensitive paths ===
 Disallow: /admin.html
@@ -57,18 +57,50 @@ Allow: /privacy.html
 Allow: /terms.html
 Allow: /cookies.html
 
-# === Block bad bots ===
-User-agent: SemrushBot
+# === SEO tool crawlers are allowed ===
+# SemrushBot, AhrefsBot, DotBot, MJ12bot, and SearchmetricsBot are allowed
+# to crawl the entire site so SEO analysis, backlink audits, and ranking
+# data can be collected correctly. These bots respect robots.txt.
+
+# === Search engines targeted at international users ===
+User-agent: YandexBot
+Allow: /
+
+User-agent: BaiduSpider
+Allow: /
+
+User-agent: PetalBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# === Block only aggressive/malicious scrapers ===
+# These bots are known to ignore crawl-delay, scrape content at high rates,
+# or attempt to exploit common CMS paths. Keep them blocked.
+User-agent: BLEXBot
 Disallow: /
 
-User-agent: AhrefsBot
+User-agent: Nutch
 Disallow: /
 
-User-agent: DotBot
+User-agent: Sogou web spider
 Disallow: /
 
-User-agent: MJ12bot
+User-agent: Sogou inst spider
 Disallow: /
 
-User-agent: Scrapy
+User-agent: CCBot
+Disallow: /
+
+User-agent: spbot
+Disallow: /
+
+User-agent: liebao
+Disallow: /
+
+User-agent: 360Spider
+Disallow: /
+
+User-agent: Bytespider
 Disallow: /
