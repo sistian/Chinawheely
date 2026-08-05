@@ -434,7 +434,7 @@ function closeWhatsappModal() {
 }
 
 function submitBooking() {
-  // Populate hidden fields with computed data so formsubmit.co email includes full details
+  // Populate hidden fields with computed data so the backend email includes full details
   const formPrice = document.getElementById('formPrice');
   if (formPrice) formPrice.value = '$' + currentPrice + ' USD';
 
@@ -485,3 +485,27 @@ document.addEventListener('keydown', function(e) {
 
 // Initialize
 if (typeof updateForm === 'function') updateForm();
+
+
+// Replace inline event handlers with event delegation (CSP/security improvement)
+if (bookingForm) {
+  bookingForm.addEventListener('change', function(e) {
+    const target = e.target;
+    if (!target) return;
+    if (target.name === 'city') {
+      updateAirportInfo();
+    } else {
+      if (target.id === 'distanceRange') {
+        target.dataset.userChanged = 'true';
+      }
+      updateForm();
+    }
+  });
+  bookingForm.addEventListener('input', function(e) {
+    const target = e.target;
+    if (!target) return;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      updateForm();
+    }
+  });
+}

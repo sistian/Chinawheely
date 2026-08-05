@@ -1,0 +1,30 @@
+# Chinawheely Caddyfile
+# Caddy provides automatic HTTPS via Let's Encrypt.
+# Install Caddy: https://caddyserver.com/docs/install
+# Run: caddy run --config /path/to/this/Caddyfile
+
+www.chinawheely.com {
+    root * /var/www/chinawheely
+    file_server
+
+    # Redirect HTTP to HTTPS is handled automatically by Caddy.
+    # Security headers
+    header {
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    }
+
+    # Reverse proxy the Vercel/Node backend if you run it separately
+    # handle_path /api/* {
+    #     reverse_proxy localhost:3000
+    # }
+}
+
+# Redirect apex domain to www
+chinawheely.com {
+    redir https://www.chinawheely.com{uri}
+}

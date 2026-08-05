@@ -1,0 +1,242 @@
+/* Auto-generated: inline styles migrated to external CSS */
+
+.u-00d77bfd { gap: var(--space-6); }
+.u-019128fe { min-width:220px; }
+.u-0263935b { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/xian.jpg') center/cover no-repeat; }
+.u-033fc2d1 { font-size:var(--text-2xl);color:var(--color-primary);font-weight:700; }
+.u-04fc7ce3 { color:var(--color-gray-600);margin-bottom:24px; }
+.u-05a8b8ce { color:var(--color-gray-500); }
+.u-0681077d { flex:1;min-width:220px; }
+.u-07acdfd1 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/shanghai.jpg') center/cover no-repeat; }
+.u-086225c6 { text-align:center;padding:var(--space-8);border-top:4px solid var(--color-info); }
+.u-0886fa1e { padding:var(--space-12) 0; }
+.u-0c677f24 { display:flex;flex-wrap:wrap;gap:var(--space-4) var(--space-6); }
+.u-0c8e3ec6 { animation-delay:0.3s; }
+.u-0cab9070 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/qingdao.jpg') center/cover no-repeat; }
+.u-0cc540b1 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/guangzhou.jpg') center/cover no-repeat; }
+.u-0e4216a5 { padding:60px 24px;background:var(--color-gray-50); }
+.u-0f2e5657 { font-size:2.5rem;margin-bottom:var(--space-3); }
+.u-10123434 { flex:1;cursor:pointer; }
+.u-10929ef3 { display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);z-index:999;padding:2rem;flex-direction:column;gap:1.5rem; }
+.u-11ac7e2b { color:rgba(255,255,255,0.9); }
+.u-1265ee1f { margin-bottom:32px; }
+.u-12c2232e { font-size:var(--text-sm);color:var(--color-gray-500); }
+.u-14704cda { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px; }
+.u-170d8228 { margin-bottom:var(--space-4);margin-top:var(--space-8); }
+.u-184bb55f { min-height:500px;min-height:60vh;max-height:800px;aspect-ratio:16/9; }
+.u-18898aec { font-size:4rem;margin-bottom:24px; }
+.u-1afc5cbe { font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3); }
+.u-1b3d84a8 { margin-top:var(--space-8);margin-bottom:var(--space-4); }
+.u-1b9fc701 { font-size:3rem;margin-bottom:var(--space-4); }
+.u-1c43eea3 { animation-delay:0.1s; }
+.u-1d226aa2 { margin-top:var(--space-8); margin-bottom:var(--space-4); }
+.u-20989682 { display:inline-flex;padding:var(--space-3) var(--space-6);border-radius:var(--radius-md);font-weight:600;text-decoration:none; }
+.u-20c7954d { font-size:var(--text-lg);color:var(--color-gray-600);margin-bottom:32px; }
+.u-21dd2803 { height:40px;width:auto; }
+.u-2325fdff { color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none; }
+.u-267a89a6 { border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast); }
+.u-27191a9c { margin-top:var(--space-6);color:var(--color-gray-400);font-size:var(--text-sm); }
+.u-273b795e { padding-top:120px;text-align:center; }
+.u-2923708c { background:var(--color-primary);color:white;padding:20px;border-radius:12px; }
+.u-2addc722 { margin-top:var(--space-10); }
+.u-2fe751e8 { font-size:3rem; margin-bottom:var(--space-3); }
+.u-3086299d { padding:80px 24px 60px;max-width:800px; }
+.u-31848d08 { text-align:center;padding:var(--space-6); }
+.u-32ab8fff { margin-bottom:var(--space-4);font-size:var(--text-lg); }
+.u-34025d67 { position:absolute;top:20px;right:20px;background:none;border:none;color:white;font-size:2rem;cursor:pointer; }
+.u-344f893f { font-weight:600;font-size:var(--text-sm); }
+.u-34d396d1 { display:flex;gap:12px;justify-content:center;flex-wrap:wrap; }
+.u-3516e787 { max-width:600px;text-align:center; }
+.u-3739f4ca { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px; }
+.u-38b7a70f { font-size:var(--text-sm);color:var(--color-gray-600); }
+.u-38e9ce32 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/nanjing.jpg') center/cover no-repeat; }
+.u-38f30c69 { display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--space-8);margin-bottom:var(--space-12); }
+.u-39e13bea { font-size:var(--text-xs);color:rgba(255,255,255,0.6);margin-top:var(--space-4); }
+.u-3b1096f1 { display:flex;flex-direction:column;gap:var(--space-3); }
+.u-3b8f8350 { padding:var(--space-6);border-left:4px solid var(--color-accent); }
+.u-3cd33126 { font-size:var(--text-lg);color:var(--color-primary);font-weight:700;margin-top:var(--space-4); }
+.u-3e309955 { font-weight:600;color:var(--color-gray-700); }
+.u-3ebeb299 { margin-bottom:var(--space-12); }
+.u-40a3aeb1 { text-align:center;padding:var(--space-8);border-top:4px solid var(--color-primary); }
+.u-42bfb081 { height:32px;width:auto; }
+.u-432c3257 { background:#ffebee;padding:24px;border-radius:12px;text-align:center; }
+.u-44cf6904 { background:var(--color-gray-100);padding:var(--space-12) 0; }
+.u-452b7957 { background:var(--color-gray-100); }
+.u-479fc233 { padding:var(--space-6); display:flex; align-items:center; justify-content:center; text-align:center; }
+.u-48d3e1c4 { display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:48px; }
+.u-4a01e15d { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:24px 0; }
+.u-4d279ffd { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/wuhan.jpg') center/cover no-repeat; }
+.u-5008ed65 { background-image:url('images/shenzhen.jpg'); }
+.u-5125d420 { background:#fff8e1;padding:24px;border-radius:12px;text-align:center; }
+.u-528f7b04 { width:120px;height:auto;border-radius:8px;border:2px solid rgba(255,255,255,0.2); }
+.u-539b047e { text-align:center; }
+.u-54524a44 { font-size:var(--text-xl);color:var(--color-gray-600);max-width:700px;margin-bottom:48px; }
+.u-54dccd1d { color:#fff;margin-bottom:16px; }
+.u-5534b3b3 { margin-bottom:16px; }
+.u-55d829cf { color:white;margin-bottom:var(--space-4); }
+.u-583db0b0 { font-weight:700;color:var(--color-primary);margin-top:var(--space-2); }
+.u-587b2f19 { margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5; }
+.u-5afbf087 { background:rgba(255,255,255,0.2);color:#fff; }
+.u-5c85a814 { font-size:var(--text-sm); }
+.u-5c8bcd05 { font-size:var(--text-lg);color:var(--color-gray-600); }
+.u-5e0ddb7b { margin-right:var(--space-4); }
+.u-5e8d7e69 { color:var(--color-gray-500);font-size:var(--text-sm); }
+.u-5f4971f6 { background:var(--color-gray-50);padding:24px;border-radius:12px; }
+.u-5ff3158d { color:rgba(255,255,255,0.6);margin-bottom:var(--space-6); }
+.u-60045321 { font-weight:600;cursor:pointer; }
+.u-601a04df { display:inline-block; }
+.u-6039a3a0 { margin-top:0; }
+.u-609533a6 { font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3); }
+.u-6194fc0e { height:200px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center; }
+.u-6243b77b { margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600; }
+.u-64507866 { background-image:url('images/guangzhou.jpg'); }
+.u-66708a10 { background:var(--color-primary);border-radius:16px;padding:32px;margin-bottom:32px;color:#fff; }
+.u-67580851 { padding:var(--space-6); border-top:4px solid var(--color-accent); }
+.u-6870bc04 { padding:var(--space-6); border-left:4px solid var(--color-primary); }
+.u-68efbec4 { margin-bottom:8px;color:white; }
+.u-6a10b399 { text-align:center;padding:var(--space-8);border-top:4px solid var(--color-accent); }
+.u-6a5e8cb9 { color:white; }
+.u-6b0c4bc2 { color:var(--color-white);font-size:1.1rem;margin-bottom:8px; }
+.u-6ca77754 { padding:120px 24px 60px;max-width:800px; }
+.u-6cf9def2 { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3); }
+.u-6d549b67 { margin-bottom:var(--space-8);border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--space-8); }
+.u-6e844ab5 { font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1); }
+.u-6ee65de0 { font-size:var(--text-xs);color:var(--color-gray-500); }
+.u-71f00d27 { background:var(--color-gray-50);padding:32px;border-radius:16px;margin-bottom:32px; }
+.u-72b7280d { display:flex;flex-direction:column;gap:16px; }
+.u-72cdc79f { display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:48px; }
+.u-750445f9 { padding:var(--space-6);border-left:4px solid var(--color-primary); }
+.u-753ad917 { padding:120px 24px 60px;min-height:70vh;display:flex;align-items:center;justify-content:center; }
+.u-755c6780 { background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));text-align:center; }
+.u-77c8140b { overflow-x:auto; }
+.u-78427c4e { margin-top:1rem; }
+.u-78f6f2c9 { margin-top:12px; }
+.u-79e145ea { text-align:center;padding:var(--space-8); }
+.u-7a7a693f { font-size:28px; }
+.u-7d3aabab { max-width:1000px;margin:0 auto; }
+.u-7e25aa05 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/tianjin.jpg') center/cover no-repeat; }
+.u-7fdbc00d { font-size:var(--text-xl);color:rgba(255,255,255,0.85);max-width:700px;margin:0 auto var(--space-8); }
+.u-80275c0f { background-image:url('images/shanghai.jpg'); }
+.u-8283e145 { color:rgba(255,255,255,0.9);margin-bottom:16px; }
+.u-82f9ce9d { font-size:var(--text-4xl);color:var(--color-primary); }
+.u-83014146 { height:200px;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));display:flex;align-items:center;justify-content:center; }
+.u-8323a3c8 { color:var(--color-gray-400);margin-top:var(--space-1);margin-bottom:0; }
+.u-8347057d { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/suzhou.jpg') center/cover no-repeat; }
+.u-84131a6a { background:rgba(255,255,255,0.05);border-radius:12px;padding:24px;margin-bottom:32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap; }
+.u-84ae2b6d { width:100%;margin-top:var(--space-4); }
+.u-84f1ffc1 { animation-delay:0.2s; }
+.u-8579832d { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/hefei.jpg') center/cover no-repeat; }
+.u-8588e44d { width:100%; }
+.u-897b8581 { width:18px;height:18px;accent-color:var(--color-primary); }
+.u-8e117f93 { color:var(--color-gray-500);margin-bottom:32px; }
+.u-8fdce8d5 { text-decoration:none; }
+.u-926af978 { background-image:url('images/hangzhou.jpg'); }
+.u-9317d6b5 { color:var(--color-gray-400);font-size:var(--text-xs); }
+.u-931a8a70 { font-size:2rem;font-weight:700; }
+.u-93b8ea5b { display:none; }
+.u-940656cc { display:flex;gap:var(--space-8);justify-content:center;flex-wrap:wrap;margin-bottom:var(--space-8); }
+.u-94789464 { max-width:800px; }
+.u-9746d846 { background-image:url('images/beijing.jpg'); }
+.u-97c4fce1 { background-image:url('images/chengdu.jpg'); }
+.u-9879fc66 { height:80px;width:auto;border-radius:var(--radius-md); }
+.u-99925db2 { margin-top:var(--space-4);color:var(--color-gray-400); }
+.u-9b4aac26 { background:#e8f5e9;padding:24px;border-radius:12px;text-align:center; }
+.u-9b981c8c { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/chongqing.jpg') center/cover no-repeat; }
+.u-9baf9545 { padding:var(--space-6); border-top:4px solid var(--color-info); }
+.u-9cef2924 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/zhengzhou.jpg') center/cover no-repeat; }
+.u-9d404e70 { font-size:var(--text-xl);padding:var(--space-5) var(--space-10); }
+.u-9d907e94 { font-size:var(--text-2xl);font-weight:800;color:var(--mint); }
+.u-9f666dd2 { color:rgba(255,255,255,0.5);font-size:0.8rem;margin-top:8px; }
+.u-a084b910 { padding:12px;border:1px solid #ddd; }
+.u-a1554ee2 { gap:var(--space-8); }
+.u-a18dd810 { margin-top:8px;font-size:12px;color:rgba(255,255,255,0.7);text-align:center; }
+.u-a1c1c4e7 { padding:0;overflow:hidden; }
+.u-a1fadb2e { font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3); }
+.u-a2922bb1 { color:rgba(255,255,255,0.85);margin-bottom:var(--space-6); }
+.u-a2c8fd1b { margin-bottom:16px;background:var(--color-gray-50);padding:16px;border-radius:8px; }
+.u-a3182ecb { display:flex;align-items:center;gap:var(--space-4); }
+.u-a4fa6444 { margin-bottom:var(--space-3); }
+.u-a5b1048b { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/chengdu.jpg') center/cover no-repeat; }
+.u-a5d2baa1 { font-weight:600; }
+.u-a9e5a1db { gap:var(--space-6);margin-bottom:var(--space-10); }
+.u-aa4a0616 { display:flex;align-items:center;gap:var(--space-3);cursor:pointer; }
+.u-aee78fe5 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/kunming.jpg') center/cover no-repeat; }
+.u-b003ef59 { margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg); }
+.u-b049a955 { display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,54,93,0.95);z-index:200;padding:80px 24px 24px;overflow-y:auto; }
+.u-b17867c2 { font-size:3rem;margin-bottom:var(--space-3); }
+.u-b207d191 { gap:var(--space-3); }
+.u-b20dc968 { gap: var(--space-10); }
+.u-b20e4789 { background:#fff;color:var(--color-primary); }
+.u-b2906d02 { text-align:center;margin:var(--space-8) 0; }
+.u-b42f29dc { gap: var(--space-8); }
+.u-b5969d77 { width:120px;height:auto;margin-bottom:16px; }
+.u-b6bb644e { flex:1;min-width:250px; }
+.u-b786ec3d { color:var(--color-white);margin-bottom:var(--space-4); }
+.u-b7f1cbc7 { height:180px;background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));display:flex;align-items:center;justify-content:center; }
+.u-b926c172 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/xiamen.jpg') center/cover no-repeat; }
+.u-ba13780c { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/nanchang.jpg') center/cover no-repeat; }
+.u-ba2c5c3e { font-size:2rem; }
+.u-ba369b6d { color:rgba(255,255,255,0.8);font-size:var(--text-xl);max-width:600px;margin:0 auto var(--space-8); }
+.u-ba518c9f { margin-left:var(--space-6);margin-top:var(--space-2);color:var(--color-gray-600); }
+.u-bc38d4de { margin-top:var(--space-4); }
+.u-c0058fe9 { background:var(--color-primary);color:white;padding:24px;border-radius:12px;text-align:center; }
+.u-c0d8df7d { background:var(--color-gray-50); }
+.u-c2763c22 { background-image:url('images/wuhan.jpg'); }
+.u-c2d0bd7f { position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;text-decoration:none; }
+.u-c423fb7d { max-width:800px;margin:0 auto; }
+.u-c679eb70 { background:#fff;border-radius:var(--radius-md);padding:var(--space-5);margin-bottom:var(--space-4);box-shadow:var(--shadow-sm); }
+.u-c8fcc83e { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+.u-ca76d851 { color:var(--color-gray-500);margin-bottom:var(--space-8); }
+.u-cb2a6611 { color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.6; }
+.u-cb9804f7 { padding:var(--space-6); border-left:4px solid var(--color-info); }
+.u-cbc0546b { padding:var(--space-6); border-top:4px solid var(--color-primary); }
+.u-cd416b13 { position:absolute;left:-9999px;opacity:0; }
+.u-cdf26e4e { font-size:1.25rem;font-weight:600;color:var(--color-gray-800); }
+.u-cf69b12b { background:var(--color-gray-50);border-radius:16px;padding:32px;margin-bottom:32px;text-align:left; }
+.u-cf924bfe { padding:var(--space-6); }
+.u-d13b218f { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/shenzhen.jpg') center/cover no-repeat; }
+.u-d18182e4 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/jinan.jpg') center/cover no-repeat; }
+.u-d4443f91 { margin-bottom:64px;padding:32px;background:var(--color-gray-50);border-radius:16px; }
+.u-d51d5aeb { font-size:2.5rem; margin-bottom:var(--space-3); }
+.u-d57eba37 { border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast); }
+.u-d5e8c5f3 { flex:1; }
+.u-d63bb612 { gap: var(--space-6); margin-bottom:var(--space-10); }
+.u-d932f602 { background:var(--color-cream);padding:var(--space-12) 0; }
+.u-d9cbab63 { font-size:3rem; }
+.u-da7d987f { text-decoration:none;color:inherit; }
+.u-db86ebba { background-image:url('images/xian.jpg'); }
+.u-dd7b8907 { gap:var(--space-6); }
+.u-de3a6f88 { color:rgba(255,255,255,0.7); }
+.u-dec4e14a { margin-bottom:var(--space-2);font-size:var(--text-4xl); }
+.u-defb54a0 { margin-left:auto;margin-right:auto; }
+.u-df284703 { margin-top:var(--space-3); }
+.u-e0851dc1 { padding:60px 24px; }
+.u-e2130a24 { padding:120px 24px 60px; }
+.u-e682172b { gap:var(--space-10); }
+.u-e913e37c { margin-bottom: var(--space-12); }
+.u-ea33a3ed { font-size:var(--text-xl);color:var(--color-gray-600);margin-bottom:32px; }
+.u-ec28022b { text-align:center;padding:var(--space-8);background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));color:white; }
+.u-ec4a84cd { margin-bottom:var(--space-4); }
+.u-ecc30b65 { padding:var(--space-6); border-left:4px solid var(--color-accent); }
+.u-edcf313d { margin-top:var(--space-8); }
+.u-ef71ad58 { padding:var(--space-6);display:flex;align-items:center;justify-content:center;text-align:center; }
+.u-f1dc2f3b { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/dalian.jpg') center/cover no-repeat; }
+.u-f24ef748 { background:linear-gradient(rgba(15,46,37,0.75),rgba(15,46,37,0.85)),url('images/hangzhou.jpg') center/cover no-repeat; }
+.u-f2c2fbd7 { color:var(--color-gray-500);max-width:600px;margin:0 auto var(--space-8);font-size:var(--text-lg); }
+.u-f409778d { line-height:2;color:var(--color-gray-700); }
+.u-f44a88dd { padding:12px;text-align:left;border:1px solid #ddd; }
+.u-f4e16a4d { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/fuzhou.jpg') center/cover no-repeat; }
+.u-f5c46350 { display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap; }
+.u-f6cd61e6 { font-size:2.5rem;margin-bottom:16px; }
+.u-f7d95f19 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/changsha.jpg') center/cover no-repeat; }
+.u-f8782b37 { font-size:1.5rem;margin-bottom:var(--space-2); }
+.u-f9125a31 { width:100%;border-collapse:collapse;margin:16px 0; }
+.u-f92c3bd1 { padding:var(--space-6); text-align:center; }
+.u-fa31476a { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/harbin.jpg') center/cover no-repeat; }
+.u-fb502ee1 { background:var(--color-primary);color:white;padding:24px;border-radius:12px;text-decoration:none; }
+.u-fd04e2ad { color:var(--color-gray-400);margin-top:var(--space-1); }
+.u-fdaeaff1 { color:var(--color-gray-400);font-size:var(--text-sm); }
+.u-fe9bb2cf { background:linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));text-align:center; }
+.u-ff386b85 { background:var(--color-cream); }
+.u-ff90d337 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/beijing.jpg') center/cover no-repeat; }
+.u-ffb85967 { color:rgba(255,255,255,0.5);margin-top:var(--space-6);font-size:var(--text-sm); }

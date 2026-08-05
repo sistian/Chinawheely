@@ -1,63 +1,27 @@
-# Chinawheely robots.txt - Security Enhanced
-# Last updated: 2026-07-09
+# Chinawheely robots.txt
+# https://www.chinawheely.com/robots.txt
 
 User-agent: *
 Allow: /
-
-# Crawl-delay for slower bots
-Crawl-delay: 1
-
-# Sitemap
-Sitemap: https://www.Chinawheely.com/sitemap.xml
-
-# === SECURITY: Disallow sensitive paths ===
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
-Disallow: /api
-Disallow: /.env
-Disallow: /.git/
-Disallow: /.git
-Disallow: /.svn/
-Disallow: /.svn
-Disallow: /.htaccess
-Disallow: /.htpasswd
-Disallow: /config/
-Disallow: /config
-Disallow: /test/
-Disallow: /test
-Disallow: /tmp/
-Disallow: /tmp
-Disallow: /backup/
-Disallow: /backup
-Disallow: /cgi-bin/
-Disallow: /cgi-bin
-Disallow: /php/
-Disallow: /php
-Disallow: /wp-admin/
-Disallow: /wp-admin
-Disallow: /wp-login.php
-Disallow: /xmlrpc.php
-Disallow: /server-status
-Disallow: /server-info
-Disallow: /error/
-Disallow: /logs/
-Disallow: /private/
+Disallow: /thank-you.html
+Disallow: /cancellation.html
+Disallow: /*?
+Crawl-delay: 1
 
-# === Allow main pages for indexing ===
-Allow: /index.html
-Allow: /services.html
-Allow: /about.html
-Allow: /contact.html
-Allow: /booking.html
-Allow: /help.html
-Allow: /cancellation.html
-Allow: /partners.html
-Allow: /privacy.html
-Allow: /terms.html
-Allow: /cookies.html
+# Search engine crawlers
+User-agent: Googlebot
+Allow: /
 
-# === Block bad bots ===
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Block aggressive SEO crawlers
 User-agent: SemrushBot
 Disallow: /
 
@@ -70,5 +34,43 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
-User-agent: Scrapy
+User-agent: SearchmetricsBot
 Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: Nutch
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: spbot
+Disallow: /
+
+User-agent: liebao
+Disallow: /
+
+User-agent: 360Spider
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://www.chinawheely.com/sitemap.xml
+
+# Sensitive paths
+Disallow: /.env
+Disallow: /.env.local
+Disallow: /.env.production
+Disallow: /.git/
+Disallow: /.htaccess
+Disallow: /.htpasswd
+Disallow: /backup/
+Disallow: /config/
+Disallow: /debug/
+Disallow: /test/
+Disallow: /tmp/
+Disallow: /*.bak$
+Disallow: /*.backup$

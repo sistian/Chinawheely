@@ -109,7 +109,7 @@
     // === ORIGIN CHECK ===
     isValidOrigin() {
       const allowedOrigins = [
-        'https://www.Chinawheely.com',
+        'https://www.chinawheely.com',
         'https://chinawheely.com'
       ];
       return allowedOrigins.includes(window.location.origin);
@@ -144,14 +144,14 @@
   });
 
   // 3. Detect and warn about DevTools (production only)
-  if (window.location.hostname === 'www.Chinawheely.com') {
+  if (window.location.hostname === 'www.chinawheely.com') {
     const threshold = 160;
     setInterval(() => {
       if (window.outerWidth - window.innerWidth > threshold || 
           window.outerHeight - window.innerHeight > threshold) {
         console.clear();
-        console.log('%c🔒 Security Notice', 'color: #e74c3c; font-size: 20px; font-weight: bold;');
-        console.log('%cThis is a browser feature intended for developers.', 'color: #333;');
+        // console.log('%c🔒 Security Notice', 'color: #e74c3c; font-size: 20px; font-weight: bold;');
+        // console.log('%cThis is a browser feature intended for developers.', 'color: #333;');
       }
     }, 1000);
   }
