@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://chinawheely-backend-api.vercel.app https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://chinawheely-backend-api.vercel.app;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -197,6 +197,50 @@
       </div>
     </div>
 
+    <section class="section" style="background-color:var(--color-cream);">
+      <div class="container">
+        <div class="section-header">
+          <h2>Send Us a Message</h2>
+          <div class="divider"></div>
+          <p class="text-lead">Fill in the form below and we'll get back to you within 24 hours.</p>
+        </div>
+        <div class="card" style="max-width:720px; margin:0 auto;">
+          <form action="https://chinawheely-backend-api.vercel.app/api/contact" method="POST" id="contactForm" novalidate>
+            <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="contactFirstName">First Name *</label>
+                <input class="form-input" type="text" id="contactFirstName" name="firstName" required placeholder="John">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contactLastName">Last Name *</label>
+                <input class="form-input" type="text" id="contactLastName" name="lastName" required placeholder="Smith">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="contactEmail">Email *</label>
+                <input class="form-input" type="email" id="contactEmail" name="email" required placeholder="john@example.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contactPhone">Phone</label>
+                <input class="form-input" type="tel" id="contactPhone" name="phone" placeholder="+1 234 567 8900">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactSubject">Subject</label>
+              <input class="form-input" type="text" id="contactSubject" name="subject" placeholder="How can we help?">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactMessage">Message *</label>
+              <textarea class="form-textarea" id="contactMessage" name="message" rows="5" required placeholder="Tell us more about your trip..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" style="width:100%">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <h2>Why Contact Chinawheely?</h2>
     <div class="u-14704cda">
       <div class="u-2923708c">
@@ -312,6 +356,28 @@
 
 
   <script src="scripts.js"></script>
+
+<script>
+(function() {
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+  var emailField = document.getElementById('contactEmail');
+  form.addEventListener('submit', function(e) {
+    if (window.ChinawheelySecurity && !window.ChinawheelySecurity.rateLimiter.check('contact')) {
+      e.preventDefault();
+      if (window.showToast) showToast('Too many attempts. Please wait a minute.', 'error');
+      else alert('Too many attempts. Please wait a minute.');
+      return;
+    }
+    if (emailField && emailField.value && window.ChinawheelySecurity && !window.ChinawheelySecurity.isValidEmail(emailField.value)) {
+      e.preventDefault();
+      if (window.showToast) showToast('Please enter a valid email address.', 'error');
+      else alert('Please enter a valid email address.');
+      return;
+    }
+  });
+})();
+</script>
 
 <!-- WhatsApp QR Modal -->
 <div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
