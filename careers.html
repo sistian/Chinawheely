@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Careers at Chinawheely | Join Our Driver & Guide Team in China</title>
+  <title>Careers at Chinawheely | Driver & Guide Jobs</title>
   <meta property="og:title" content="Careers at Chinawheely | Join Our Driver & Guide Team in China">
   <meta property="og:description" content="Join Chinawheely as a driver or guide. Flexible schedules, competitive pay, and the opportunity to help international travelers explore 40+ cities in China.">
   <meta property="og:image" content="https://www.chinawheely.com/images/og-image.jpg">
@@ -38,6 +38,7 @@
   <link rel="mask-icon" href="favicon.png" color="#E63946">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/inline-fixes.css">
   <style>
     .careers-hero { min-height: 60vh; display: flex; align-items: center; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%); padding-top: 72px; }
     .careers-hero h1 { color: var(--color-white); font-size: var(--text-5xl); margin-bottom: var(--space-4); }
@@ -128,7 +129,7 @@
   <nav class="nav" id="navbar">
     <div class="container nav-inner">
       <a href="index.html" class="nav-logo">
-        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
+        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img u-21dd2803"></picture>
         <span class="nav-brand-text">之二虫<sup>®</sup></span>
         <span class="nav-brand-sep">|</span>
         <span>Chinawheely</span>
@@ -138,13 +139,13 @@
         <li><a href="careers.html">Careers</a></li>
         <li><a href="index.html#faq">FAQ</a></li>
       </ul>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 <!-- Mobile Menu -->
-<div id="mobileMenu" style="display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);z-index:999;padding:2rem;flex-direction:column;gap:1.5rem;">
+<div id="mobileMenu" class="u-10929ef3">
   <a href="index.html">Home</a>
   <a href="services.html">Services</a>
   <a href="index.html#cities">Cities</a>
@@ -168,7 +169,7 @@
       <div class="benefits-grid">
         <div class="benefit-item">
           <div class="benefit-icon">💰</div>
-          <h4>Competitive Pay</h4>
+          <h3 class="lvl-h4">Competitive Pay</h3>
           <p>Above-market rates with performance bonuses</p>
         </div>
         <div class="benefit-item">
@@ -190,7 +191,7 @@
     </div>
   </section>
 
-  <section class="section" style="background:var(--color-gray-100);">
+  <section class="section u-452b7957">
     <div class="container">
       <div class="section-header">
         <h2>Open Positions</h2>
@@ -205,7 +206,7 @@
           <span>💼 Immediate Start</span>
         </div>
         <div class="job-section">
-          <h4>What You'll Do</h4>
+          <h3 class="lvl-h4">What You'll Do</h3>
           <ul>
             <li>Provide airport transfers and city car service for international guests</li>
             <li>Communicate with guests using translation apps and tools</li>
@@ -303,21 +304,21 @@
     </div>
   </section>
 
-  <section class="section" style="text-align:center;">
+  <section class="section u-539b047e">
     <div class="container">
       <h2>Don't See Your Role?</h2>
-      <p style="color:var(--color-gray-500);max-width:600px;margin:0 auto var(--space-8);font-size:var(--text-lg);">
+      <p class="u-f2c2fbd7">
         We're always looking for talented people. Send us your CV and tell us how you can contribute.
       </p>
       <a href="mailto:15527771775@qq.com?subject=General Application - Chinawheely" class="btn btn-accent btn-large">Send Us Your CV</a>
-      <p style="margin-top:var(--space-6);color:var(--color-gray-400);font-size:var(--text-sm);">
+      <p class="u-27191a9c">
         Contact: CC at +86-15527771775 (WhatsApp/WeChat) or 15527771775@qq.com
       </p>
     </div>
   </section>
 
     <!-- Travel Essentials -->
-  <section class="section" style="background:var(--color-cream);">
+  <section class="section u-ff386b85">
     <div class="container">
       <div class="section-header">
         <h2>Travel Essentials for Your China Trip</h2>
@@ -325,23 +326,23 @@
         <p class="text-lead">Make your journey smoother with these essential services.</p>
       </div>
       <div class="grid grid-3">
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-accent);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">📶</div>
-          <h4>Mobile Pocket Wi-Fi</h4>
-          <p style="margin-top:var(--space-3);">Stay connected anywhere in China with a pocket Wi-Fi device. Pre-book online and pick up at the airport or have it delivered to your hotel.</p>
-          <a href="https://www.chinawifigo.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Wi-Fi at ChinaWiFiGo</a>
+        <div class="card u-6a10b399">
+          <div class="u-1b9fc701">📶</div>
+          <h3 class="lvl-h4">Mobile Pocket Wi-Fi</h3>
+          <p class="u-df284703">Stay connected anywhere in China with a pocket Wi-Fi device. Pre-book online and pick up at the airport or have it delivered to your hotel.</p>
+          <a href="https://www.chinawifigo.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Wi-Fi at ChinaWiFiGo</a>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-primary);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">🗣️</div>
+        <div class="card u-40a3aeb1">
+          <div class="u-1b9fc701">🗣️</div>
           <h4>English-Speaking Guide</h4>
-          <p style="margin-top:var(--space-3);">Explore China with a professional English-speaking guide. Custom tours, skip-the-line access, and insider knowledge.</p>
-          <a href="https://www.vipchinaguide.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Guide at VIPChinaGuide</a>
+          <p class="u-df284703">Explore China with a professional English-speaking guide. Custom tours, skip-the-line access, and insider knowledge.</p>
+          <a href="https://www.vipchinaguide.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Guide at VIPChinaGuide</a>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-info);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">🏥</div>
+        <div class="card u-086225c6">
+          <div class="u-1b9fc701">🏥</div>
           <h4>Medical Services</h4>
-          <p style="margin-top:var(--space-3);">Add a health checkup, dental cleaning, or TCM treatment to your trip. China medical services cost 70% less than in the US or Europe.</p>
-          <a href="https://www.mediescortchina.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Medical at MediEscortChina</a>
+          <p class="u-df284703">Add a health checkup, dental cleaning, or TCM treatment to your trip. China medical services cost 70% less than in the US or Europe.</p>
+          <a href="https://www.mediescortchina.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Medical at MediEscortChina</a>
         </div>
       </div>
     </div>
@@ -351,7 +352,7 @@
       <div class="footer-grid">
         <div>
           <div class="footer-brand">
-            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
+            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img u-21dd2803"></picture>
             <span>之二虫<sup>®</sup></span><span>|</span><span>Chinawheely</span>
           </div>
           <p class="footer-desc">Professional airport transfers and private car service across China. Licensed by Wuhan City Zhierchong Culture and Tourism Co., Ltd.</p>
@@ -369,22 +370,22 @@
           <ul class="footer-links">
             <li><a href="mailto:15527771775@qq.com">15527771775@qq.com</a></li>
             <li><a href="tel:+8615527771775">+86-15527771775</a></li>
-            <li><a href="https://wa.me/8615527771775">WhatsApp</a></li>
+            <li><a href="https://wa.me/8615527771775" rel="noopener noreferrer">WhatsApp</a></li>
           </ul>
         </div>
       </div>
-      <div class="footer-links-bar" style="margin-bottom:var(--space-8);border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--space-8);">
-        <div class="footer-title" style="margin-bottom:var(--space-3);">Friendly Links</div>
-        <div style="display:flex;flex-wrap:wrap;gap:var(--space-4) var(--space-6);">
-          <a href="https://www.vipchinaguide.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">VIPChinaGuide导游服务</a>
-          <a href="https://www.Chinawheely.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">Chinawheely用车服务</a>
-          <a href="https://www.MediEscortChina.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">MediEscortChina入境医疗服务</a>
-          <a href="https://www.ChinaWiFiGo.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">ChinaWiFiGo中国口袋Wi-Fi服务</a>
-          <a href="https://www.wuhan.video" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">武汉视频指南</a>
+      <div class="footer-links-bar u-6d549b67">
+        <div class="footer-title u-a4fa6444">Friendly Links</div>
+        <div class="u-0c677f24">
+          <a href="https://www.vipchinaguide.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">VIPChinaGuide导游服务</a>
+          <a href="https://www.chinawheely.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">Chinawheely用车服务</a>
+          <a href="https://www.MediEscortChina.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">MediEscortChina入境医疗服务</a>
+          <a href="https://www.ChinaWiFiGo.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">ChinaWiFiGo中国口袋Wi-Fi服务</a>
+          <a href="https://www.wuhan.video" rel="nofollow noopener" target="_blank" class="u-2325fdff">武汉视频指南</a>
         </div>
       </div>
 
-      <div class="footer-cities" style="min-width:220px;">
+      <div class="footer-cities u-019128fe">
           <div class="footer-title">Cities</div>
           <ul class="footer-links">
             <li><a href="beijing.html">Beijing</a></li>
@@ -398,12 +399,12 @@
             <li><a href="index.html#cities">All Cities →</a></li>
           </ul>
         </div>
-      <div class="footer-license" style="margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);">
-        <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
-          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" style="height:80px;width:auto;border-radius:var(--radius-md);"></picture>
-          <div style="flex:1;min-width:220px;">
-            <p style="margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600;">Licensed Travel Agency</p>
-            <p style="margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5;">License No. L-HUB-101603. Wuhan City Zhierchong Culture & Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People's Republic of China to operate domestic and inbound tourism services. Issued July 7, 2025.</p>
+      <div class="footer-license u-b003ef59">
+        <div class="u-f5c46350">
+          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" class="u-9879fc66"></picture>
+          <div class="u-0681077d">
+            <p class="u-6243b77b">Licensed Travel Agency</p>
+            <p class="u-587b2f19">License No. L-HUB-101603. Wuhan City Zhierchong Culture & Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People's Republic of China to operate domestic and inbound tourism services. Issued July 7, 2025.</p>
           </div>
         </div>
       </div>
@@ -418,8 +419,8 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/8615527771775" class="whatsapp-float" style="position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;text-decoration:none;" aria-label="Chat on WhatsApp">
-    <span style="font-size:28px;">💬</span>
+  <a href="https://wa.me/8615527771775" class="whatsapp-float u-c2d0bd7f" aria-label="Chat on WhatsApp" rel="noopener noreferrer">
+    <span class="u-7a7a693f">💬</span>
   </a>
 <script src="js/security.js"></script>
 
@@ -429,17 +430,17 @@
 <!-- WhatsApp QR Modal -->
 <div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
   <div class="whatsapp-modal-box" data-action="stop-propagation">
-    <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
+    <button type="button" class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
     <h3>Chat on WhatsApp</h3>
     <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
     <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
     <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
-    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp" style="display:inline-flex;padding:var(--space-3) var(--space-6);border-radius:var(--radius-md);font-weight:600;text-decoration:none;">Open WhatsApp Chat</a>
+    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp u-20989682" rel="noopener noreferrer">Open WhatsApp Chat</a>
   </div>
 </div>
 
 <!-- Floating WhatsApp Button -->
-<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+<button type="button" class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
   <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
 </body>

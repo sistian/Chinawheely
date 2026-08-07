@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://chinawheely-backend-api.vercel.app;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Private Car & Airport Transfer in China | Chinawheely</title>
+  <meta name="robots" content="index, follow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="description" content="Book your airport transfer or private car in China in under 2 minutes. Fixed price, English-speaking driver, free flight tracking. No account required.">
   <meta name="keywords" content="book private car China, airport transfer booking, China car service reservation, Beijing airport pickup book, Shanghai private driver hire">
@@ -35,6 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/inline-fixes.css">
   
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -334,7 +336,7 @@
   <nav class="nav" id="navbar">
     <div class="container nav-inner">
       <a href="index.html" class="nav-logo">
-        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
+        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img u-21dd2803"></picture>
         <span class="nav-brand-text">之二虫<sup>®</sup></span>
         <span class="nav-brand-sep">|</span>
         <span>Chinawheely</span>
@@ -349,7 +351,7 @@
       <div class="nav-cta">
         <span class="nav-phone">+86-15527771775</span>
       </div>
-    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
 
@@ -357,7 +359,7 @@
   </nav>
 
 <!-- Mobile Menu -->
-<div id="mobileMenu" style="display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);z-index:999;padding:2rem;flex-direction:column;gap:1.5rem;">
+<div id="mobileMenu" class="u-10929ef3">
   <a href="index.html">Home</a>
   <a href="services.html">Services</a>
   <a href="index.html#cities">Cities</a>
@@ -369,46 +371,41 @@
     <div class="container booking-container">
       <!-- Booking Form -->
       <div class="booking-form-card">
-        <h2 style="margin-bottom:var(--space-2);">Book Your Ride</h2>
-        <p style="color:var(--color-gray-500);margin-bottom:var(--space-8);">Fill in your details below. You'll get a fixed price instantly.</p>
+        <h1 class="u-dec4e14a">Book Your Private Car or Airport Transfer in China</h1>
+        <p class="u-ca76d851">Fill in your details below. You'll get a fixed price instantly.</p>
 
-        <form id="bookingForm" action="https://formsubmit.co/ef5e07ff710b617bdc42401c730e609b" method="POST" novalidate>
-          <input type="hidden" name="_next" value="https://www.chinawheely.com/thank-you.html">
-          <input type="hidden" name="_subject" value="New Booking - Chinawheely">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="price" id="formPrice" value="">
+        <form id="bookingForm" action="https://chinawheely-backend-api.vercel.app/api/booking" method="POST" novalidate>          <input type="hidden" name="price" id="formPrice" value="">
           <input type="hidden" name="routeSummary" id="formRouteSummary" value="">
           <input type="hidden" name="serviceTypeLabel" id="formServiceType" value="">
           <input type="hidden" name="vehicleLabel" id="formVehicleLabel" value="">
           <!-- Honeypot field - hidden from humans, traps bots -->
-          <div style="position:absolute;left:-9999px;opacity:0;">
+          <div class="u-cd416b13">
             <label for="website">Website</label>
             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
           </div>
           <!-- Service Type -->
           <div class="form-group">
             <label class="form-label">Service Type</label>
-            <div class="form-row" style="gap:var(--space-3);">
-              <label class="service-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="serviceType" value="airport" checked style="display:none;" onchange="updateForm()">
-                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">✈</div>
-                  <div style="font-weight:600;font-size:var(--text-sm);">Airport Transfer</div>
+            <div class="form-row u-b207d191">
+              <label class="service-option u-10123434">
+                <input type="radio" name="serviceType" value="airport" checked class="u-93b8ea5b">
+                <div class="service-option-box u-267a89a6">
+                  <div class="u-f8782b37">✈</div>
+                  <div class="u-344f893f">Airport Transfer</div>
                 </div>
               </label>
-              <label class="service-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="serviceType" value="city" style="display:none;" onchange="updateForm()">
-                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">🚗</div>
-                  <div style="font-weight:600;font-size:var(--text-sm);">City / Hourly</div>
+              <label class="service-option u-10123434">
+                <input type="radio" name="serviceType" value="city" class="u-93b8ea5b">
+                <div class="service-option-box u-267a89a6">
+                  <div class="u-f8782b37">🚗</div>
+                  <div class="u-344f893f">City / Hourly</div>
                 </div>
               </label>
-              <label class="service-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="serviceType" value="intercity" style="display:none;" onchange="updateForm()">
-                <div class="service-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);text-align:center;transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.5rem;margin-bottom:var(--space-2);">🌄</div>
-                  <div style="font-weight:600;font-size:var(--text-sm);">Intercity</div>
+              <label class="service-option u-10123434">
+                <input type="radio" name="serviceType" value="intercity" class="u-93b8ea5b">
+                <div class="service-option-box u-267a89a6">
+                  <div class="u-f8782b37">🌄</div>
+                  <div class="u-344f893f">Intercity</div>
                 </div>
               </label>
             </div>
@@ -417,7 +414,7 @@
           <!-- City -->
           <div class="form-group">
             <label class="form-label" for="city">City</label>
-            <select class="form-select" id="city" name="city" required onchange="updateAirportInfo()">
+            <select class="form-select" id="city" name="city" required>
               <option value="" disabled selected>Select your city</option>
               <optgroup label="Top Entry Points (Most Popular)">
                 <option value="shanghai">Shanghai — #1 International Entry</option>
@@ -473,42 +470,42 @@
             <div class="form-row">
               <div>
                 <label class="form-label" for="airport">Airport *</label>
-                <select class="form-select" id="airport" name="airport" required onchange="updateAirportInfo()">
+                <select class="form-select" id="airport" name="airport" required>
                   <option value="" disabled selected>Select airport</option>
                 </select>
-                <p class="text-small" id="airportDistanceInfo" style="color:var(--color-gray-400);margin-top:var(--space-1);margin-bottom:0;"></p>
+                <p class="text-small u-8323a3c8" id="airportDistanceInfo"></p>
               </div>
               <div>
                 <label class="form-label" for="transferDirection">Transfer Direction *</label>
-                <select class="form-select" id="transferDirection" name="transferDirection" required onchange="updateForm()">
+                <select class="form-select" id="transferDirection" name="transferDirection" required>
                   <option value="" disabled selected>Select direction</option>
                   <option value="airport-to-hotel">Airport → Hotel (Pickup)</option>
                   <option value="hotel-to-airport">Hotel → Airport (Drop-off)</option>
                 </select>
               </div>
             </div>
-            <div class="form-group" style="margin-top:var(--space-4);">
+            <div class="form-group u-bc38d4de">
               <label class="form-label" for="hotelAddress">Hotel / Destination Address *</label>
-              <input type="text" class="form-input" id="hotelAddress" name="hotelAddress" required placeholder="Hotel name or full address (e.g., Park Hyatt Shanghai, 100 Century Avenue)" oninput="updateForm()" onchange="updateForm()">
+              <input type="text" class="form-input" id="hotelAddress" name="hotelAddress" required placeholder="Hotel name or full address (e.g., Park Hyatt Shanghai, 100 Century Avenue)" aria-label="Hotel name or full address">
             </div>
-            <div class="form-group" style="margin-top:var(--space-4);">
+            <div class="form-group u-bc38d4de">
               <label class="form-label" for="distanceRange">Approximate Distance (km) *</label>
-              <select class="form-select" id="distanceRange" name="distanceRange" required onchange="this.dataset.userChanged='true'; updateForm();">
+              <select class="form-select" id="distanceRange" name="distanceRange" required>
                 <option value="" disabled selected>Select distance range</option>
                 <option value="0-30">0–30 km (≈ $35–$50 Economy)</option>
                 <option value="30-50">30–50 km (≈ $45–$65 Economy)</option>
                 <option value="50-80">50–80 km (≈ $55–$80 Economy)</option>
                 <option value="80+">80+ km (≈ $70–$100 Economy)</option>
               </select>
-              <p class="text-small" style="color:var(--color-gray-400);margin-top:var(--space-1);">Distance is pre-filled based on airport. Adjust if your hotel is far from the city center.</p>
+              <p class="text-small u-fd04e2ad">Distance is pre-filled based on airport. Adjust if your hotel is far from the city center.</p>
             </div>
           </div>
 
-          <div class="form-group" id="cityFields" style="display:none;">
+          <div class="form-group u-93b8ea5b" id="cityFields">
             <div class="form-row">
               <div>
                 <label class="form-label" for="hours">Hours Needed</label>
-                <select class="form-select" id="hours" name="hours" onchange="updateForm()">
+                <select class="form-select" id="hours" name="hours">
                   <option value="4">4 hours</option>
                   <option value="8" selected>8 hours</option>
                   <option value="12">12 hours</option>
@@ -517,39 +514,39 @@
               </div>
               <div>
                 <label class="form-label" for="cityDistanceRange">Trip Distance (km)</label>
-                <select class="form-select" id="cityDistanceRange" name="cityDistanceRange" onchange="updateForm()">
+                <select class="form-select" id="cityDistanceRange" name="cityDistanceRange">
                   <option value="0-150" selected>Within City (0–150 km)</option>
                   <option value="150-300">Suburban (150–300 km)</option>
                   <option value="300-500">Outside City (300–500 km)</option>
                 </select>
               </div>
             </div>
-            <div class="form-row" style="margin-top:var(--space-4);">
-              <div style="flex:1;">
+            <div class="form-row u-bc38d4de">
+              <div class="u-d5e8c5f3">
                 <label class="form-label" for="cityRoute">Route / Area</label>
-                <input type="text" class="form-input" id="cityRoute" name="cityRoute" placeholder="e.g., Downtown sightseeing, Great Wall, Zhouzhuang">
-                <p class="text-small" style="color:var(--color-gray-400);margin-top:var(--space-1);">Tell us where you're going and we'll estimate the distance range.</p>
+                <input type="text" class="form-input" id="cityRoute" name="cityRoute" placeholder="e.g., Downtown sightseeing, Great Wall, Zhouzhuang" aria-label="City route or sightseeing plan">
+                <p class="text-small u-fd04e2ad">Tell us where you're going and we'll estimate the distance range.</p>
               </div>
             </div>
           </div>
 
-          <div class="form-group" id="intercityFields" style="display:none;">
+          <div class="form-group u-93b8ea5b" id="intercityFields">
             <div class="form-row">
               <div>
                 <label class="form-label" for="fromCity">From</label>
-                <input type="text" class="form-input" id="fromCity" name="fromCity" placeholder="e.g., Beijing">
+                <input type="text" class="form-input" id="fromCity" name="fromCity" placeholder="e.g., Beijing" aria-label="Departure city">
               </div>
               <div>
                 <label class="form-label" for="toCity">To</label>
-                <input type="text" class="form-input" id="toCity" name="toCity" placeholder="e.g., Great Wall">
+                <input type="text" class="form-input" id="toCity" name="toCity" placeholder="e.g., Great Wall" aria-label="Destination city">
               </div>
             </div>
           </div>
 
           <!-- Custom Address (conditional) -->
-          <div class="form-group" id="customAddressGroup" style="display:none;">
+          <div class="form-group u-93b8ea5b" id="customAddressGroup">
             <label class="form-label" for="customAddress">Custom Address</label>
-            <input type="text" class="form-input" id="customAddress" name="customAddress" placeholder="Hotel name or full address">
+            <input type="text" class="form-input" id="customAddress" name="customAddress" placeholder="Hotel name or full address" aria-label="Custom pickup or drop-off address">
           </div>
 
           <!-- Date & Time -->
@@ -569,29 +566,29 @@
           <!-- Vehicle Type -->
           <div class="form-group">
             <label class="form-label">Vehicle Type</label>
-            <div class="form-row" style="gap:var(--space-3);">
-              <label class="vehicle-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="vehicle" value="economy" checked style="display:none;" onchange="updateForm()">
-                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">Economy</div>
-                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Sedan · 3 pax · 2 bags</div>
-                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="50">From $50</div>
+            <div class="form-row u-b207d191">
+              <label class="vehicle-option u-10123434">
+                <input type="radio" name="vehicle" value="economy" checked class="u-93b8ea5b">
+                <div class="vehicle-option-box u-d57eba37">
+                  <div class="u-6e844ab5">Economy</div>
+                  <div class="u-6ee65de0">Sedan · 3 pax · 2 bags</div>
+                  <div class="vehicle-price u-583db0b0" data-base="50">From $50</div>
                 </div>
               </label>
-              <label class="vehicle-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="vehicle" value="business" style="display:none;" onchange="updateForm()">
-                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">Business</div>
-                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Premium · 3 pax · 2 bags</div>
-                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="80">From $80</div>
+              <label class="vehicle-option u-10123434">
+                <input type="radio" name="vehicle" value="business" class="u-93b8ea5b">
+                <div class="vehicle-option-box u-d57eba37">
+                  <div class="u-6e844ab5">Business</div>
+                  <div class="u-6ee65de0">Premium · 3 pax · 2 bags</div>
+                  <div class="vehicle-price u-583db0b0" data-base="80">From $80</div>
                 </div>
               </label>
-              <label class="vehicle-option" style="flex:1;cursor:pointer;">
-                <input type="radio" name="vehicle" value="mpv" style="display:none;" onchange="updateForm()">
-                <div class="vehicle-option-box" style="border:2px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-4);transition:all var(--transition-fast);" onmouseenter="this.style.borderColor='var(--color-primary)'" onmouseleave="if(!this.previousElementSibling.checked)this.style.borderColor='var(--color-gray-200)'">
-                  <div style="font-size:1.25rem;font-weight:700;color:var(--color-primary);margin-bottom:var(--space-1);">MPV</div>
-                  <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Van · 6 pax · 4 bags</div>
-                  <div class="vehicle-price" style="font-weight:700;color:var(--color-primary);margin-top:var(--space-2);" data-base="105">From $105</div>
+              <label class="vehicle-option u-10123434">
+                <input type="radio" name="vehicle" value="mpv" class="u-93b8ea5b">
+                <div class="vehicle-option-box u-d57eba37">
+                  <div class="u-6e844ab5">MPV</div>
+                  <div class="u-6ee65de0">Van · 6 pax · 4 bags</div>
+                  <div class="vehicle-price u-583db0b0" data-base="105">From $105</div>
                 </div>
               </label>
             </div>
@@ -631,26 +628,26 @@
             <div class="form-row">
               <div>
                 <label class="form-label" for="flightNumber">Flight Number (optional)</label>
-                <input type="text" class="form-input" id="flightNumber" name="flightNumber" placeholder="e.g., CA981">
+                <input type="text" class="form-input" id="flightNumber" name="flightNumber" placeholder="e.g., CA981" aria-label="Flight number">
               </div>
               <div>
                 <label class="form-label" for="airline">Airline (optional)</label>
-                <input type="text" class="form-input" id="airline" name="airline" placeholder="e.g., Air China">
+                <input type="text" class="form-input" id="airline" name="airline" placeholder="e.g., Air China" aria-label="Airline name">
               </div>
             </div>
           </div>
 
           <!-- Contact Details -->
           <div class="form-group">
-            <h4 style="margin-bottom:var(--space-4);font-size:var(--text-lg);">Contact Information</h4>
+            <h2 class="lvl-h4 u-32ab8fff">Contact Information</h2>
             <div class="form-row">
               <div>
                 <label class="form-label" for="firstName">First Name *</label>
-                <input type="text" class="form-input" id="firstName" name="firstName" required placeholder="John">
+                <input type="text" class="form-input" id="firstName" name="firstName" required placeholder="John" aria-label="First name">
               </div>
               <div>
                 <label class="form-label" for="lastName">Last Name *</label>
-                <input type="text" class="form-input" id="lastName" name="lastName" required placeholder="Smith">
+                <input type="text" class="form-input" id="lastName" name="lastName" required placeholder="Smith" aria-label="Last name">
               </div>
             </div>
           </div>
@@ -659,11 +656,11 @@
             <div class="form-row">
               <div>
                 <label class="form-label" for="email">Email *</label>
-                <input type="email" class="form-input" id="email" name="email" required placeholder="15527771775@qq.com">
+                <input type="email" class="form-input" id="email" name="email" required placeholder="15527771775@qq.com" aria-label="Email address">
               </div>
               <div>
                 <label class="form-label" for="phone">Phone / WhatsApp *</label>
-                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="+1 234 567 8900">
+                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="+1 234 567 8900" aria-label="Phone number">
               </div>
             </div>
           </div>
@@ -677,26 +674,26 @@
           <!-- Extras -->
           <div class="form-group">
             <label class="form-label">Add-ons</label>
-            <div style="display:flex;flex-direction:column;gap:var(--space-3);">
-              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
-                <input type="checkbox" name="extras" value="childseat" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
-                <span>Child / Baby Seat <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Free)</span></span>
+            <div class="u-3b1096f1">
+              <label class="u-aa4a0616">
+                <input type="checkbox" name="extras" value="childseat" class="u-897b8581">
+                <span>Child / Baby Seat <span class="u-fdaeaff1">(Free)</span></span>
               </label>
-              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
-                <input type="checkbox" name="extras" value="meetgreet" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
-                <span>Name Board Meet & Greet <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Included)</span></span>
+              <label class="u-aa4a0616">
+                <input type="checkbox" name="extras" value="meetgreet" class="u-897b8581">
+                <span>Name Board Meet & Greet <span class="u-fdaeaff1">(Included)</span></span>
               </label>
-              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;">
-                <input type="checkbox" name="extras" value="wifi" onchange="updateForm()" style="width:18px;height:18px;accent-color:var(--color-primary);">
-                <span>In-Car WiFi <span style="color:var(--color-gray-400);font-size:var(--text-sm);">(Business+ only, Free)</span></span>
+              <label class="u-aa4a0616">
+                <input type="checkbox" name="extras" value="wifi" class="u-897b8581">
+                <span>In-Car WiFi <span class="u-fdaeaff1">(Business+ only, Free)</span></span>
               </label>
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-large" style="width:100%;margin-top:var(--space-4);">
+          <button type="submit" class="btn btn-primary btn-large u-84ae2b6d">
             Book
           </button>
-          <p class="text-small text-center" style="margin-top:var(--space-4);color:var(--color-gray-400);">
+          <p class="text-small text-center u-99925db2">
             Pay with PayPal, Alipay, or Alipay. No credit card required. <br>
             CNY pricing available for domestic Chinese payments.
           </p>
@@ -731,7 +728,7 @@
             <span>Passengers</span>
             <span id="summaryPassengers">2</span>
           </div>
-          <div class="booking-summary-item" id="summaryExtrasRow" style="display:none;">
+          <div class="booking-summary-item u-93b8ea5b" id="summaryExtrasRow">
             <span>Add-ons</span>
             <span id="summaryExtras">-</span>
           </div>
@@ -740,7 +737,7 @@
           <span>Estimated Total</span>
           <span id="summaryPrice">$50</span>
         </div>
-        <p style="font-size:var(--text-xs);color:rgba(255,255,255,0.6);margin-top:var(--space-4);">
+        <p class="u-39e13bea">
           Final quote confirmed after booking. PayPal, Alipay & Alipay accepted.
         </p>
       </div>
@@ -750,26 +747,26 @@
   <!-- Footer -->
   
   <!-- Booking SEO Sections -->
-  <section class="section" style="background:var(--color-gray-100);padding:var(--space-12) 0;">
+  <section class="section u-44cf6904">
     <div class="container">
       <div class="section-header">
         <h2>How to Book Your China Transfer in 3 Steps</h2>
         <div class="divider"></div>
         <p class="text-lead">Booking a private car or airport transfer in China takes less than 2 minutes. No account required.</p>
       </div>
-      <div class="grid grid-3" style="gap:var(--space-6);">
-        <div class="card" style="text-align:center;padding:var(--space-8);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">1️⃣</div>
-          <h4>Choose Your Service</h4>
+      <div class="grid grid-3 u-dd7b8907">
+        <div class="card u-79e145ea">
+          <div class="u-1b9fc701">1️⃣</div>
+          <h3 class="lvl-h4">Choose Your Service</h3>
           <p>Select airport transfer, city hourly charter, or intercity trip. Pick your city and vehicle type.</p>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">2️⃣</div>
+        <div class="card u-79e145ea">
+          <div class="u-1b9fc701">2️⃣</div>
           <h4>Enter Trip Details</h4>
           <p>Fill in your pickup/drop-off address, date, time, and flight number. Get a fixed price instantly.</p>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">3️⃣</div>
+        <div class="card u-79e145ea">
+          <div class="u-1b9fc701">3️⃣</div>
           <h4>Confirm & Pay</h4>
           <p>Pay with PayPal or Alipay. Send the payment screenshot via WhatsApp and we confirm within 10 minutes.</p>
         </div>
@@ -777,26 +774,26 @@
     </div>
   </section>
 
-  <section class="section" style="padding:var(--space-12) 0;">
+  <section class="section u-0886fa1e">
     <div class="container">
       <div class="section-header">
         <h2>What's Included in Your Booking</h2>
         <div class="divider"></div>
       </div>
-      <div class="grid grid-2" style="gap:var(--space-6);">
-        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
-          <h4>✈️ Free Flight Tracking</h4>
+      <div class="grid grid-2 u-dd7b8907">
+        <div class="card u-750445f9">
+          <h3 class="lvl-h4">✈️ Free Flight Tracking</h3>
           <p>We monitor your flight status for delays. Your driver will be there when you land, no extra charge for reasonable delays.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
+        <div class="card u-750445f9">
           <h4>🙋 English-Speaking Driver</h4>
           <p>Professional drivers selected for English communication. No language barriers at the airport or hotel.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
+        <div class="card u-750445f9">
           <h4>🧳 Meet & Greet with Name Board</h4>
           <p>Your driver meets you at the arrival hall or hotel lobby with a name board. Easy to find, no confusion.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
+        <div class="card u-750445f9">
           <h4>💺 Free Child Seat & WiFi</h4>
           <p>Child seats, name boards, and in-car WiFi (Business+) are included at no extra cost. Just add your needs in the form.</p>
         </div>
@@ -804,30 +801,30 @@
     </div>
   </section>
 
-  <section class="section" style="background:var(--color-cream);padding:var(--space-12) 0;">
+  <section class="section u-d932f602">
     <div class="container">
       <div class="section-header">
         <h2>Why Travelers Choose Chinawheely</h2>
         <div class="divider"></div>
       </div>
-      <div class="grid grid-4" style="gap:var(--space-6);">
-        <div class="card" style="text-align:center;padding:var(--space-6);">
-          <div style="font-size:2.5rem;margin-bottom:var(--space-3);">🔒</div>
-          <h4>Fixed Price</h4>
+      <div class="grid grid-4 u-dd7b8907">
+        <div class="card u-31848d08">
+          <div class="u-0f2e5657">🔒</div>
+          <h3 class="lvl-h4">Fixed Price</h3>
           <p>No meter, no surprise tolls, no airport taxi scams. The price you see is the price you pay.</p>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-6);">
-          <div style="font-size:2.5rem;margin-bottom:var(--space-3);">🕐</div>
+        <div class="card u-31848d08">
+          <div class="u-0f2e5657">🕐</div>
           <h4>24/7 Availability</h4>
           <p>Early morning flight or late-night arrival? Our drivers are available around the clock across 23+ cities.</p>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-6);">
-          <div style="font-size:2.5rem;margin-bottom:var(--space-3);">💬</div>
+        <div class="card u-31848d08">
+          <div class="u-0f2e5657">💬</div>
           <h4>WhatsApp Support</h4>
           <p>Get real-time help before, during, and after your ride. Message us anytime at +86-155-2777-1775.</p>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-6);">
-          <div style="font-size:2.5rem;margin-bottom:var(--space-3);">🚗</div>
+        <div class="card u-31848d08">
+          <div class="u-0f2e5657">🚗</div>
           <h4>Flexible Vehicle Options</h4>
           <p>Economy sedan, business car, or MPV van. Choose the right vehicle for your group size and luggage.</p>
         </div>
@@ -835,26 +832,26 @@
     </div>
   </section>
 
-  <section class="section" style="padding:var(--space-12) 0;">
+  <section class="section u-0886fa1e">
     <div class="container">
       <div class="section-header">
         <h2>Frequently Asked Questions About Booking</h2>
         <div class="divider"></div>
       </div>
-      <div class="grid grid-2" style="gap:var(--space-6);">
-        <div class="card" style="padding:var(--space-6);">
-          <h4>Do I need to pay in advance?</h4>
+      <div class="grid grid-2 u-dd7b8907">
+        <div class="card u-cf924bfe">
+          <h3 class="lvl-h4">Do I need to pay in advance?</h3>
           <p>We ask for a small deposit or full payment to confirm your booking. You can pay via PayPal or Alipay, and we'll send confirmation within 10 minutes.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);">
+        <div class="card u-cf924bfe">
           <h4>What happens if my flight is delayed?</h4>
           <p>We track your flight in real time. For reasonable delays, your driver will wait at no extra charge. Just make sure your flight number is correct.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);">
+        <div class="card u-cf924bfe">
           <h4>Can I book a car for a full day?</h4>
           <p>Yes. Select "City / Hourly" service and choose 4, 8, or 12 hours. Your driver will follow your itinerary for the day.</p>
         </div>
-        <div class="card" style="padding:var(--space-6);">
+        <div class="card u-cf924bfe">
           <h4>Is the price per person or per car?</h4>
           <p>All prices are per car, not per person. The vehicle capacity is shown next to each option (Economy, Business, MPV).</p>
         </div>
@@ -863,7 +860,7 @@
   </section>
 
   <!-- Travel Essentials -->
-  <section class="section" style="background:var(--color-cream);">
+  <section class="section u-ff386b85">
     <div class="container">
       <div class="section-header">
         <h2>Travel Essentials for Your China Trip</h2>
@@ -871,23 +868,23 @@
         <p class="text-lead">Make your journey smoother with these essential services.</p>
       </div>
       <div class="grid grid-3">
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-accent);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">📶</div>
-          <h4>Mobile Pocket Wi-Fi</h4>
-          <p style="margin-top:var(--space-3);">Stay connected anywhere in China with a pocket Wi-Fi device. Pre-book online and pick up at the airport or have it delivered to your hotel.</p>
-          <a href="https://www.chinawifigo.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Wi-Fi at ChinaWiFiGo</a>
+        <div class="card u-6a10b399">
+          <div class="u-1b9fc701">📶</div>
+          <h3 class="lvl-h4">Mobile Pocket Wi-Fi</h3>
+          <p class="u-df284703">Stay connected anywhere in China with a pocket Wi-Fi device. Pre-book online and pick up at the airport or have it delivered to your hotel.</p>
+          <a href="https://www.chinawifigo.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Wi-Fi at ChinaWiFiGo</a>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-primary);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">🗣️</div>
+        <div class="card u-40a3aeb1">
+          <div class="u-1b9fc701">🗣️</div>
           <h4>English-Speaking Guide</h4>
-          <p style="margin-top:var(--space-3);">Explore China with a professional English-speaking guide. Custom tours, skip-the-line access, and insider knowledge.</p>
-          <a href="https://www.vipchinaguide.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Guide at VIPChinaGuide</a>
+          <p class="u-df284703">Explore China with a professional English-speaking guide. Custom tours, skip-the-line access, and insider knowledge.</p>
+          <a href="https://www.vipchinaguide.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Guide at VIPChinaGuide</a>
         </div>
-        <div class="card" style="text-align:center;padding:var(--space-8);border-top:4px solid var(--color-info);">
-          <div style="font-size:3rem;margin-bottom:var(--space-4);">🏥</div>
+        <div class="card u-086225c6">
+          <div class="u-1b9fc701">🏥</div>
           <h4>Medical Services</h4>
-          <p style="margin-top:var(--space-3);">Add a health checkup, dental cleaning, or TCM treatment to your trip. China medical services cost 70% less than in the US or Europe.</p>
-          <a href="https://www.mediescortchina.com" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:var(--space-4);">Book Medical at MediEscortChina</a>
+          <p class="u-df284703">Add a health checkup, dental cleaning, or TCM treatment to your trip. China medical services cost 70% less than in the US or Europe.</p>
+          <a href="https://www.mediescortchina.com" target="_blank" rel="noopener" class="btn btn-outline u-bc38d4de">Book Medical at MediEscortChina</a>
         </div>
       </div>
     </div>
@@ -897,7 +894,7 @@
       <div class="footer-grid">
         <div>
           <div class="footer-brand">
-            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img" style="height:40px;width:auto;"></picture>
+            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img u-21dd2803"></picture>
             <span>之二虫<sup>®</sup></span><span>|</span><span>Chinawheely</span>
           </div>
           <p class="footer-desc">Professional airport transfers and private car service across China. Licensed by 武汉市之二虫文旅有限公司.</p>
@@ -921,18 +918,18 @@
           </ul>
         </div>
       </div>
-      <div class="footer-links-bar" style="margin-bottom:var(--space-8);border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--space-8);">
-        <div class="footer-title" style="margin-bottom:var(--space-3);">Friendly Links</div>
-        <div style="display:flex;flex-wrap:wrap;gap:var(--space-4) var(--space-6);">
-          <a href="https://www.vipchinaguide.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">VIPChinaGuide导游服务</a>
-          <a href="https://www.Chinawheely.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">Chinawheely用车服务</a>
-          <a href="https://www.MediEscortChina.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">MediEscortChina入境医疗服务</a>
-          <a href="https://www.ChinaWiFiGo.com" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">ChinaWiFiGo中国口袋Wi-Fi服务</a>
-          <a href="https://www.wuhan.video" rel="nofollow noopener" target="_blank" style="color:var(--color-gray-400);font-size:var(--text-sm);text-decoration:none;">武汉视频指南</a>
+      <div class="footer-links-bar u-6d549b67">
+        <div class="footer-title u-a4fa6444">Friendly Links</div>
+        <div class="u-0c677f24">
+          <a href="https://www.vipchinaguide.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">VIPChinaGuide导游服务</a>
+          <a href="https://www.chinawheely.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">Chinawheely用车服务</a>
+          <a href="https://www.MediEscortChina.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">MediEscortChina入境医疗服务</a>
+          <a href="https://www.ChinaWiFiGo.com" rel="nofollow noopener" target="_blank" class="u-2325fdff">ChinaWiFiGo中国口袋Wi-Fi服务</a>
+          <a href="https://www.wuhan.video" rel="nofollow noopener" target="_blank" class="u-2325fdff">武汉视频指南</a>
         </div>
       </div>
 
-      <div class="footer-cities" style="min-width:220px;">
+      <div class="footer-cities u-019128fe">
           <div class="footer-title">Cities</div>
           <ul class="footer-links">
             <li><a href="beijing.html">Beijing</a></li>
@@ -946,12 +943,12 @@
             <li><a href="index.html#cities">All Cities →</a></li>
           </ul>
         </div>
-      <div class="footer-license" style="margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);">
-        <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
-          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" style="height:80px;width:auto;border-radius:var(--radius-md);"></picture>
-          <div style="flex:1;min-width:220px;">
-            <p style="margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600;">Licensed Travel Agency</p>
-            <p style="margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5;">License No. L-HUB-101603. Wuhan City Zhierchong Culture & Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People's Republic of China to operate domestic and inbound tourism services. Issued July 7, 2025.</p>
+      <div class="footer-license u-b003ef59">
+        <div class="u-f5c46350">
+          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" class="u-9879fc66"></picture>
+          <div class="u-0681077d">
+            <p class="u-6243b77b">Licensed Travel Agency</p>
+            <p class="u-587b2f19">License No. L-HUB-101603. Wuhan City Zhierchong Culture & Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People's Republic of China to operate domestic and inbound tourism services. Issued July 7, 2025.</p>
           </div>
         </div>
       </div>
@@ -1002,7 +999,7 @@
         <div class="payment-tab-content active" id="tab-paypal">
           <div class="qr-section">
             <picture><source srcset="images/pay-paypal-qr.webp" type="image/webp"><img loading="lazy" width="1168" height="1180" decoding="async" src="images/pay-paypal-qr.png" alt="PayPal QR Code"></picture>
-            <p style="font-size:var(--text-sm);color:var(--color-gray-600);">Scan with PayPal app to pay</p>
+            <p class="u-38b7a70f">Scan with PayPal app to pay</p>
             <div class="qr-note">
               <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
             </div>
@@ -1013,7 +1010,7 @@
         <div class="payment-tab-content" id="tab-alipay">
           <div class="qr-section">
             <picture><source srcset="images/pay-alipay-qr.webp" type="image/webp"><img loading="lazy" width="1112" height="1480" decoding="async" src="images/pay-alipay-qr.png" alt="Alipay QR Code"></picture>
-            <p style="font-size:var(--text-sm);color:var(--color-gray-600);">Scan with Alipay app to pay</p>
+            <p class="u-38b7a70f">Scan with Alipay app to pay</p>
             <div class="qr-note">
               <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
             </div>
@@ -1025,7 +1022,7 @@
           <p><strong>Need help?</strong> Chat with us on WhatsApp</p>
           <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
           <p>📱 Scan to chat with us on WhatsApp</p>
-          <p>Or click to open: <a href="https://wa.me/8615527771775" target="_blank">https://wa.me/8615527771775</a></p>
+          <p>Or click to open: <a href="https://wa.me/8615527771775" target="_blank" rel="noopener noreferrer">https://wa.me/8615527771775</a></p>
         </div>
 
         <!-- Contact Info -->
@@ -1057,17 +1054,17 @@
 <!-- WhatsApp QR Modal -->
 <div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
   <div class="whatsapp-modal-box" data-action="stop-propagation">
-    <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
+    <button type="button" class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">×</button>
     <h3>Chat on WhatsApp</h3>
     <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
     <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
     <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
-    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp" style="display:inline-flex;padding:var(--space-3) var(--space-6);border-radius:var(--radius-md);font-weight:600;text-decoration:none;">Open WhatsApp Chat</a>
+    <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-whatsapp u-20989682" rel="noopener noreferrer">Open WhatsApp Chat</a>
   </div>
 </div>
 
 <!-- Floating WhatsApp Button -->
-<button class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+<button type="button" class="fab-whatsapp" data-action="open-whatsapp" aria-label="Chat on WhatsApp">
   <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
 </body>
