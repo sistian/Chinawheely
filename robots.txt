@@ -8,7 +8,6 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /thank-you.html
 Disallow: /cancellation.html
-Disallow: /*?
 Crawl-delay: 1
 
 # Search engine crawlers
@@ -20,6 +19,28 @@ Allow: /
 
 User-agent: Googlebot-Image
 Allow: /images/
+
+# Allow AI / Crawl bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: AnthropicAI
+Allow: /
+
+User-agent: GoogleExtended
+Allow: /
 
 # Block aggressive SEO crawlers
 User-agent: SemrushBot
@@ -43,9 +64,6 @@ Disallow: /
 User-agent: Nutch
 Disallow: /
 
-User-agent: CCBot
-Disallow: /
-
 User-agent: spbot
 Disallow: /
 
@@ -54,23 +72,3 @@ Disallow: /
 
 User-agent: 360Spider
 Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-Sitemap: https://www.chinawheely.com/sitemap.xml
-
-# Sensitive paths
-Disallow: /.env
-Disallow: /.env.local
-Disallow: /.env.production
-Disallow: /.git/
-Disallow: /.htaccess
-Disallow: /.htpasswd
-Disallow: /backup/
-Disallow: /config/
-Disallow: /debug/
-Disallow: /test/
-Disallow: /tmp/
-Disallow: /*.bak$
-Disallow: /*.backup$
