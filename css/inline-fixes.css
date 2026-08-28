@@ -18,7 +18,7 @@
 .u-0f2e5657 { font-size:2.5rem;margin-bottom:var(--space-3); }
 .u-10123434 { flex:1;cursor:pointer; }
 .u-10929ef3 { display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);z-index:999;padding:2rem;flex-direction:column;gap:1.5rem; }
-.u-11ac7e2b { color:rgba(255,255,255,0.9); }
+.u-11ac7e2b { color:var(--color-gray-900); }
 .u-1265ee1f { margin-bottom:32px; }
 .u-12c2232e { font-size:var(--text-sm);color:var(--color-gray-500); }
 .u-14704cda { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px; }
@@ -93,7 +93,7 @@
 .u-66708a10 { background:var(--color-primary);border-radius:16px;padding:32px;margin-bottom:32px;color:#fff; }
 .u-67580851 { padding:var(--space-6); border-top:4px solid var(--color-accent); }
 .u-6870bc04 { padding:var(--space-6); border-left:4px solid var(--color-primary); }
-.u-68efbec4 { margin-bottom:8px;color:white; }
+.u-68efbec4 { margin-bottom:8px;color:var(--color-gray-900); }
 .u-6a10b399 { text-align:center;padding:var(--space-8);border-top:4px solid var(--color-accent); }
 .u-6a5e8cb9 { color:white; }
 .u-6b0c4bc2 { color:var(--color-white);font-size:1.1rem;margin-bottom:8px; }
@@ -240,3 +240,6 @@
 .u-ff386b85 { background:var(--color-cream); }
 .u-ff90d337 { background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('images/beijing.jpg') center/cover no-repeat; }
 .u-ffb85967 { color:rgba(255,255,255,0.5);margin-top:var(--space-6);font-size:var(--text-sm); }
+.u-4d2e9c7b { background:var(--color-white);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md);transition:transform var(--transition-base),box-shadow var(--transition-base); }
+.u-4d2e9c7b:hover { transform:translateY(-4px);box-shadow:var(--shadow-xl); }
+.u-fabc8aea { padding:var(--space-6); }
