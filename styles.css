@@ -893,7 +893,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 40%, transparent 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.1) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -928,22 +928,30 @@
 
 .city-card-name {
   font-family: 'Inter', 'Playfair Display', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
   text-align: center;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  margin-bottom: 4px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.5);
+  margin-bottom: 6px;
+  background: rgba(0,0,0,0.35);
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 .city-card-name-cn {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.95);
   text-align: center;
-  letter-spacing: 3px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  letter-spacing: 4px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6), 0 0 4px rgba(0,0,0,0.4);
   font-weight: 400;
+  background: rgba(0,0,0,0.25);
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 /* Responsive caption */
