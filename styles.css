@@ -904,6 +904,7 @@
   background-size: cover;
   background-position: center;
   transition: transform 0.5s ease;
+  z-index: 1;
 }
 
 .city-card-wrapper .city-card:hover .city-card-bg {
