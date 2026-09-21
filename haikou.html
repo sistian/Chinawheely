@@ -1,104 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"City","name":"Haikou","alternateName":"haikou","description":"Haikou is a city in China with unique attractions, culture, and cuisine.","containedInPlace":{"@type":"Province","name":"China"},"population":{"@type":"QuantitativeValue","value":"1000000"},"area":{"@type":"QuantitativeValue","value":"10000"}}
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Airport Transfer & Car Service in Haikou | ChinaWheely</title>
-  <meta name="description" content="Book private airport transfer and car service in Haikou, 海南省. Professional English-speaking drivers, fixed prices, 24/7 availability.">
-  <meta name="keywords" content="Haikou airport transfer, Haikou car service, private car Haikou, 海口 airport pickup">
-  <link rel="canonical" href="https://www.chinawheely.com/haikou.html">
-  <link href="styles.css" rel="stylesheet">
-  <style>
-    .hero { background: linear-gradient(135deg, #1B4D3E 0%, #0d3d27 100%); color: white; padding: 80px 0; text-align: center; }
-    .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .hero .subtitle { font-size: 1.2rem; opacity: 0.9; }
-    .section { padding: 60px 0; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
-    .service-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-    .service-card h3 { color: #1B4D3E; margin-bottom: 12px; }
-    .service-card p { color: #666; font-size: 0.95rem; line-height: 1.6; }
-    .price-tag { font-size: 1.5rem; font-weight: 700; color: #D4AF37; margin-top: 12px; }
-    .cta-section { background: #1B4D3E; color: white; text-align: center; padding: 60px 20px; }
-    .cta-btn { display: inline-block; background: #D4AF37; color: #1a1a1a; padding: 14px 32px; border-radius: 8px; font-weight: 600; text-decoration: none; margin-top: 20px; }
-    .region-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; display: inline-block; margin-bottom: 16px; }
-  </style>
+  <title>Haikou Airport Transfer & Car Service | Chinawheely</title>
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Book Haikou private car service with licensed driver. Fixed price airport transfers and city tours. No hidden fees.">
+  <link rel="canonical" href="https://haikou.chinawheely.com/">
+  <meta property="og:title" content="Haikou Airport Transfer & Private Car Service | Chinawheely">
+  <meta property="og:description" content="Book Haikou private car service. HKK Meilan Airport transfers, tropical city tours, Hainanese cuisine, duty-free shopping, and Hainan Island car service. Fixed price.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://haikou.chinawheely.com/">
+  <meta property="og:site_name" content="Chinawheely">
+  <meta property="og:image" content="https://www.chinawheely.com/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/inline-fixes.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="logo">ChinaWheely</a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="booking.html">Book Now</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
+  <nav class="nav" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img"></picture>
+        <span class="nav-brand-text">Chinawheely</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="index.html#cities">Cities</a></li>
+        <li><a href="booking.html">Book Now</a></li>
+      </ul>
+      <div class="nav-cta"><a href="booking.html?city=Haikou" class="btn btn-primary">Book Haikou Ride</a></div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="index.html">Home</a><a href="services.html">Services</a>
+    <a href="index.html#cities">Cities</a><a href="booking.html">Book Now</a>
+  </div>
 
   <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1>Haikou<br><span>Airport Transfer &amp; Private Car</span></h1>
+        <p class="hero-lead">Haikou Meilan Airport (HKK) transfers, tropical city tours, duty-free shopping, Hainanese cuisine, and island car service with professional licensed driver. Fixed price.</p>
+        <div class="hero-buttons">
+          <a href="booking.html?city=Haikou" class="btn btn-accent btn-large">Book Haikou Transfer</a>
+          <a href="#city-info" class="btn btn-outline-light btn-large">Explore Haikou</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="city-info">
     <div class="container">
-      <span class="region-tag">华南 China</span>
-      <h1>Haikou Airport Transfer & Car Service</h1>
-      <p class="subtitle">海口 · 海南省</p>
+      <div class="section-header">
+        <h2>Haikou at a Glance</h2>
+        <div class="divider"></div>
+        <p class="text-lead">The tropical capital of Hainan Province - a coastal city of 3 million people at the northern tip of China southernmost island, known for duty-free shopping, volcanic landscapes, and year-round summer.</p>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:var(--space-12);">
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">2,284</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">km2</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">Total Area</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">3.0M</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">Population</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">2024 Estimate</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">25 km</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">to HKK Airport</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">30-40 min by car</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">22-32C</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">Year-Round</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">Average Temperature</div>
+        </div>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-10);">
+        <div>
+          <h3>Name Origin</h3>
+          <p>The name "Haikou" (海口) literally means <strong>"Mouth of the Sea"</strong> (hai = sea, kou = mouth/entrance) - referring to its location at the mouth of the Nandu River (南渡江) where it flows into the Gulf of Tonkin. The city has served as Hainan main port and administrative center for over 1,000 years. Historically known as <strong>Qiongzhou</strong> (琼州), Haikou has been the gateway to tropical Hainan since the Tang Dynasty.</p>
+          <h3 style="margin-top:var(--space-8);">Culture &amp; Heritage</h3>
+          <p>Haikou is a blend of <strong>Hainanese, Cantonese, and Hakka cultural traditions</strong>. The city has a significant <strong>Hakka community</strong> - the Datian (大田) and Yanfeng (雁峰) Hakka villages near the city preserve traditional Hakka architecture and customs. Haikou is famous for <strong>Hainanese chicken rice (文昌鸡)</strong> - arguably the most beloved dish in all of Southeast Asia. The city also has a strong <strong>reform-minded intellectual tradition</strong> - Haikou native <strong>Hairui</strong> (海瑞, 1514-1587), the famous Ming Dynasty honest official, is commemorated in the city and his tomb is a major historical site.</p>
+        </div>
+        <div>
+          <h3>Transportation</h3>
+          <p><strong>Haikou Meilan International Airport (HKK)</strong> is located just 25 km north of downtown Haikou - about 30-40 minutes by road. The airport serves domestic routes across China and international routes to Southeast Asia and Korea. Haikou also has a <strong>ferry port</strong> connecting to the mainland (Zhongshan, Guangzhou, and other ports) - the only way to bring vehicles to Hainan Island. The <strong>Hainan East Ring Railway</strong> connects Haikou to Sanya in 1.5 hours.</p>
+          <h3 style="margin-top:var(--space-8);">Geography &amp; Environment</h3>
+          <p>Haikou is located on the <strong>northern coast of Hainan Island</strong>, facing the Gulf of Tonkin (北部湾) and the South China Sea. The city sits on a <strong>volcanic lava plain</strong> - the Leiqiong Volcanic Field (雷琼火山群) UNESCO Global Geopark extends beneath the city, with volcanic cones and craters visible in the urban area. The climate is <strong>tropical oceanic monsoon</strong> - warm year-round (avg 22-32C), humid, with a distinct wet season (May-October) and dry season (November-April).</p>
+        </div>
+      </div>
+      <h3 style="margin-top:var(--space-10);">Maps &amp; Transit</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;">
+        <a href="http://www.haikou.gov.cn/" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#2d6a4f;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:600;">Map of Haikou</a>
+        <a href="https://www.12306.cn/" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#E63946;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:600;">China HSR Booking</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-gray-100);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Top Haikou Attractions</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical coastal culture, volcanic landscapes, duty-free shopping, and the birthplace of Hainanese cuisine.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Waigo Plaza (万绿园)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Urban Waterfront Park - 1,000+ Tropical Plants</p>
+            <p style="margin-top:var(--space-3);">Waigo Plaza (万绿园) is Haikou largest and most beloved urban park - a vast lakeside green space in the city center with over 1,000 species of tropical plants, mangrove forests, and waterfront promenades. Locals come here for morning tai chi, evening dancing, and weekend kite-flying. The best time to visit is early morning or at sunset.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#8b4513,#cd853f);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Hairui Tomb (海瑞墓)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Ming Dynasty Honest Official - Cultural Heritage</p>
+            <p style="margin-top:var(--space-3);">The tomb and memorial hall of <strong>Hairui</strong> (海瑞, 1514-1587), one of China most famous honest officials. During the Ming Dynasty he famously presented a memorial criticizing the Jiajing Emperor - an act of extraordinary courage that made him a symbol of integrity. The tomb complex includes the tomb mound, memorial steles, exhibition halls, and a bonsai garden. A place of deep cultural significance.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Hainan Provincial Museum</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">History, Culture &amp; Li Minority Heritage</p>
+            <p style="margin-top:var(--space-3);">Hainan Provincial Museum houses artifacts from the island 10,000-year history - including Li minority textiles, Han Dynasty ceramics, maritime Silk Road objects, and natural history exhibits. The museum has excellent English labels and a good cafe. Free admission. Best visited in the afternoon when the outdoor exhibits are less hot.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#8b4513,#cd853f);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Leiqiong Volcanic Geopark (雷琼地质公园)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">UNESCO Global Geopark - Ancient Volcanoes</p>
+            <p style="margin-top:var(--space-3);">The Leiqiong Volcanic Geopark (雷琼海口火山群世界地质公园) preserves ancient volcanic craters and lava formations just outside the city. The Crater of Maan Mountain (马鞍岭火山口) is the most impressive - a 222m-deep volcanic crater you can walk down into. The surrounding area has traditional Hakka stone houses built from volcanic rock. Fascinating geology.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Haikou Century Bridge (世纪大桥)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Iconic Night View - 3.1 km Cable Stayed Bridge</p>
+            <p style="margin-top:var(--space-3);">The 3.1 km Haikou Century Bridge (世纪大桥) is the city most recognizable modern landmark - a cable-stayed bridge spanning Haidian Bay with an iconic inverted "A" tower design. The bridge is spectacularly lit at night and the viewpoint at the bridge foot is a popular evening gathering spot for locals and visitors.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Duty-Free Shopping (CDF Haikou City)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">China Largest Duty-Free Shop - Up to 30% Off</p>
+            <p style="margin-top:var(--space-3);">Haikou is one of China major duty-free shopping destinations. The <strong>CNSC Haikou Duty-Free Shop</strong> (cdf海口日月广场) in the city center offers香水, cosmetics, watches, bags, and electronics at 20-30% below mainland prices. Maximum duty-free allowance is 100,000 RMB per person per year. A must-visit for shoppers.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <h2 style="text-align: center; color: #1B4D3E; margin-bottom: 16px;">Our Services in Haikou</h2>
-      <p style="text-align: center; color: #666; max-width: 600px; margin: 0 auto 40px;">Professional private car service with English-speaking drivers available 24/7 for all your transportation needs in Haikou.</p>
-      
-      <div class="services-grid">
-        <div class="service-card">
-          <h3>✈️ Airport Transfer</h3>
-          <p>Airport pickup and drop-off at Haikou airport. Meet & greet service included.</p>
-          <div class="price-tag">From $35</div>
+      <div class="section-header">
+        <h2>Popular Haikou Routes</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Fixed-price private car service for Haikou most popular journeys.</p>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-6);">
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>HKK Airport - Haikou Downtown</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $20</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~25 km - 30-40 min - Economy/Business/MPV</p>
+          <p>Your driver meets you at Haikou Meilan Airport (HKK) arrival hall and drives you directly to your hotel in downtown Haikou, Haidian Island, or Xiuying District. The airport is close to the city - quick and easy by private car.</p>
         </div>
-        <div class="service-card">
-          <h3>🏨 Hotel Transfers</h3>
-          <p>Comfortable transfers between hotels, airports, and any location in Haikou.</p>
-          <div class="price-tag">From $25</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Duty-Free Shopping Transfer</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $15</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~5-15 km - 20-30 min - Economy/Business</p>
+          <p>Your driver takes you to the CDF Haikou duty-free shopping center in the city center and waits while you shop. After collecting your purchases, you are driven back to your hotel or the ferry terminal.</p>
         </div>
-        <div class="service-card">
-          <h3>🏢 Business Travel</h3>
-          <p>Professional service for meetings, conferences, and corporate events.</p>
-          <div class="price-tag">From $40</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Volcanic Geopark Half Day</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $35</span>
+          </div>
+          <p style="font-size:var(--space-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~25 km - 3-4 hours - Economy/Business</p>
+          <p>Visit the Leiqiong Volcanic Geopark and walk down into the Maan Mountain crater. Your driver also stops at nearby Hakka stone villages built from volcanic rock. Best done in the morning before the tropical heat peaks.</p>
         </div>
-        <div class="service-card">
-          <h3>🗺️ City Tours</h3>
-          <p>Explore Haikou and nearby attractions with a professional driver guide.</p>
-          <div class="price-tag">From $60/day</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Haikou City Tour</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $40</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~30 km - Half day - Economy/Business</p>
+          <p>Cover Haikou main attractions in a half day: Waigo Plaza waterfront park, Hairui Tomb, Hainan Provincial Museum, and the Century Bridge viewpoint. Your driver knows the best order to visit based on time of day and traffic.</p>
         </div>
-        <div class="service-card">
-          <h3>🚄 Train Station Transfers</h3>
-          <p>Reliable transfers to and from all train stations in Haikou.</p>
-          <div class="price-tag">From $25</div>
+      </div>
+      <div class="text-center" style="margin-top:var(--space-10);">
+        <a href="booking.html?city=Haikou" class="btn btn-accent btn-large">Book Your Haikou Ride</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Getting to &amp; Around Haikou</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Haikou Meilan Airport is close to the city. The island is best explored by private car.</p>
+      </div>
+      <h3>Haikou Meilan International Airport (HKK)</h3>
+      <div class="grid grid-2" style="gap:var(--space-6);margin-bottom:var(--space-10);">
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
+          <h4>Haikou Meilan Airport (HKK)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">25 km north of city center - 30-40 min by road</p>
+          <p>HKK (海口美兰国际机场) is Hainan main aviation hub with domestic flights across China and international routes to Bangkok, Singapore, Seoul, and other Southeast Asian cities. The airport is compact and efficient. It is connected to Haikou city by the Hainan East Ring Railway (Kuaiqian Line) - trains run every 15-30 minutes and take 30 minutes to Haikou East Station. However, the train does not serve the old city or ferry terminal areas - a private car is more convenient.</p>
         </div>
-        <div class="service-card">
-          <h3>💼 Long Distance</h3>
-          <p>Inter-city travel to destinations across 华南 China.</p>
-          <div class="price-tag">Contact for quote</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <h4>Getting Around Haikou</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">City layout and transport options</p>
+          <p>Haikou is a relatively flat city spread across a volcanic plain. The main tourist areas - the old city (老城区), Haidian Island (海南大学 area), and the new downtown (国兴大道) - are all within 15 km of each other. Didi (China Uber) is widely available in Haikou but surge pricing is common during rainy weather. A private car is recommended for volcano trips and ferry terminal transfers.</p>
+        </div>
+      </div>
+      <h3>Haikou Ferry Terminal &amp; intercity Transport</h3>
+      <div class="grid grid-3" style="gap:var(--space-6);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Haikou New Port (海口新海港)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Main ferry terminal - to mainland China</p>
+          <p>Haikou New Port (新海港) is the main passenger ferry terminal, handling routes to Zhongshan (中山, 1.5 hours), Guangzhou (广州, 2 hours), and other mainland ports. This is the port used if you are bringing a vehicle to Hainan. Your driver can drop you at the terminal entrance.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Haikou Railway Stations</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">East Station / Haian Railway</p>
+          <p><strong>Haikou East Station</strong> (海口东站) is the main intercity rail hub, serving the Hainan East Ring Railway to Sanya (1.5 hours). <strong>Haikou Railway Station</strong> (海口站) near the old city handles some intercity trains. <strong>Meilan Railway Station</strong> connects to the airport.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);display:flex;align-items:center;justify-content:center;text-align:center;">
+          <div>
+            <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+            <h4>Need a Station Pickup?</h4>
+            <p style="margin-bottom:var(--space-4);">We meet you at the exit with a name board and help with luggage.</p>
+            <a href="booking.html?city=Haikou" class="btn btn-primary">Book Station Transfer</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="cta-section">
+  <section class="section">
     <div class="container">
-      <h2>Book Your Haikou Transfer Today</h2>
-      <p style="opacity: 0.9; max-width: 500px; margin: 16px auto;">Get instant confirmation with our best-price guarantee. English-speaking support available 24/7.</p>
-      <a href="booking.html" class="cta-btn">Book Now →</a>
+      <div class="section-header">
+        <h2>Best Photo Spots in Haikou</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical waterfronts, volcanic craters, and the iconic century bridge at dusk.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Century Bridge at Night</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best after dark</p>
+          <p>The Haikou Century Bridge is spectacularly lit at night - the inverted "A" tower creates a striking silhouette against the night sky. The best viewpoint is the waterfront promenade at the bridge foot, where locals gather in the evening for dancing and street food.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Waigo Plaza at Sunrise</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at dawn</p>
+          <p>Waigo Plaza (万绿园) at sunrise is when the park is most alive - tai chi groups, ballroom dancers, and morning exercisers fill the lakeside. The tropical plants are fresh and dewy and the lake reflects the rising sun. Arrive before 7 AM to catch the full morning culture.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Volcanic Crater Panorama</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best with wide-angle lens</p>
+          <p>The Maan Mountain crater at Leiqiong Volcanic Geopark is most dramatic shot from the viewpoint at the crater rim, looking down into the 222m-deep volcanic depression. The surrounding volcanic rock landscape and Hakka stone village walls make excellent foreground elements.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Hairui Tomb Bonsai Garden</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best in morning light</p>
+          <p>The bonsai garden at Hairui Tomb is a hidden photography gem - ancient cypress trees, carefully pruned bonsai, and traditional Chinese architecture. The morning light filtering through the trees creates a contemplative atmosphere. Less visited than other attractions.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Old City Street Life</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best mid-morning</p>
+          <p>The narrow streets of old Haikou (老城区) near the former concession area have a unique blend of colonial and tropical architecture. Look for the old French consulate building, the arcaded shopfronts, and the daily life of a working-class Hainanese neighborhood. Best photographed mid-morning on weekdays.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Hainan Provincial Museum Atrium</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best with flash or tripod</p>
+          <p>The museum atrium has beautiful natural lighting and striking architectural lines. The exhibition halls have excellent displays of Li minority textiles and Han Dynasty ceramics. Photography inside requires no flash for most exhibits. Free admission and air-conditioned - a good refuge from the tropical midday heat.</p>
+        </div>
+      </div>
     </div>
   </section>
 
+  <section class="section" style="background:var(--color-gray-100);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Food &amp; Shopping in Haikou</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-10);">
+        <div>
+          <h3>Must-Try Hainanese Cuisine</h3>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainanese Chicken Rice (文昌鸡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The dish that made Hainan famous worldwide. Chicken poached in a light ginger-scallion broth, served chopped with seasoned rice cooked in the same broth, cucumber, and chili-lime dipping sauce. Found at every restaurant in Haikou - the best versions are at traditional Hainanese eateries in the old city.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainanese Wenchang Chicken (文昌鸡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Named after Wenchang County (80 km east of Haikou) where the chickens are raised free-range on coconut and grain. The premium version of Hainanese chicken rice - the meat is firmer and more flavorful. Many Haikou restaurants specifically state they use Wenchang chickens.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Jianbings and Street Breakfast</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Haikou morning streets come alive with breakfast vendors. Look for <strong>jianbing</strong> (煎饼, crispy crepe with egg and scallion), <strong>bao dou jiang</strong> (豆浆, soy milk), and <strong>zhaliang</strong> (炸粽, fried rice dumplings). The best street breakfast areas are near the old city wet markets.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainan Coconut Chicken Hot Pot (椰子鸡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Fresh young coconut juice used as the hot pot broth, with tender chicken, mushrooms, and vegetables. The sweetness of the coconut water balances the savory chicken. A tropical specialty unique to Hainan. Available at specialty hot pot restaurants throughout Haikou.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hakka Salted Pork (客家咸猪肉)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Haikou has a significant Hakka community and their salted pork dishes are a local specialty. The pork is dry-cured with salt and spices, then steamed or fried. Available at Hakka restaurants near the volcanic geopark area and at the old city market stalls.</p>
+          </div>
+        </div>
+        <div>
+          <h3>Shopping Destinations</h3>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>CNSC Duty-Free Shopping Center</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The CNSC (cdf海口日月广场) is China largest duty-free shopping complex, with香水, skincare, watches, bags, electronics, and more at 20-30% below mainland prices. Present your passport and departure flight ticket to qualify for duty-free. The shop near Haikou old port is the main downtown location.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Haikou Old City Wet Markets</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The old city wet markets are the most authentic shopping experience in Haikou. Fresh tropical fruits, live seafood, dried fish, and local spices. The <strong>Dongmen Market</strong> (东门市场) is the largest and most atmospheric - especially in the early morning when the catch arrives.</p>
+          </div>
+          <h4 style="margin-top:var(--space-8);">What to Buy in Haikou</h4>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainanese Coffee (兴隆咖啡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Hainan has a long tradition of coffee cultivation in the Xinglong area (兴隆). The local Arabica coffee is grown on volcanic soil and has a distinctive smooth, low-acid flavor. Available at supermarkets and specialty shops throughout Haikou. Ground and whole bean options.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Coconut Products (椰子制品)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Hainan produces excellent coconut products - coconut oil, coconut milk, dried coconut flakes, and coconut candy. Available at the old city markets and supermarkets. The coconut oil in particular is high quality and reasonably priced.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainan Tropical Fruits (热带水果)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Fresh tropical fruits at a fraction of mainland prices - durian, mangosteen, longan, lychee, and papaya. Best at the Dongmen Market or the fruit wholesale market in the Xiuying District. Your driver can take you to the best fruit markets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Medical History &amp; TCM Heritage of Haikou</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical medicine, Hakka herbal traditions, and volcanic mineral springs at China southernmost edge.</p>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-8);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Tropical Medicine Tradition</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>Haikou has been an important center of tropical medicine since the early 20th century.</strong> The city foreign concession era (late 1800s-1940s) brought European missionaries and doctors who established hospitals and clinics. The <strong>Hainan Provincial People's Hospital</strong> has a long history of treating tropical diseases including malaria, dengue fever, and typhoid - diseases less common elsewhere in China. The warm climate and coastal environment have also made Hainan a center for rehabilitation medicine.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">HKK airport has tropical disease screening facilities for arriving travelers.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Hakka Herbal Medicine</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The Hakka community in Haikou maintains a strong tradition of herbal medicine.</strong> Hakka herbal formulas (客家药方) use local tropical plants - many from the rainforest and volcanic areas of Hainan - for digestive health, joint pain, and immune support. Hakka herbal soup (药膳汤) is a daily tradition in many households, with specific herbs used for different seasons and conditions.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Available at Hakka medicine shops near the volcanic geopark and old city Hakka villages.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Volcanic Mineral Springs</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The Leiqiong volcanic field produces mineral-rich spring water used for therapeutic bathing.</strong> The volcanic rock filters the groundwater, adding minerals including selenium, zinc, and silica - all associated with skin health and circulation. <strong>Hot spring resorts</strong> in the volcanic area near Haikou (especially in Qiongshan District) offer mineral spring pools. The water is naturally warm and has been used for generations.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Hot spring resorts near the Leiqiong Geopark area are open to day visitors.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Hairui Health Legacy</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>Hairui, the Ming Dynasty honest official from Haikou, is remembered for his simple living and moral discipline.</strong> His tomb complex includes a bonsai garden traditionally associated with longevity and contemplation. His personal habits - simple diet, regular exercise, and intellectual pursuits - are referenced in local wellness traditions as a model of healthy living.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The Hairui Tomb bonsai garden is open to visitors daily.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Haikou Local Secrets</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Insider tips to help you experience Haikou like a local.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Book HKK Airport Transfer 12 Hours Ahead</h4>
+          <p>Haikou Meilan Airport (HKK) is only 25 km from downtown - the drive takes 30-40 minutes. Booking 12 hours ahead ensures your driver is ready when you land. The airport has excellent facilities but can get crowded during peak travel periods.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Eat Chicken Rice at the Old City Market</h4>
+          <p>Skip the tourist-oriented restaurants. The best Hainanese chicken rice in Haikou is at the small food stalls inside or near the old city wet markets. Ask your driver to take you to the most popular local spot - you will not be disappointed. Best for lunch.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Visit the Duty-Free Shop with Your Passport</h4>
+          <p>Bring your passport and departure flight information to the CNSC duty-free shop. You need these to qualify for duty-free purchases. The allowance is 100,000 RMB per person per year. Plan what you want to buy before you go - the shop is massive and overwhelming without a plan.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Go to the Volcano in the Morning</h4>
+          <p>The Leiqiong Volcanic Geopark is most comfortable to visit before 10 AM when the tropical sun is not yet intense. Wear sturdy shoes as the crater paths are uneven. After visiting the volcano, your driver can take you to a nearby Hakka village for a simple lunch at a family-run restaurant.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Walk the Century Bridge Foot at Night</h4>
+          <p>The area at the foot of the Century Bridge (世纪大桥) comes alive in the evening. Locals dance, practice tai chi, and sell street food. The bridge is lit up beautifully after dark. The view from the bridge foot looking back at the city skyline is one of Haikou best nighttime scenes.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Take the Ferry from Haikou New Port</h4>
+          <p>If you are leaving Hainan Island by ferry, use Haikou New Port (新海港) - it is the most modern and efficient terminal. Book your ferry ticket through the "Bus 12306" app or at the port. Your driver can drop you right at the terminal entrance. Ferries to Zhongshan and Guangzhou depart frequently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Best Time to Visit Haikou</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical oceanic climate - warm year-round with distinct wet and dry seasons. Hainan is a year-round destination.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Autumn</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Sep-Nov - 24-30C</p>
+          <p>The best overall season to visit Haikou. The typhoon season winds down, humidity drops, and the weather is warm and comfortable. Good for all outdoor activities including volcano visits, duty-free shopping, and beach areas. Shoulder season means lower hotel prices.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Comfortable weather, fewer crowds, lower prices</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Winter</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Dec-Feb - 18-24C</p>
+          <p>Peak season as mainland China freezes. Warm and dry - the only time when most of China is cold and Haikou is tropical and pleasant. Hotel prices peak during Chinese New Year (January/February). Book well in advance for Chinese New Year travel.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Warm escape from mainland winter, Chinese New Year atmosphere</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Spring</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Mar-May - 22-30C</p>
+          <p>Warm and increasingly humid. The weather is pleasant but the "回南天" (hui nan tian) humidity - when warm moist air meets cool surfaces - can make indoor spaces feel damp in March and April. Still a good time to visit with fewer crowds than winter.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Warm weather, tropical fruits in season, fewer tourists</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Summer</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Jun-Aug - 28-34C</p>
+          <p>Hot, humid, and rainy. Afternoon thunderstorms are daily occurrences from June to September. Typhoons can occur (peak August-October). Despite the heat, summer is low season - hotels are cheapest and attractions are least crowded. Indoor attractions (museum, duty-free shop) are good refuges from the heat.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Lowest prices, tropical atmosphere, afternoon rain</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(135deg,#2d6a4f,#52b788);text-align:center;">
+    <div class="container">
+      <h2 style="color:var(--color-white);margin-bottom:var(--space-4);">Book Your Haikou Airport Transfer</h2>
+      <p style="color:rgba(255,255,255,0.8);font-size:var(--text-xl);max-width:600px;margin:0 auto var(--space-8);">Fixed price, professional licensed driver, free flight tracking. From HKK Meilan Airport to your Haikou hotel, duty-free shopping, or ferry terminal.</p>
+      <a href="booking.html?city=Haikou" class="btn btn-accent btn-large" style="font-size:var(--text-xl);padding:var(--space-5) var(--space-10);">Get Instant Quote</a>
+      <p style="color:rgba(255,255,255,0.5);margin-top:var(--space-6);font-size:var(--text-sm);">Questions? WhatsApp +86-155-2777-1775</p>
+    </div>
+  </section>
+
+  <div class="seo-keywords" style="margin:2.5rem auto;padding:1.5rem 2rem;max-width:900px;background:#f8f9fa;border-radius:10px;border-left:4px solid #2d6a4f;font-size:0.92rem;line-height:1.8;color:#333;">
+    <p style="margin:0 0 1rem 0;"><strong>Explore Haikou with Chinawheely Haikou with Chinawheely Haikou with Chinawheely</strong> - Your trusted partner for professional Haikou car service. Whether you need a Haikou Meilan (HKK) airport transfer to downtown, a Leiqiong Volcanic Geopark day trip, a duty-free shopping transfer, a Hairui Tomb cultural tour, or reliable hourly car hire with a professional licensed driver, Chinawheely delivers comfortable, fixed-price transportation across Haikou and Hainan Island.</p>
+    <p style="margin:0 0 0.75rem 0;"><strong>Airport Transfers and Ground Transportation in Haikou:</strong><br/><span style="color:#555;font-size:0.88rem;">Haikou airport transfer - HKK Meilan Airport pickup - Haikou railway station transfer - Haikou New Port ferry terminal - Haikou duty-free shopping transfer</span></p>
+    <p style="margin:0 0 0.75rem 0;"><strong>Top Destinations and Tours in Haikou:</strong><br/><span style="color:#555;font-size:0.88rem;">Waigo Plaza waterfront park - Hairui Tomb - Leiqiong Volcanic Geopark - Hainan Provincial Museum - Century Bridge - Hainanese chicken rice</span></p>
+    <p style="margin:0;"><strong>Why Choose Chinawheely?</strong> Licensed travel agency arranging verified professional drivers. Fixed pricing with no hidden fees. Free flight tracking for airport pickups. Support via WhatsApp and WeChat: +86-155-2777-1775.</p>
+  </div>
+
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2024 ChinaWheely. All rights reserved.</p>
-      <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 8px;">Serving 297 cities across China</p>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img"></picture>
+            <span>之二虫</span><span>|</span><span>Chinawheely</span>
+          </div>
+          <p class="footer-desc">Professional airport transfers and private car service across China. Professional licensed drivers, fixed prices.</p>
+        </div>
+        <div>
+          <div class="footer-title">Services</div>
+          <ul class="footer-links">
+            <li><a href="services.html#airport">Airport Transfers</a></li>
+            <li><a href="services.html#city">City Car Service</a></li>
+            <li><a href="services.html#intercity">Intercity Trips</a></li>
+          </ul>
+        </div>
+        <div class="footer-cities">
+          <div class="footer-title">Cities</div>
+          <ul class="footer-links">
+            <li><a href="haikou.html">Haikou</a></li>
+            <li><a href="sanya.html">Sanya</a></li>
+            <li><a href="beijing.html">Beijing</a></li>
+            <li><a href="shanghai.html">Shanghai</a></li>
+            <li><a href="guangzhou.html">Guangzhou</a></li>
+            <li><a href="shenzhen.html">Shenzhen</a></li>
+            <li><a href="index.html#cities">All Cities</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="terms.html">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-license" style="margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);">
+        <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
+          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" style="height:80px;width:auto;border-radius:var(--radius-md);"></picture>
+          <div style="flex:1;min-width:220px;">
+            <p style="margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600;">Licensed Travel Agency</p>
+            <p style="margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5;">License No. L-HUB-101603. Wuhan City Zhierchong Culture and Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People Republic of China. Issued July 7, 2025.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">2026 之二虫 / Chinawheely. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
     </div>
   </footer>
+
+  <script src="scripts.js"></script>
+
+  <div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
+    <div class="whatsapp-modal-box" data-action="stop-propagation">
+      <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">x</button>
+      <h3>Chat on WhatsApp</h3>
+      <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
+      <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
+      <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
+      <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-accent">Open WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="whatsapp-float" id="whatsappFloat">
+    <button data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var whatsappModal = document.getElementById('whatsappModal');
+      document.querySelectorAll('[data-action="open-whatsapp"]').forEach(function(btn) {
+        btn.addEventListener('click', function() { whatsappModal.style.display = 'flex'; });
+      });
+      document.querySelectorAll('[data-action="close-whatsapp"]').forEach(function(btn) {
+        btn.addEventListener('click', function() { whatsappModal.style.display = 'none'; });
+      });
+      if (whatsappModal) {
+        whatsappModal.addEventListener('click', function(e) {
+          if (e.target === whatsappModal) whatsappModal.style.display = 'none';
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>

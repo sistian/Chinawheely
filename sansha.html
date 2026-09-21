@@ -1,104 +1,592 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "City",
+  "name": "Sansha",
+  "alternateName": "sansha",
+  "description": "Sansha is China southernmost prefecture covering Xisha and Nansha Islands in the South China Sea. Tropical island paradise with coral reefs.",
+  "containedInPlace": {"@type": "Province", "name": "Hainan"},
+  "geo": {"@type": "GeoCoordinates", "latitude": "35.0", "longitude": "105.0"},
+  "population": {"@type": "QuantitativeValue", "value": "500"},
+  "area": {"@type": "QuantitativeValue", "value": "2000000"}
+}
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Airport Transfer & Car Service in Sansha | ChinaWheely</title>
-  <meta name="description" content="Book private airport transfer and car service in Sansha, 海南省. Professional English-speaking drivers, fixed prices, 24/7 availability.">
-  <meta name="keywords" content="Sansha airport transfer, Sansha car service, private car Sansha, 三沙 airport pickup">
-  <link rel="canonical" href="https://www.chinawheely.com/sansha.html">
-  <link href="styles.css" rel="stylesheet">
-  <style>
-    .hero { background: linear-gradient(135deg, #1B4D3E 0%, #0d3d27 100%); color: white; padding: 80px 0; text-align: center; }
-    .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .hero .subtitle { font-size: 1.2rem; opacity: 0.9; }
-    .section { padding: 60px 0; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
-    .service-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-    .service-card h3 { color: #1B4D3E; margin-bottom: 12px; }
-    .service-card p { color: #666; font-size: 0.95rem; line-height: 1.6; }
-    .price-tag { font-size: 1.5rem; font-weight: 700; color: #D4AF37; margin-top: 12px; }
-    .cta-section { background: #1B4D3E; color: white; text-align: center; padding: 60px 20px; }
-    .cta-btn { display: inline-block; background: #D4AF37; color: #1a1a1a; padding: 14px 32px; border-radius: 8px; font-weight: 600; text-decoration: none; margin-top: 20px; }
-    .region-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; display: inline-block; margin-bottom: 16px; }
-  </style>
+  <title>Sansha Airport Transfer & Car Service | Chinawheely</title>
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Book Sansha private car service with licensed driver. Fixed price airport transfers and city tours. No hidden fees.">
+  <link rel="canonical" href="https://sansha.chinawheely.com/">
+  <meta property="og:title" content="Sansha Airport Transfer & Private Car Service | Chinawheely">
+  <meta property="og:description" content="Book Sansha private car service. Sanya (SYX) and Haikou (HKK) boat transfers to Yongxing Island, Xisha Islands tours, South China Sea island travel, and Hainan car service. Fixed price.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sansha.chinawheely.com/">
+  <meta property="og:site_name" content="Chinawheely">
+  <meta property="og:image" content="https://www.chinawheely.com/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/inline-fixes.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="logo">ChinaWheely</a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="booking.html">Book Now</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
+  <nav class="nav" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img"></picture>
+        <span class="nav-brand-text">Chinawheely</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="index.html#cities">Cities</a></li>
+        <li><a href="booking.html">Book Now</a></li>
+      </ul>
+      <div class="nav-cta"><a href="booking.html?city=Sansha" class="btn btn-primary">Book Sansha Ride</a></div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="index.html">Home</a><a href="services.html">Services</a>
+    <a href="index.html#cities">Cities</a><a href="booking.html">Book Now</a>
+  </div>
 
   <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1>Sansha<br><span>Airport Transfer &amp; Private Car</span></h1>
+        <p class="hero-lead">Sanya (SYX) or Haikou (HKK) to Yongxing Island boat transfers, Xisha Islands tours, South China Sea island travel, and Hainan car service with professional licensed driver. Fixed price.</p>
+        <div class="hero-buttons">
+          <a href="booking.html?city=Sansha" class="btn btn-accent btn-large">Book Sansha Transfer</a>
+          <a href="#city-info" class="btn btn-outline-light btn-large">Explore Sansha</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="city-info">
     <div class="container">
-      <span class="region-tag">华南 China</span>
-      <h1>Sansha Airport Transfer & Car Service</h1>
-      <p class="subtitle">三沙 · 海南省</p>
+      <div class="section-header">
+        <h2>Sansha at a Glance</h2>
+        <div class="divider"></div>
+        <p class="text-lead">China southernmost city - a maritime prefecture spanning the Xisha (Paracel), Nansha (Spratly), and Zhongsha (Zhongsha) Islands in the South China Sea, administered by Hainan Province.</p>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:var(--space-12);">
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">~2M</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">km2</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">Maritime Jurisdiction Area</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">~2,000+</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">Population</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">Military &amp; Administrative Personnel</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">350+ km</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">From Hainan</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">Boat ride to Yongxing Island</div>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-8);">
+          <div style="font-size:var(--text-4xl);color:var(--color-primary);margin-bottom:var(--space-3);">2012</div>
+          <div style="font-weight:600;color:var(--color-gray-700);">Established</div>
+          <div style="font-size:var(--text-sm);color:var(--color-gray-500);">As Pre-fecture Level City</div>
+        </div>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-10);">
+        <div>
+          <h3>Name Origin</h3>
+          <p>The name "Sansha" (三沙) literally means <strong>"Three Sandy Islands"</strong> - referring to the three island groups that comprise the city: <strong>Xisha Islands</strong> (西沙群岛, Paracel Islands), <strong>Nansha Islands</strong> (南沙群岛, Spratly Islands), and <strong>Zhongsha Islands</strong> (中沙群岛, Zhongsha Islands). Established as a prefecture-level city in 2012, Sansha is China southernmost municipal administration. The administrative headquarters is on <strong>Yongxing Island</strong> (永兴岛) in the Xisha Islands - the largest of the Paracel Islands.</p>
+          <h3 style="margin-top:var(--space-8);">Culture &amp; Heritage</h3>
+          <p>Sansha represents China maritime frontier in the South China Sea. The Xisha Islands have been inhabited by Chinese fishermen for centuries - traditional <strong>Beikeng (南海耕海)</strong> fishing culture runs deep in the communities. Yongxing Island has a <strong>naval garrison</strong> atmosphere with a small civilian population of administrative and support staff. The islands have excellent coral reef ecosystems and are of significant <strong>strategic and geopolitical importance</strong> in the South China Sea disputes.</p>
+        </div>
+        <div>
+          <h3>Transportation</h3>
+          <p>Sansha is only accessible by <strong>boat from Hainan Island</strong>. There is no commercial airport on the islands. The regular passenger boat (琼沙3号) departs from <strong>Sanya</strong> and <strong>Haikou</strong> ports to Yongxing Island - the journey takes about 15-18 hours from Sanya and 18-20 hours from Haikou. Government and charter vessels also operate from Wenchang (文昌) on Hainan east coast. Our private car service covers transfers from <strong>Sanya Airport (SYX)</strong> or <strong>Haikou Meilan Airport (HKK)</strong> to the boat ports.</p>
+          <h3 style="margin-top:var(--space-8);">Geography &amp; Environment</h3>
+          <p>Sansha spans the entire <strong>South China Sea</strong> jurisdiction - an area of approximately 2 million km2 including hundreds of islands, reefs, and shoals. The islands are tropical - hot and humid year-round. <strong>Yongxing Island</strong> (永兴岛) is the largest, about 3.2 km long with coconut palms,蔬菜种植, and a small settlement. The surrounding waters have world-class <strong>coral reefs, marine biodiversity, and diving sites</strong>. The climate is tropical oceanic with typhoon risks (May-November).</p>
+        </div>
+      </div>
+      <h3 style="margin-top:var(--space-10);">Maps &amp; Transit</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;">
+        <a href="http://www.sansha.gov.cn/" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#2d6a4f;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:600;">Official Sansha Government</a>
+        <a href="https://www.12306.cn/" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#E63946;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:600;">China HSR Booking</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-gray-100);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Top Sansha Attractions</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical South China Sea islands - coral reefs, marine life, and China maritime frontier at its most remote and beautiful.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Yongxing Island (永兴岛)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Administrative Center - Tropical Island Capital</p>
+            <p style="margin-top:var(--space-3);">Yongxing Island (永兴岛) is Sansha administrative headquarters - the largest of the Paracel Islands at 3.2 km long. The island has coconut palms, a small town with administrative offices, a hospital, school, and fishing port. The island is a military-civilian settlement with a unique frontier atmosphere. The surrounding lagoon has excellent coral and is popular for snorkeling.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Xisha Islands Coral Reefs</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">World-Class Diving - Pristine Reefs</p>
+            <p style="margin-top:var(--space-3);">The Xisha Islands (西沙群岛) have some of the most pristine coral reefs in the South China Sea. The water is exceptionally clear (visibility 30+ meters) and the reefs support extraordinary marine biodiversity - coral gardens, tropical fish, sea turtles, and rays. Diving trips to the Xisha Islands depart from Sanya and Wenchang on Hainan Island.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>North Reef (七连屿)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Seven Islands - Bird Sanctuary</p>
+            <p style="margin-top:var(--space-3);">North Reef (七连屿) is a string of seven coral islands and reefs north of Yongxing Island, known for its bird sanctuary. The islands are covered in sea birds and have pristine white sand beaches surrounded by turquoise lagoon water. Access is by boat from Yongxing Island. The reef is considered one of the most beautiful spots in the Paracel Islands.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Yongxing Port Fishing Market</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Frontier Port - Fresh South China Sea Catch</p>
+            <p style="margin-top:var(--space-3);">The Yongxing Island fishing port (永兴岛渔港) is where the South China Sea fishing fleet unloads its catch. The market sells the freshest possible seafood - tropical fish, lobster, crab, sea cucumber, and abalone - all from the rich waters of the South China Sea. The port area also has small restaurants serving grilled fresh fish.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>Phoenix Island (琛航岛)</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Military Memorial - Paracel War Heritage</p>
+            <p style="margin-top:var(--space-3);">Phoenix Island (琛航岛) hosts the <strong>Paracel Islands Martyrs Cemetery</strong> (西沙海战烈士陵园), commemorating the 1974 Xisha (Paracel) Islands battle between China and South Vietnam. The memorial honors the Chinese naval personnel who died in the conflict that secured Chinese control of the Paracel Islands. A place of significant historical and patriotic significance.</p>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="height:200px;background:linear-gradient(135deg,#0077b6,#00b4d8);display:flex;align-items:center;justify-content:center;"><span style="font-size:3rem;"></span></div>
+          <div style="padding:var(--space-6);">
+            <h4>South China Sea Museum</h4>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Maritime History &amp; Marine Environment</p>
+            <p style="margin-top:var(--space-3);">The South China Sea Museum (南海博物馆) on Yongxing Island displays the history of Chinese activity in the South China Sea, including artifacts from ancient shipwrecks, marine biology exhibits, and historical documents relating to Chinese sovereignty claims. The museum provides important context for understanding the significance of the Sansha jurisdiction.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <h2 style="text-align: center; color: #1B4D3E; margin-bottom: 16px;">Our Services in Sansha</h2>
-      <p style="text-align: center; color: #666; max-width: 600px; margin: 0 auto 40px;">Professional private car service with English-speaking drivers available 24/7 for all your transportation needs in Sansha.</p>
-      
-      <div class="services-grid">
-        <div class="service-card">
-          <h3>✈️ Airport Transfer</h3>
-          <p>Airport pickup and drop-off at Sansha airport. Meet & greet service included.</p>
-          <div class="price-tag">From $35</div>
+      <div class="section-header">
+        <h2>Popular Sansha Routes</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Fixed-price private car service for getting to the boat ports and island tours.</p>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-6);">
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Sanya Airport to Sanya Boat Port</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $20</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~15 km - 30 min - Economy/Business</p>
+          <p>Your driver meets you at Sanya Phoenix Airport (SYX) and drives you to the Sanya ferry port for the boat to Yongxing Island. The boat journey takes about 15-18 hours. We arrange the port transfer as part of your island journey.</p>
         </div>
-        <div class="service-card">
-          <h3>🏨 Hotel Transfers</h3>
-          <p>Comfortable transfers between hotels, airports, and any location in Sansha.</p>
-          <div class="price-tag">From $25</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Haikou Airport to Wenchang Port</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $35</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~90 km - 1.5 hours - Economy/Business</p>
+          <p>Your driver meets you at Haikou Meilan Airport (HKK) and drives you to Wenchang (文昌) port on Hainan east coast, the main departure point for Sansha boats. The drive takes about 1.5 hours. Wenchang is also famous for its Wenchang chicken - ask your driver for a stop.</p>
         </div>
-        <div class="service-card">
-          <h3>🏢 Business Travel</h3>
-          <p>Professional service for meetings, conferences, and corporate events.</p>
-          <div class="price-tag">From $40</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Haikou to Sanya Overland Tour</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $150</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">~300 km - Full day - Economy/Business/MPV</p>
+          <p>If you are traveling from Haikou to Sanya anyway, consider a private car tour along the Hainan east coast - stopping at Wenchang (chicken town), Xinglong (tropical plantations), and ending at Sanya for the boat to Sansha. Your driver explains the Hainan coast along the way.</p>
         </div>
-        <div class="service-card">
-          <h3>🗺️ City Tours</h3>
-          <p>Explore Sansha and nearby attractions with a professional driver guide.</p>
-          <div class="price-tag">From $60/day</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-3);">
+            <h4>Yongxing Island Day Tour</h4>
+            <span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">From $80</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Island tour - Full day on Yongxing Island</p>
+          <p>Once on Yongxing Island, a local guide or your accommodation can arrange a tour of the island including the South China Sea Museum, the fishing port, the Paracel Islands Martyrs Cemetery, and the island perimeter. The island is small enough to walk or cycle around.</p>
         </div>
-        <div class="service-card">
-          <h3>🚄 Train Station Transfers</h3>
-          <p>Reliable transfers to and from all train stations in Sansha.</p>
-          <div class="price-tag">From $25</div>
+      </div>
+      <div class="text-center" style="margin-top:var(--space-10);">
+        <a href="booking.html?city=Sansha" class="btn btn-accent btn-large">Book Your Sansha Ride</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Getting to Sansha: How to Reach the South China Sea Islands</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Sansha is only accessible by boat from Hainan Island - no airport on the islands.</p>
+      </div>
+      <h3>How to Reach Sansha (Yongxing Island)</h3>
+      <div class="grid grid-2" style="gap:var(--space-6);margin-bottom:var(--space-10);">
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-primary);">
+          <h4>Step 1: Fly to Sanya (SYX) or Haikou (HKK)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Fly to Hainan Island first</p>
+          <p>Book a flight to either <strong>Sanya Phoenix International Airport (SYX)</strong> or <strong>Haikou Meilan International Airport (HKK)</strong>. Sanya is closer to the boat departure port - the drive to the Sanya ferry terminal is only 30 minutes. Haikou has more flight options and a 1.5-hour drive to Wenchang port.</p>
         </div>
-        <div class="service-card">
-          <h3>💼 Long Distance</h3>
-          <p>Inter-city travel to destinations across 华南 China.</p>
-          <div class="price-tag">Contact for quote</div>
+        <div class="card" style="padding:var(--space-6);border-left:4px solid var(--color-accent);">
+          <h4>Step 2: Take the Ferry to Yongxing Island</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Boat journey: Sanya 15-18h / Wenchang 12-14h</p>
+          <p>The <strong>passenger ferry (琼沙3号)</strong> operates from Sanya and Wenchang ports to Yongxing Island. Tickets must be booked in advance through official channels - the boat is popular and often fully booked weeks ahead. The journey takes 15-18 hours from Sanya and 12-14 hours from Wenchang. Cabin class is recommended for the overnight journey.</p>
+        </div>
+      </div>
+      <h3>Nearest Airports (Hainan Island)</h3>
+      <div class="grid grid-3" style="gap:var(--space-6);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Sanya Phoenix Airport (SYX)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">15 km to Sanya ferry port - 30 min by road</p>
+          <p>SYX serves domestic flights and some international routes. Closer to the Sanya ferry terminal for boats to Yongxing Island. Less flight options than Haikou but convenient. Our driver meets you at the airport and transfers you directly to the ferry port.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Haikou Meilan Airport (HKK)</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">90 km to Wenchang port - 1.5 hours by road</p>
+          <p>HKK is Hainan main aviation hub with more flight options. Drive to Wenchang port for boats to Yongxing Island. Wenchang is famous for Wenchang chicken - a good excuse for a lunch stop on the way to the port.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);display:flex;align-items:center;justify-content:center;text-align:center;">
+          <div>
+            <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+            <h4>Need a Port Transfer?</h4>
+            <p style="margin-bottom:var(--space-4);">We meet you at the airport and drive you to the ferry port.</p>
+            <a href="booking.html?city=Sansha" class="btn btn-primary">Book Airport to Port Transfer</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="cta-section">
+  <section class="section">
     <div class="container">
-      <h2>Book Your Sansha Transfer Today</h2>
-      <p style="opacity: 0.9; max-width: 500px; margin: 16px auto;">Get instant confirmation with our best-price guarantee. English-speaking support available 24/7.</p>
-      <a href="booking.html" class="cta-btn">Book Now →</a>
+      <div class="section-header">
+        <h2>Best Photo Spots in Sansha</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Crystal-clear South China Sea waters, coral reefs, and tropical island frontier at China southernmost edge.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Yongxing Island Lagoon</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best with underwater camera</p>
+          <p>The lagoon surrounding Yongxing Island has exceptionally clear water with coral formations visible from the surface. On calm days the turquoise lagoon is most beautiful. Aerial photography (if permitted) captures the full island lagoon system best. Snorkeling provides the closest view of the coral gardens.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>North Reef at Low Tide</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at low tide</p>
+          <p>North Reef (七连屿) has vast areas of reef exposed at low tide - creating extraordinary tidal pools filled with sea life. The white sand bars between the reef sections are most visible at low tide. The bird sanctuary islands are covered in sea birds - visible from the boat approach.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Sunset over the South China Sea</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best at golden hour</p>
+          <p>The South China Sea sunset from Yongxing Island is dramatic - the sky and sea turn orange and gold with no land in any direction to interrupt the view. The palm trees on the island make excellent silhouettes. Best viewed from the north side of the island facing the open sea.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Yongxing Port Fishing Catch</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best early morning</p>
+          <p>The fishing port at Yongxing Island is most active in the early morning when the overnight fishing boats unload their catch. The display of tropical fish, lobster, and sea cucumber is colorful and unique to this frontier port. The surrounding fishing boats and port activity make good subjects.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Coral Reef Snorkeling</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best in the morning</p>
+          <p>The Xisha Islands coral reefs are best snorkeled in the morning when the water is calmest and visibility is highest (30+ meters). The coral gardens near Yongxing Island have brain coral, table coral, and anemones with clownfish. Bring an underwater camera - the marine life is extraordinary.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Paracel Martyrs Cemetery</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Best in quiet morning</p>
+          <p>The Paracel Islands Martyrs Cemetery (琛航岛) is a solemn and photogenic site. The neat rows of graves against the tropical island background create a striking image. The site is best visited early in the morning when it is quiet and the light is soft.</p>
+        </div>
+      </div>
     </div>
   </section>
 
+  <section class="section" style="background:var(--color-gray-100);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Food &amp; Shopping in Sansha</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-10);">
+        <div>
+          <h3>Must-Try South China Sea Cuisine</h3>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>South China Sea Grouper (南海石斑)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Fresh grouper from the South China Sea - cooked simply with ginger, scallion, and soy sauce to highlight the natural sweetness of the fish. Available at the Yongxing Island port restaurants. The fish is so fresh it is often still twitching when served.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Steamed Lobster (清蒸龙虾)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Fresh lobster from the South China Sea - steamed with garlic and scallion. The clear waters around the Xisha Islands produce excellent lobster with firm, sweet meat. Available at port restaurants and some accommodation on Yongxing Island.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Sea Cucumber (海参)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">South China Sea sea cucumber - a prized delicacy. Usually braised or stir-fried with vegetables. High in protein and considered a luxury ingredient. Available at port restaurants and a popular souvenir item for those with the means to transport it.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Wenchang Chicken (文昌鸡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">If traveling via Wenchang before boarding the boat to Sansha, Wenchang chicken is essential. The free-range chicken raised on coconut and grain has delicate, flavorful meat. Many consider it the best chicken in China. Best at the chicken restaurants in Wenchang town.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Fresh Abalone (鲜鲍鱼)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">South China Sea abalone - tender and sweet when stir-fried or steamed. Available at Yongxing Island port market and restaurants. The abalone here is considered premium quality due to the clean ocean environment of the Xisha Islands.</p>
+          </div>
+        </div>
+        <div>
+          <h3>What to Buy in Sansha</h3>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Dried Seafood from the South China Sea</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Dried fish, dried shrimp, and dried squid from the South China Sea are popular souvenirs. Available at the Yongxing Island port market and Hainan markets. Lightweight and keep well for travel. The flavor of sea-dried fish from these clean waters is exceptional.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Coral and Shell Crafts</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Shell and coral crafts are available at Hainan markets (including in Sanya and Haikou) for those who have visited the Sansha area. Be aware of CITES regulations if purchasing coral - some species are protected. Look for shell-based items rather than coral.</p>
+          </div>
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <h5>Hainanese Tea (兴隆咖啡)</h5>
+            <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Hainan produces excellent coffee at the Xinglong (兴隆) plantations near Haikou. The local Arabica coffee grown on volcanic soil is smooth and low-acid. Available at supermarkets and specialty shops throughout Hainan - a practical and delicious souvenir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Medical History &amp; Wellness Heritage of Sansha</h2>
+        <div class="divider"></div>
+        <p class="text-lead">South China Sea marine medicine, tropical island wellness, and frontier garrison health traditions.</p>
+      </div>
+      <div class="grid grid-2" style="gap:var(--space-8);">
+        <div class="card" style="padding:var(--space-6);">
+          <h4>South China Sea Marine Medicine</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The South China Sea waters around the Xisha Islands have been a source of traditional marine medicine for centuries.</strong> <strong>海参 (sea cucumber, haishen)</strong> from these waters is used in TCM for its exceptional nutritional and medicinal properties - associated with joint health, immune support, and longevity. <strong>海马 (seahorse)</strong> from the South China Sea is used in TCM for kidney and respiratory health. The clean, unpolluted waters of the Paracel Islands produce high-quality marine medicinal products.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Available at the Yongxing Island port market and Hainan TCM shops.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Tropical Island Climate Therapy</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The tropical maritime climate of the Xisha Islands - warm year-round, humid, with abundant sunshine and sea air - has therapeutic properties.</strong> The negative ions from the ocean spray, the consistent warmth, and the high UV levels (moderate sun exposure) are associated with skin health and mood improvement. The coral reef environment produces oxygen-rich air. The island environment is generally beneficial for respiratory and skin conditions.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">The island is most pleasant in the morning and evening - avoid midday sun.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Traditional Fishing Health Culture</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The traditional Beikeng (南海耕海) fishing culture of the South China Sea involves physical labor, sea air, and a fish-rich diet.</strong> Fishermen on these waters traditionally had strong physiques and long working lives despite demanding conditions. The diet - rich in omega-3 fatty acids from fresh fish, combined with physical activity - is associated with cardiovascular health. This traditional lifestyle is referenced in discussions of longevity in island fishing communities.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Fresh South China Sea fish is best for health at Yongxing Island port restaurants.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);">
+          <h4>Coral Reef Therapeutic Environment</h4>
+          <p style="margin-bottom:var(--space-3);"><strong>The coral reef environment of the Xisha Islands has been studied for its therapeutic properties.</strong> Coral reefs produce certain bioactive compounds with potential pharmaceutical applications. The reef ecosystem, with its high biodiversity and clean water, creates an environment associated with mental wellness - the "blue mind" effect of being near marine environments. Snorkeling and diving in the crystal-clear reef waters are considered beneficial for stress reduction.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);">Best experienced in the morning when water clarity is highest.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--color-cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Sansha Local Secrets</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Insider tips for visiting China southernmost frontier city.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Book Boat Tickets Weeks in Advance</h4>
+          <p>The passenger ferry to Yongxing Island (琼沙3号) is very popular and often fully booked. Book your boat ticket at least 2-3 weeks in advance through the official Sansha government ticketing system. Our driver can help with airport to port transfer once your boat schedule is confirmed.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Choose a Cabin Class Ticket</h4>
+          <p>The ferry journey to Yongxing Island takes 12-18 hours overnight. Cabin class (舱位) tickets provide air-conditioned cabins with bunks - much more comfortable than the open deck. Book cabin class if available. Bring motion sickness medication if susceptible to seasickness - the South China Sea can be rough.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Stop for Wenchang Chicken on the Way</h4>
+          <p>If departing from Haikou to Wenchang port for the boat, stop in Wenchang town for the famous Wenchang chicken (文昌鸡). The chicken is considered the best in China - tender, flavorful, and served with dipping sauce. Best at the chicken restaurants near Wenchang old town.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-primary);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Bring Reef-Safe Sunscreen</h4>
+          <p>The tropical sun at the Xisha Islands is intense year-round. Use reef-safe sunscreen (无氧苯甲酸酯) to protect both your skin and the coral reef ecosystem. Regular sunscreen chemicals are harmful to coral - reef-safe formulas are strongly encouraged. Wear a hat and UV-protective clothing.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-accent);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Visit in Winter (November-March)</h4>
+          <p>The best time to visit Sansha is November through March when the weather is drier, the sea is calmer (better for boat travel), and there is no typhoon risk. Summer (June-September) has rough seas, higher humidity, and typhoon risk. The winter months offer the most reliable access and most comfortable conditions.</p>
+        </div>
+        <div class="card" style="padding:var(--space-6);border-top:4px solid var(--color-info);">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-3);"></div>
+          <h4>Eat Fresh Fish at the Port Market</h4>
+          <p>The best meal in Sansha is at the Yongxing Island fishing port market. Fresh fish, lobster, and abalone are grilled to order by small stalls near the port. The seafood does not get any fresher - the fish may have been swimming hours earlier. Go for lunch when the morning catch has just arrived.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Best Time to Visit Sansha</h2>
+        <div class="divider"></div>
+        <p class="text-lead">Tropical oceanic climate - hot and humid year-round with distinct dry and wet seasons and typhoon risks.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Winter</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Nov-Mar - 22-28C - Best Season</p>
+          <p>The best time to visit Sansha. Dry season with calm seas, lower humidity, and no typhoon risk. The boat journey is most reliable and comfortable. Clear skies and excellent visibility for diving and snorkeling. Peak season for visits - book boat tickets well in advance.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Best weather, calm seas, clearest water, diving peak</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Spring</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Apr-May - 25-30C</p>
+          <p>Warm and increasingly humid. The water temperature is comfortable for swimming and diving. Boat services are still reliable. Late May marks the beginning of the typhoon season - monitor weather conditions. Shoulder season with moderate tourist numbers.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Warm water, fewer crowds, diving still good</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Summer</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Jun-Oct - 28-34C - Typhoon Season</p>
+          <p>Hot, humid, with typhoon risk (May-November). The South China Sea can be very rough in summer - boat services are occasionally suspended during typhoons. This is low season - fewer visitors and lower prices. Not recommended for those with limited time due to weather uncertainty.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Lowest prices, fewer tourists, risk of rough seas</p>
+        </div>
+        <div class="card" style="text-align:center;padding:var(--space-6);">
+          <div style="font-size:3rem;margin-bottom:var(--space-3);"></div>
+          <h4>Autumn</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-gray-500);margin-bottom:var(--space-3);">Sep-Nov - 25-30C - Transition</p>
+          <p>September still has typhoon risk. Conditions improve in October and November as the typhoon season ends. November marks the start of the best season. Shoulder month - boat services becoming more reliable and weather improving. A good compromise between summer prices and winter reliability.</p>
+          <p style="font-size:var(--text-sm);color:var(--color-primary);margin-top:var(--space-3);"><strong>Highlights:</strong> Improving weather, transitional prices</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(135deg,#0077b6,#00b4d8);text-align:center;">
+    <div class="container">
+      <h2 style="color:var(--color-white);margin-bottom:var(--space-4);">Book Your Sansha Airport Transfer</h2>
+      <p style="color:rgba(255,255,255,0.8);font-size:var(--text-xl);max-width:600px;margin:0 auto var(--space-8);">Fixed price, professional licensed driver. From Sanya (SYX) or Haikou (HKK) to the boat port for your South China Sea island journey.</p>
+      <a href="booking.html?city=Sansha" class="btn btn-accent btn-large" style="font-size:var(--text-xl);padding:var(--space-5) var(--space-10);">Get Instant Quote</a>
+      <p style="color:rgba(255,255,255,0.5);margin-top:var(--space-6);font-size:var(--text-sm);">Questions? WhatsApp +86-155-2777-1775</p>
+    </div>
+  </section>
+
+  <div class="seo-keywords" style="margin:2.5rem auto;padding:1.5rem 2rem;max-width:900px;background:#f8f9fa;border-radius:10px;border-left:4px solid #0077b6;font-size:0.92rem;line-height:1.8;color:#333;">
+    <p style="margin:0 0 1rem 0;"><strong>Explore Sansha with Chinawheely Sansha with Chinawheely Sansha with Chinawheely</strong> - Your trusted partner for professional Sansha car service. Whether you need a Sanya (SYX) or Haikou (HKK) airport transfer to the boat port, a Wenchang port transfer, a Hainan east coast tour from Haikou to Sanya, or reliable hourly car hire with a professional licensed driver, Chinawheely delivers comfortable, fixed-price transportation across Hainan to the gateway of China southernmost city.</p>
+    <p style="margin:0 0 0.75rem 0;"><strong>Airport Transfers and Ground Transportation to Sansha:</strong><br/><span style="color:#555;font-size:0.88rem;">Sansha airport transfer - Sanya SYX to Sansha port - Haikou HKK to Wenchang port - Hainan east coast tour - Yongxing Island port transfer</span></p>
+    <p style="margin:0 0 0.75rem 0;"><strong>Top Destinations and Tours Near Sansha:</strong><br/><span style="color:#555;font-size:0.88rem;">Yongxing Island - Xisha Islands coral reefs - North Reef bird sanctuary - South China Sea Museum - Wenchang chicken tour - Hainan east coast</span></p>
+    <p style="margin:0;"><strong>Why Choose Chinawheely?</strong> Licensed travel agency arranging verified professional drivers. Fixed pricing with no hidden fees. Free flight tracking for airport pickups. Support via WhatsApp and WeChat: +86-155-2777-1775.</p>
+  </div>
+
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2024 ChinaWheely. All rights reserved.</p>
-      <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 8px;">Serving 297 cities across China</p>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <picture><source srcset="images/logo.webp" type="image/webp"><img width="120" height="120" decoding="async" src="images/logo.png" alt="Chinawheely Logo" class="nav-logo-img"></picture>
+            <span>之二虫</span><span>|</span><span>Chinawheely</span>
+          </div>
+          <p class="footer-desc">Professional airport transfers and private car service across China. Professional licensed drivers, fixed prices.</p>
+        </div>
+        <div>
+          <div class="footer-title">Services</div>
+          <ul class="footer-links">
+            <li><a href="services.html#airport">Airport Transfers</a></li>
+            <li><a href="services.html#city">City Car Service</a></li>
+            <li><a href="services.html#intercity">Intercity Trips</a></li>
+          </ul>
+        </div>
+        <div class="footer-cities">
+          <div class="footer-title">Cities</div>
+          <ul class="footer-links">
+            <li><a href="sansha.html">Sansha</a></li>
+            <li><a href="sanya.html">Sanya</a></li>
+            <li><a href="haikou.html">Haikou</a></li>
+            <li><a href="beijing.html">Beijing</a></li>
+            <li><a href="shanghai.html">Shanghai</a></li>
+            <li><a href="guangzhou.html">Guangzhou</a></li>
+            <li><a href="index.html#cities">All Cities</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="terms.html">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-license" style="margin:var(--space-8) 0;padding:var(--space-4);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);">
+        <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
+          <picture><source srcset="images/license.webp" type="image/webp"><img loading="lazy" width="400" height="300" decoding="async" src="images/license.png" alt="Travel Agency Business License" style="height:80px;width:auto;border-radius:var(--radius-md);"></picture>
+          <div style="flex:1;min-width:220px;">
+            <p style="margin-bottom:var(--space-1);color:var(--color-white);font-size:var(--text-sm);font-weight:600;">Licensed Travel Agency</p>
+            <p style="margin-bottom:0;color:var(--color-gray-400);font-size:var(--text-xs);line-height:1.5;">License No. L-HUB-101603. Wuhan City Zhierchong Culture and Tourism Co., Ltd. is licensed by the Ministry of Culture and Tourism of the People Republic of China. Issued July 7, 2025.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">2026 之二虫 / Chinawheely. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
     </div>
   </footer>
+
+  <script src="scripts.js"></script>
+
+  <div class="whatsapp-modal-overlay" id="whatsappModal" data-action="close-whatsapp">
+    <div class="whatsapp-modal-box" data-action="stop-propagation">
+      <button class="whatsapp-modal-close" data-action="close-whatsapp" aria-label="Close">x</button>
+      <h3>Chat on WhatsApp</h3>
+      <picture><source srcset="images/whatsapp-qr.webp" type="image/webp"><img loading="lazy" width="379" height="426" decoding="async" src="images/whatsapp-qr.png" alt="WhatsApp QR Code"></picture>
+      <p>Scan the QR code with WhatsApp to add us and start chatting.</p>
+      <p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
+      <a href="https://wa.me/8615527771775" target="_blank" class="btn btn-accent">Open WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="whatsapp-float" id="whatsappFloat">
+    <button data-action="open-whatsapp" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var whatsappModal = document.getElementById('whatsappModal');
+      document.querySelectorAll('[data-action="open-whatsapp"]').forEach(function(btn) {
+        btn.addEventListener('click', function() { whatsappModal.style.display = 'flex'; });
+      });
+      document.querySelectorAll('[data-action="close-whatsapp"]').forEach(function(btn) {
+        btn.addEventListener('click', function() { whatsappModal.style.display = 'none'; });
+      });
+      if (whatsappModal) {
+        whatsappModal.addEventListener('click', function(e) {
+          if (e.target === whatsappModal) whatsappModal.style.display = 'none';
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
