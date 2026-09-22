@@ -4384,17 +4384,17 @@
     <script>
     function toggleShowMoreCities() {
         var btn = document.getElementById("showMoreCitiesBtn");
-        var extraCards = document.querySelectorAll(".city-card-wrapper.extra-hidden");
+        var extraCards = document.querySelectorAll(".card.extra-hidden");
         
         if (btn.classList.contains("expanded")) {
-            // Collapse - hide extra cards
+            // Currently showing more - switch to Show Less
             btn.classList.remove("expanded");
             btn.innerHTML = "<span>Show More Cities</span><span class=\"arrow\">▼</span>";
             extraCards.forEach(function(card) {
                 card.classList.add("extra-hidden");
             });
         } else {
-            // Expand - show all cards
+            // Currently showing less - switch to Show More
             btn.classList.add("expanded");
             btn.innerHTML = "<span>Show Less Cities</span><span class=\"arrow\">▲</span>";
             extraCards.forEach(function(card) {
