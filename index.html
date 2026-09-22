@@ -4340,74 +4340,14 @@
   
     <!-- Show More Cities Button -->
     <style>
-    .show-more-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 400px;
-        margin: 2rem auto 0;
-        background: linear-gradient(135deg, #2d6a4f, #1B4D3E);
-        color: white;
-        border: none;
-        padding: 0.875rem 2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
-    }
-    .show-more-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
-    }
-    .show-more-btn .arrow {
-        margin-left: 8px;
-        transition: transform 0.3s ease;
-    }
-    .show-more-btn.expanded .arrow {
-        transform: rotate(180deg);
-    }
-    .card.extra-hidden {
-        display: none;
-    }
-    </style>
     
-    <div style="text-align: center;">
-        <button class="show-more-btn" id="showMoreCitiesBtn" onclick="toggleShowMoreCities()">
-            <span>Show More Cities</span>
-            <span class="arrow">▼</span>
-        </button>
-    </div>
+    
+    
+    
+    
+    </style>
 
     <script>
-    // Cache hidden cards ONCE on page load - don't re-query after DOM changes
-    var _hiddenCityCards = null;
-    function toggleShowMoreCities() {
-        var btn = document.getElementById("showMoreCitiesBtn");
-        
-        // First call: cache the hidden cards
-        if (!_hiddenCityCards) {
-            _hiddenCityCards = document.querySelectorAll(".card.extra-hidden");
-        }
-        
-        if (btn.dataset.expanded === "true") {
-            // Currently showing MORE - collapse back to initial state
-            btn.dataset.expanded = "false";
-            btn.innerHTML = "<span>Show More Cities</span><span class=\"arrow\">▼</span>";
-            _hiddenCityCards.forEach(function(card) {
-                card.classList.add("extra-hidden");
-            });
-        } else {
-            // Currently showing LESS - expand to show ALL cities
-            btn.dataset.expanded = "true";
-            btn.innerHTML = "<span>Show Less Cities</span><span class=\"arrow\">▲</span>";
-            document.querySelectorAll(".card").forEach(function(card) {
-                card.classList.remove("extra-hidden");
-            });
-        }
-    }
     </script>
 </section>
   <!-- Footer -->
