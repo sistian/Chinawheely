@@ -790,13 +790,27 @@
         var cards = document.querySelectorAll(".city-card-wrapper");
         
         if (btn.classList.contains("active")) {
+            // Show Less - collapse back to first 8 cities
             btn.classList.remove("active");
             btn.innerHTML = "<span>Browse All 346 China Cities</span><span class=\"arrow\">▼</span>";
             filter.classList.remove("visible");
+            // Hide all cards except first 8
+            cards.forEach(function(card, index) {
+                if (index >= 8) {
+                    card.classList.add("hidden");
+                } else {
+                    card.classList.remove("hidden");
+                }
+            });
         } else {
+            // Browse All - show all cities
             btn.classList.add("active");
             btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
             filter.classList.add("visible");
+            // Show all cards
+            cards.forEach(function(card) {
+                card.classList.remove("hidden");
+            });
         }
     }
 
