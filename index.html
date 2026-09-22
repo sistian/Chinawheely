@@ -671,6 +671,926 @@
    </div>
   </section>
   <!-- Cities -->
+  <section class="section section-dark" 
+
+<!-- ============================================
+     EXPLORE OUR CITIES SECTION - REDESIGNED
+     ============================================ -->
+<section id="cities" class="section" style="background: linear-gradient(180deg, #0a2e23 0%, #0d3d2d 100%); padding: 80px 0;">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: 2.5rem; font-weight: 700; color: white; margin-bottom: 0.5rem;">
+        🏙️ Explore Our Cities
+      </h2>
+      <p style="font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
+        Private car service available in 346 cities across China
+      </p>
+      <div class="divider" style="width: 60px; height: 3px; background: linear-gradient(90deg, #e67e22, #f39c12); margin: 0 auto;"></div>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 2.5rem; flex-wrap: wrap;">
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: #e67e22;">346</div>
+        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Cities</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: #e67e22;">24/7</div>
+        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Service</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: #e67e22;">Licensed</div>
+        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Drivers</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: #e67e22;">Fixed</div>
+        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Prices</div>
+      </div>
+    </div>
+
+    <!-- More Cities Toggle Button -->
+    <style>
+    .explore-cities-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #e67e22, #d35400);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+        box-shadow: 0 4px 20px rgba(230, 126, 34, 0.4);
+    }
+    .explore-cities-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(230, 126, 34, 0.5);
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+    }
+    .explore-cities-btn .arrow {
+        margin-left: 8px;
+        transition: transform 0.3s ease;
+    }
+    .explore-cities-btn.active .arrow {
+        transform: rotate(180deg);
+    }
+    .letter-filter {
+        display: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+    }
+    .letter-filter.visible {
+        display: flex;
+    }
+    .letter-btn {
+        width: 42px;
+        height: 42px;
+        border: 2px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+    .letter-btn:hover, .letter-btn.active {
+        background: linear-gradient(135deg, #e67e22, #d35400);
+        border-color: #e67e22;
+        transform: scale(1.1);
+    }
+    .city-card-wrapper {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .city-card-wrapper:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        border-color: rgba(230, 126, 34, 0.5);
+    }
+    .city-card-wrapper.hidden {
+        display: none !important;
+    }
+    .city-card-wrapper.has-photo {
+        background: transparent;
+        border: none;
+    }
+    .city-card-wrapper.has-photo:hover {
+        border: none;
+    }
+    .city-card-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.3s ease;
+    }
+    .city-card-wrapper:hover .city-card-bg {
+        transform: scale(1.1);
+    }
+    .city-card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .city-card-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        margin-bottom: 0.25rem;
+    }
+    .city-card-prov {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.8);
+    }
+    .grid-hidden {
+        display: none !important;
+    }
+    </style>
+
+    <div style="text-align: center;">
+        <button class="explore-cities-btn" id="exploreCitiesBtn" onclick="toggleExploreCities()">
+            <span>Browse All 346 China Cities</span>
+            <span class="arrow">▼</span>
+        </button>
+    </div>
+
+    <!-- Letter Filter -->
+    <div class="letter-filter" id="letterFilter">
+        <button class="letter-btn active" onclick="filterByLetter2('ALL')">ALL</button>
+        <button class="letter-btn" onclick="filterByLetter2('A')">A</button>
+        <button class="letter-btn" onclick="filterByLetter2('B')">B</button>
+        <button class="letter-btn" onclick="filterByLetter2('C')">C</button>
+        <button class="letter-btn" onclick="filterByLetter2('D')">D</button>
+        <button class="letter-btn" onclick="filterByLetter2('E')">E</button>
+        <button class="letter-btn" onclick="filterByLetter2('F')">F</button>
+        <button class="letter-btn" onclick="filterByLetter2('G')">G</button>
+        <button class="letter-btn" onclick="filterByLetter2('H')">H</button>
+        <button class="letter-btn" onclick="filterByLetter2('J')">J</button>
+        <button class="letter-btn" onclick="filterByLetter2('K')">K</button>
+        <button class="letter-btn" onclick="filterByLetter2('L')">L</button>
+        <button class="letter-btn" onclick="filterByLetter2('M')">M</button>
+        <button class="letter-btn" onclick="filterByLetter2('N')">N</button>
+        <button class="letter-btn" onclick="filterByLetter2('P')">P</button>
+        <button class="letter-btn" onclick="filterByLetter2('Q')">Q</button>
+        <button class="letter-btn" onclick="filterByLetter2('R')">R</button>
+        <button class="letter-btn" onclick="filterByLetter2('S')">S</button>
+        <button class="letter-btn" onclick="filterByLetter2('T')">T</button>
+        <button class="letter-btn" onclick="filterByLetter2('W')">W</button>
+        <button class="letter-btn" onclick="filterByLetter2('X')">X</button>
+        <button class="letter-btn" onclick="filterByLetter2('Y')">Y</button>
+        <button class="letter-btn" onclick="filterByLetter2('Z')">Z</button>
+    </div>
+
+    <!-- City Grid -->
+    <div class="grid grid-4" id="cityGrid">
+
+    </div>
+
+    <script>
+    function toggleExploreCities() {
+        var btn = document.getElementById("exploreCitiesBtn");
+        var filter = document.getElementById("letterFilter");
+        var grid = document.getElementById("cityGrid");
+        
+        if (btn.classList.contains("active")) {
+            btn.classList.remove("active");
+            btn.innerHTML = "<span>Browse All 346 China Cities</span><span class=\"arrow\">▼</span>";
+            filter.classList.remove("visible");
+        } else {
+            btn.classList.add("active");
+            btn.innerHTML = "<span>Show Less Cities</span><span class=\"arrow\">▲</span>";
+            filter.classList.add("visible");
+            grid.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+
+    function filterByLetter2(letter) {
+        // Update active button
+        document.querySelectorAll(".letter-btn").forEach(function(btn) {
+            btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+        
+        // Filter cards
+        var cards = document.querySelectorAll("#cityGrid .city-card-wrapper");
+        cards.forEach(function(card) {
+            var nameEl = card.querySelector(".city-card-name");
+            if (!nameEl) return;
+            var name = nameEl.textContent.trim();
+            var firstLetter = name.charAt(0).toUpperCase();
+            
+            if (letter === "ALL" || firstLetter === letter) {
+                card.classList.remove("hidden");
+            } else {
+                card.classList.add("hidden");
+            }
+        });
+    }
+    </script>
+  </div>
+</section>
+ html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" http-equiv="Content-Security-Policy"/>
+  <meta content="nosniff" http-equiv="X-Content-Type-Options"/>
+  <meta content="DENY" http-equiv="X-Frame-Options"/>
+  <meta content="strict-origin-when-cross-origin" http-equiv="Referrer-Policy"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Airport Transfer &amp; Travel Services in China | Chinawheely | Licensed Travel Agency
+  </title>
+  <meta content="index, follow" name="robots"/>
+  <meta name="description" content="Book private airport transfer & travel services with Professional licensed driver in 346 cities. Licensed travel agency, not a car rental. Fixed price, free flight tracking. Support: Beijing time 8AM-12AM. Airport pickup..."/>
+  <meta content="China private car transfer, Beijing airport pickup, Shanghai private driver, airport transfer China, city charter car, intercity private car, professional licensed driver China" name="keywords"/>
+  <link href="https://www.chinawheely.com/" rel="canonical"/>
+  <!-- Open Graph -->
+  <meta content="Airport Transfer &amp; Travel Services in China | Chinawheely | Licensed Travel Agency" property="og:title"/>
+  <meta content="Book private airport transfer & travel services with Professional licensed driver in 346 cities. Licensed travel agency (not a car rental). Fixed price, free flight tracking. Support: Beijing time 8AM-12AM." property="og:description"/>
+  <meta content="https://www.chinawheely.com/images/og-image.jpg" property="og:image"/>
+  <meta content="1200" property="og:image:width"/>
+  <meta content="630" property="og:image:height"/>
+  <meta content="Airport Transfer &amp; Travel Services in China | Chinawheely" property="og:image:alt"/>
+  <meta content="image/jpeg" property="og:image:type"/>
+  <meta content="website" property="og:type"/>
+  <meta content="https://www.chinawheely.com/" property="og:url"/>
+  <meta content="Chinawheely" property="og:site_name"/>
+  <!-- Twitter Card -->
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="Airport Transfer &amp; Travel Services in China | Chinawheely" name="twitter:title"/>
+  <meta content="Book private airport transfer & travel services with Professional licensed driver in 346 cities. Licensed travel agency (not a car rental). Fixed price, free flight tracking. Support: Beijing time 8AM-12AM." name="twitter:description"/>
+  <meta content="https://www.chinawheely.com/images/og-image.jpg" name="twitter:image"/>
+  <meta content="Airport Transfer &amp; Travel Services in China | Chinawheely" name="twitter:image:alt"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=block" rel="stylesheet" media="print" onload="this.media='all'"/>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=block" rel="stylesheet"/></noscript>
+  <link href="styles.css" rel="stylesheet"/>
+  <link href="css/inline-fixes.css" rel="stylesheet"/>
+  <!-- Favicon & Icons -->
+  <link href="favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="favicon.png" rel="icon" sizes="120x120" type="image/png"/>
+  <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+  <link color="#E63946" href="favicon.png" rel="mask-icon"/>
+  <link href="favicon.png" rel="shortcut icon"/>
+  <script type="application/ld+json">
+   {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Chinawheely",
+    "alternateName": "之二虫文旅",
+    "url": "https://www.chinawheely.com/",
+    "logo": "https://www.chinawheely.com/images/logo.png",
+    "image": "https://www.chinawheely.com/images/logo.png",
+    "description": "Licensed travel agency arranging professional airport transfers and private car service across 346 cities in China with Professional licensed drivers."
+    "sameAs": [
+      "https://wa.me/8615527771775"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+86-155-2777-1775",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Chinese"],
+      "areaServed": "CN"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+   {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Chinawheely",
+    "url": "https://www.chinawheely.com/",
+    "description": "Licensed travel agency arranging professional airport transfers and private car service across 346 cities in China with Professional licensed drivers."
+    "publisher": {
+      "@type": "Organization",
+      "name": "Chinawheely",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.chinawheely.com/images/logo.png",
+        "width": 120,
+        "height": 120
+      }
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.chinawheely.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+   {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Chinawheely",
+    "alternateName": "之二虫文旅",
+    "url": "https://www.chinawheely.com/",
+    "logo": "https://www.chinawheely.com/images/logo.png",
+    "image": "https://www.chinawheely.com/images/logo.png",
+    "description": "Licensed travel agency arranging professional airport transfers and private car service across 346 cities in China. Professional licensed drivers, fixed prices, Beijing time 8AM-12AM support."
+    "telephone": "+86-155-2777-1775",
+    "email": "15527771775@qq.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Room 2622, Wuhan Hang Lung Plaza, 688 Jinghan Avenue",
+      "addressLocality": "Wuhan",
+      "addressRegion": "Hubei",
+      "addressCountry": "CN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "30.5928",
+      "longitude": "114.3055"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "08:00",
+      "closes": "00:00"
+    },
+    "priceRange": "$$",
+    "areaServed": {
+      "@type": "Country",
+      "name": "China"
+    },
+    "sameAs": [
+      "https://wa.me/8615527771775"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "127",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "James Davidson"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": "After a 14-hour flight from London, my Chinawheely driver was waiting with a name board, spoke perfect English, and got me to my hotel in 45 minutes. Worth every penny.",
+        "datePublished": "2026-05-15"
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah M."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": "We booked a day trip to the Index Attraction. The driver knew the best times to avoid crowds and suggested a great local restaurant. The whole day was seamless.",
+        "datePublished": "2026-04-22"
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Michael K."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": "Fixed price, WhatsApp updates, and the driver even helped me check in at the train station. Highly recommend for any foreign traveler in China!",
+        "datePublished": "2026-03-10"
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Private Car Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Airport Transfers",
+            "description": "Private airport pickup and drop-off with Professional licensed driver"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "City Charter Car",
+            "description": "Full day private car with driver for city tours and business meetings"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Intercity Private Car",
+            "description": "Long distance private transfer between cities"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+   {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.chinawheely.com/"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+   {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What happens if my flight is delayed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We track your flight in real-time. For airport pickups, we include 60 minutes (Economy) or 90 minutes (Business/MPV) of free waiting time after your scheduled landing. If your flight is delayed, your driver will be automatically notified and will wait \u2014 no extra charge."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do your drivers speak English?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our drivers are professional licensed drivers. While they may not speak English fluently, every booking includes a dedicated online human translation assistant who provides real-time communication support via WhatsApp or WeChat. Drivers are also equipped with professional translation devices. For on-site fluent English support, Escort and Expert Guide add-ons are available."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I need help communicating during the ride?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every booking includes a free online human translation assistant. Message our bilingual support team on WhatsApp or WeChat during your ride, and we will translate between you and your driver instantly — so you are always understood and safe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I book for multiple cities in one trip?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. You can book each leg of your journey separately, or contact us for a multi-city itinerary. We offer discounts for bookings of 3 or more rides. For complex trips, email us at 15527771775@qq.com or WhatsApp +86-15527771775 and we'll build a custom package."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is your cancellation policy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Free cancellation up to 48 hours before pickup. Cancellations within 24-48 hours receive a 50% refund. Same-day cancellations are non-refundable, but we can reschedule at no extra cost if you contact us at least 4 hours before pickup. Contact: 15527771775@qq.com or +86-15527771775 (WhatsApp)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What payment methods do you accept?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We accept PayPal and Alipay. All Chinese domestic payments are settled in CNY. International payments via PayPal are processed in USD. You'll receive an invoice by email after your ride."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are child seats available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Child and baby seats are available with 96 hours advance notice. This includes cleaning and disinfection. Cost: CNY 200 per seat. Please indicate your child's age when booking so we can provide the appropriate seat type."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide business/corporate accounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we offer corporate accounts with monthly billing, dedicated account managers, and priority booking. Contact us at 15527771775@qq.com or WhatsApp +86-15527771775 for a tailored proposal."
+      }
+    }
+  ]
+}
+  </script>
+  <link href="https://www.chinawheely.com/index.html" hreflang="en" rel="alternate"/>
+  <link href="https://www.chinawheely.com/index.html" hreflang="x-default" rel="alternate"/>
+ 
+/* City Card Chinese Name Style */
+.city-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.city-card-chinese {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 2px;
+  margin-top: 2px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+
+/* Performance: Gradient placeholders for faster perceived load */
+.city-card-bg {
+  background-color: #1B4D3E;
+  background: linear-gradient(135deg, #1B4D3E 0%, #0d3d27 100%);
+}
+
+
+  <link rel="preload" href="images/beijing.webp" as="image">
+  <link rel="preload" href="images/shanghai.webp" as="image">
+  <link rel="preload" href="images/guangzhou.webp" as="image">
+  <link rel="preload" href="images/shenzhen.webp" as="image">
+  <link rel="preload" href="images/chengdu.webp" as="image">
+  <link rel="preload" href="images/xian.webp" as="image">
+  <link rel="preload" href="images/hangzhou.webp" as="image">
+  <link rel="preload" href="images/wuhan.webp" as="image">
+
+</head>
+ <body>
+  <!-- Navigation -->
+  <nav class="nav" id="navbar">
+   <div class="container nav-inner">
+    <a class="nav-logo" href="#">
+     <picture>
+      <source srcset="images/logo.webp" type="image/webp"/>
+      <img alt="Chinawheely Logo" class="nav-logo-img u-21dd2803" decoding="async" height="120" src="images/logo.png" width="120"/>
+     </picture>
+     <span class="nav-brand-text">
+      之二虫
+      <sup>
+       &reg;
+      </sup>
+     </span>
+     <span class="nav-brand-sep">
+      |
+     </span>
+     <span>
+      Chinawheely
+     </span>
+    </a>
+    <ul class="nav-links">
+     <li>
+      <a href="#">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="#services">
+       Services
+      </a>
+     </li>
+     <li>
+      <a href="#cities">
+       Cities
+      </a>
+     </li>
+     <li>
+      <a href="#how-it-works">
+       How It Works
+      </a>
+     </li>
+     <li>
+      <a href="#pricing">
+       Pricing
+      </a>
+     </li>
+     <li>
+      <a href="#faq">
+       FAQ
+      </a>
+     </li>
+    </ul>
+    <div class="nav-cta">
+     <span class="nav-phone">
+      +86-15527771775
+     </span>
+     <a class="btn btn-primary" href="booking.html">
+      Book Now
+     </a>
+    </div>
+    <button aria-label="Menu" class="mobile-toggle" id="mobileToggle" type="button">
+     <span>
+     </span>
+     <span>
+     </span>
+     <span>
+     </span>
+    </button>
+   </div>
+  </nav>
+  <!-- Mobile Menu -->
+  <div class="u-10929ef3" id="mobileMenu">
+   <a class="u-cdf26e4e" href="#">
+    Home
+   </a>
+   <a class="u-cdf26e4e" href="#services">
+    Services
+   </a>
+   <a class="u-cdf26e4e" href="#cities">
+    Cities
+   </a>
+   <a class="u-cdf26e4e" href="#how-it-works">
+    How It Works
+   </a>
+   <a class="u-cdf26e4e" href="#pricing">
+    Pricing
+   </a>
+   <a class="u-cdf26e4e" href="#faq">
+    FAQ
+   </a>
+   <a class="btn btn-primary u-78427c4e" href="booking.html">
+    Book Now
+   </a>
+  </div>
+  <!-- Hero -->
+  <section class="hero">
+   <div class="container hero-inner">
+    <div class="hero-content">
+     <h1 class="animate-fade-in-up">
+      Private Car &amp; Airport Transfer
+      <br/>
+      <span>
+       Across China
+      </span>
+     </h1>
+     <p class="hero-lead animate-fade-in-up u-1c43eea3">
+      Book professional licensed driver for airport pickup, city tour &amp; intercity private car across all China tier 1&amp;346 cities. Fixed price, free flight tracking, 24h online support.
+     </p>
+     <div class="hero-stats animate-fade-in-up u-84f1ffc1">
+      <div class="hero-stat">
+       <div class="hero-stat-number">
+        40+
+       </div>
+       <div class="hero-stat-label">
+        Cities
+       </div>
+      </div>
+      <div class="hero-stat">
+       <div class="hero-stat-number">
+        Beijing time 8AM-12AM (16 hours/day)
+       </div>
+       <div class="hero-stat-label">
+        Support
+       </div>
+      </div>
+      <div class="hero-stat">
+       <div class="hero-stat-number">
+        100%
+       </div>
+       <div class="hero-stat-label">
+        Fixed Price
+       </div>
+      </div>
+     </div>
+     <div class="hero-buttons animate-fade-in-up u-0c8e3ec6">
+      <a class="btn btn-accent btn-large" href="booking.html">
+       Book Your Ride
+      </a>
+      <a class="btn btn-outline-light btn-large" href="#services">
+       Learn More
+      </a>
+     </div>
+    </div>
+    <div class="hero-visual animate-slide-in-right u-84f1ffc1">
+     <div class="hero-card">
+      <h2 class="lvl-h3">
+       Popular Airport Routes
+      </h2>
+      <div class="route-row">
+       <div class="route-icon">
+        ✈
+       </div>
+       <div class="route-info">
+        <div class="route-name">
+         Beijing Capital (Local) &rarr; City Center
+        </div>
+        <div class="route-detail">
+         ~30 km &middot; Tier 1 &middot; Smart distance estimate
+        </div>
+       </div>
+       <div class="route-price">
+        From $50
+       </div>
+      </div>
+      <div class="route-row">
+       <div class="route-icon">
+        ✈
+       </div>
+       <div class="route-info">
+        <div class="route-name">
+         Shanghai Pudong (PVG) &rarr; The Bund
+        </div>
+        <div class="route-detail">
+         ~45 km &middot; Tier 1 &middot; Smart distance estimate
+        </div>
+       </div>
+       <div class="route-price">
+        From $65
+       </div>
+      </div>
+      <div class="route-row">
+       <div class="route-icon">
+        ✈
+       </div>
+       <div class="route-info">
+        <div class="route-name">
+         Chengdu Tianfu (TFU) &rarr; Downtown
+        </div>
+        <div class="route-detail">
+         ~50 km &middot; Tier 2 &middot; Smart distance estimate
+        </div>
+       </div>
+       <div class="route-price">
+        From $70
+       </div>
+      </div>
+      <div class="u-a18dd810">
+       ✨ Enter your hotel name in the booking form for instant, accurate pricing
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- Trust Bar -->
+  <div class="trust-bar">
+   <div class="container trust-bar-inner">
+    <div class="trust-item">
+     <span class="trust-item-icon">
+      &checkmark;
+     </span>
+     Licensed Travel Agency
+    </div>
+    <div class="trust-item">
+     <span class="trust-item-icon">
+      &checkmark;
+     </span>
+     Professional Drivers with Translation Support
+    </div>
+    <div class="trust-item">
+     <span class="trust-item-icon">
+      &checkmark;
+     </span>
+     Fixed Price Guarantee
+    </div>
+    <div class="trust-item">
+     <span class="trust-item-icon">
+      &checkmark;
+     </span>
+     Free Cancellation (48h)
+    </div>
+    <div class="trust-item">
+     <span class="trust-item-icon">
+      &checkmark;
+     </span>
+     Beijing time 8AM-12AM (16 hours/day)
+    </div>
+   </div>
+  </div>
+  <!-- Services -->
+  <section class="section" id="services">
+   <div class="container">
+    <div class="section-header">
+     <h2>
+      China Private Car Services &mdash; Airport Transfer &amp; City Charter
+     </h2>
+     <div class="divider">
+     </div>
+     <p>
+      From airport pickups to full-day city tours, we cover every ground transportation need for your China trip. Professional Professional licensed drivers, fixed prices, no surprises.
+     </p>
+    </div>
+    <div class="grid grid-3">
+     <div class="card service-card">
+      <div class="service-icon">
+       ✈
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#airport">
+        Airport Transfers
+       </a>
+      </h3>
+      <p>
+       Private airport pickup and drop-off at all major Chinese airports. Flight tracking included &mdash; we wait if you're delayed, no extra charge. Beijing Capital, Shanghai Pudong, Guangzhou Baiyun &amp; more.
+      </p>
+     </div>
+     <div class="card service-card">
+      <div class="service-icon">
+       🚗
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#city">
+        City Car Service
+       </a>
+      </h3>
+      <p>
+       Hourly or daily private car hire with professional driver. Perfect for business meetings, shopping, or exploring at your own pace. Full day charter available in Beijing, Shanghai, Guangzhou, Shenzhen &amp; 346 cities.
+      </p>
+     </div>
+     <div class="card service-card">
+      <div class="service-icon">
+       🌄
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#intercity">
+        Intercity Trips
+       </a>
+      </h3>
+      <p>
+       Travel between cities in comfort. Beijing to Index Attraction, Shanghai to Suzhou, Guangzhou to Shenzhen, or any custom route. Door-to-door private transfer with luggage space.
+      </p>
+     </div>
+     <div class="card service-card">
+      <div class="service-icon">
+       🏢
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#corporate">
+        Corporate Travel
+       </a>
+      </h3>
+      <p>
+       Dedicated account management, invoicing, and consistent service standards for business travelers and companies. Executive car service for foreign executives in China.
+      </p>
+     </div>
+     <div class="card service-card">
+      <div class="service-icon">
+       👨&zwj;👩&zwj;👧&zwj;👦
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#tours">
+        Family &amp; Group Tours
+       </a>
+      </h3>
+      <p>
+       Spacious 7-seater MPV and vans with child seats available. Private driver for family travel in China. We handle the logistics so you can focus on your family.
+      </p>
+     </div>
+     <div class="card service-card">
+      <div class="service-icon">
+       🎒
+      </div>
+      <h3>
+       <a class="u-da7d987f" href="services.html#tours">
+        Custom Tours
+       </a>
+      </h3>
+      <p>
+       Build your own itinerary or let us suggest the best routes. From half-day food tours to multi-day adventures. Index Attraction, Terracotta Warriors, pandas &amp; more.
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- Cities -->
   <section class="section section-dark" id="cities">
    <div class="container">
     <div class="section-header">
