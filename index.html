@@ -757,6 +757,31 @@
         </button>
     </div>
 
+        <script>
+    // Initialize: Show Less state (only cities with photos visible)
+    document.addEventListener("DOMContentLoaded", function() {
+        var cards = document.querySelectorAll(".city-card-wrapper");
+        cards.forEach(function(card) {
+            var bg = card.querySelector(".city-card-bg");
+            var hasPhoto = bg && bg.style.backgroundImage && bg.style.backgroundImage.includes("url(");
+            if (hasPhoto) {
+                card.classList.remove("hidden");
+            } else {
+                card.classList.add("hidden");
+            }
+        });
+        // Set button to Show Less state
+        var btn = document.getElementById("browseAllBtn");
+        if (btn) {
+            btn.classList.add("active");
+            btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
+        }
+        var filter = document.getElementById("letterFilter");
+        if (filter) {
+            filter.classList.add("visible");
+        }
+    });
+    </script>
     <div class="letter-filter" id="letterFilter">
         <button class="letter-btn active" onclick="filterByLetter3('ALL')">ALL</button>
         <button class="letter-btn" onclick="filterByLetter3('A')">A</button>
@@ -790,7 +815,7 @@
         var cards = document.querySelectorAll(".city-card-wrapper");
         
         if (btn.classList.contains("active")) {
-            // Show Less - collapse back to only cities with photos
+            // Currently showing all - switch to Show Less (only photos)
             btn.classList.remove("active");
             btn.innerHTML = "<span>Browse All 346 China Cities</span><span class=\"arrow\">▼</span>";
             filter.classList.remove("visible");
@@ -805,7 +830,7 @@
                 }
             });
         } else {
-            // Browse All - show all cities
+            // Currently showing less - expand to show all
             btn.classList.add("active");
             btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
             filter.classList.add("visible");
@@ -879,7 +904,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="shijiazhuang.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/chongqing,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Shijiazhuang</span>
        <span class="city-card-name-cn">石家庄</span>
@@ -888,7 +913,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="tangshan.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/tianjin,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Tangshan</span>
        <span class="city-card-name-cn">唐山</span>
@@ -897,7 +922,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="qinhuangdao.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/shijiazhuang,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Qinhuangdao</span>
        <span class="city-card-name-cn">秦皇岛</span>
@@ -987,7 +1012,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="datong.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/taiyuan,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Datong</span>
        <span class="city-card-name-cn">大同</span>
@@ -1086,7 +1111,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="baotou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/hohhot,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Baotou</span>
        <span class="city-card-name-cn">包头</span>
@@ -1176,7 +1201,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="anshan.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/dalian,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Anshan</span>
        <span class="city-card-name-cn">鞍山</span>
@@ -1185,7 +1210,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="fushun.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/shenyang,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Fushun</span>
        <span class="city-card-name-cn">抚顺</span>
@@ -1293,7 +1318,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jilin.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/changchun,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jilin</span>
        <span class="city-card-name-cn">吉林</span>
@@ -1365,7 +1390,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="qiqihaer.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/harbin,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Qiqihar</span>
        <span class="city-card-name-cn">齐齐哈尔</span>
@@ -1473,7 +1498,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="wuxi.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/nanjing,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Wuxi</span>
        <span class="city-card-name-cn">无锡</span>
@@ -1482,7 +1507,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="xuzhou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/wuxi,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Xuzhou</span>
        <span class="city-card-name-cn">徐州</span>
@@ -1509,7 +1534,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="nantong.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/suzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Nantong</span>
        <span class="city-card-name-cn">南通</span>
@@ -1518,7 +1543,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="lianyungang.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/nantong,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Lianyungang</span>
        <span class="city-card-name-cn">连云港</span>
@@ -1554,7 +1579,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zhenjiang.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/yangzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zhenjiang</span>
        <span class="city-card-name-cn">镇江</span>
@@ -1590,7 +1615,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="ningbo.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/hangzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Ningbo</span>
        <span class="city-card-name-cn">宁波</span>
@@ -1599,7 +1624,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="wenzhou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/ningbo,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Wenzhou</span>
        <span class="city-card-name-cn">温州</span>
@@ -1608,7 +1633,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jiaxing.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/wenzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jiaxing</span>
        <span class="city-card-name-cn">嘉兴</span>
@@ -1635,7 +1660,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jinhua.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/shaoxing,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jinhua</span>
        <span class="city-card-name-cn">金华</span>
@@ -1689,7 +1714,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="wuhu.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/hefei,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Wuhu</span>
        <span class="city-card-name-cn">芜湖</span>
@@ -1842,7 +1867,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="putian.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/xiamen,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Putian</span>
        <span class="city-card-name-cn">莆田</span>
@@ -1851,7 +1876,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="sanming.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/fuzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Sanming</span>
        <span class="city-card-name-cn">三明</span>
@@ -1914,7 +1939,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jingdezhen.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/nanchang,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jingdezhen</span>
        <span class="city-card-name-cn">景德镇</span>
@@ -2022,7 +2047,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zibo.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/qingdao,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zibo</span>
        <span class="city-card-name-cn">淄博</span>
@@ -2031,7 +2056,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zaozhuang.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/jinan,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zaozhuang</span>
        <span class="city-card-name-cn">枣庄</span>
@@ -2058,7 +2083,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="weifang.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/yantai,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Weifang</span>
        <span class="city-card-name-cn">潍坊</span>
@@ -2130,7 +2155,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="binzhou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/liaocheng,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Binzhou</span>
        <span class="city-card-name-cn">滨州</span>
@@ -2157,7 +2182,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="kaifeng.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/zhengzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Kaifeng</span>
        <span class="city-card-name-cn">开封</span>
@@ -2310,7 +2335,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="huangshi.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/wuhan,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Huangshi</span>
        <span class="city-card-name-cn">黄石</span>
@@ -2418,7 +2443,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zhuzhou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/changsha,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zhuzhou</span>
        <span class="city-card-name-cn">株洲</span>
@@ -2535,7 +2560,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="shaoguan.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/guangzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Shaoguan</span>
        <span class="city-card-name-cn">韶关</span>
@@ -2553,7 +2578,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zhuhai.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/shenzhen,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zhuhai</span>
        <span class="city-card-name-cn">珠海</span>
@@ -2562,7 +2587,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="shantou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/zhuhai,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Shantou</span>
        <span class="city-card-name-cn">汕头</span>
@@ -2580,7 +2605,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jiangmen.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/foshan,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jiangmen</span>
        <span class="city-card-name-cn">江门</span>
@@ -2598,7 +2623,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="maoming.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/zhanjiang,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Maoming</span>
        <span class="city-card-name-cn">茂名</span>
@@ -2724,7 +2749,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="liuzhou.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/nanning,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Liuzhou</span>
        <span class="city-card-name-cn">柳州</span>
@@ -2850,7 +2875,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="sanya.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/haikou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Sanya</span>
        <span class="city-card-name-cn">三亚</span>
@@ -2886,7 +2911,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="zigong.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/chengdu,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Zigong</span>
        <span class="city-card-name-cn">自贡</span>
@@ -3048,7 +3073,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="liupanshui.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/guiyang,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Liupanshui</span>
        <span class="city-card-name-cn">六盘水</span>
@@ -3102,7 +3127,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="qujing.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/kunming,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Qujing</span>
        <span class="city-card-name-cn">曲靖</span>
@@ -3174,7 +3199,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="rikaze.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/lhasa,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Rikaze</span>
        <span class="city-card-name-cn">日喀则</span>
@@ -3228,7 +3253,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="tongchuan.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/xian,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Tongchuan</span>
        <span class="city-card-name-cn">铜川</span>
@@ -3318,7 +3343,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="jiayuguan.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/lanzhou,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Jiayuguan</span>
        <span class="city-card-name-cn">嘉峪关</span>
@@ -3426,7 +3451,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="haidong.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/xining,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Haidong</span>
        <span class="city-card-name-cn">海东</span>
@@ -3489,7 +3514,7 @@
     </div>
     <div class="city-card-wrapper">
       <a class="city-card" href="kelamayi.html">
-       <div class="city-card-bg" style="background: linear-gradient(135deg, #1B4D3E 0%, #0d5c3d 50%, #2d6a4f 100%); display: flex; align-items: center; justify-content: center;;" loading="lazy"></div>
+       <div class="city-card-bg" style="background-image: url(https://loremflickr.com/800/600/urumqi,china);" loading="lazy"></div>
         <div class="city-card-caption">
        <span class="city-card-name">Karamay</span>
        <span class="city-card-name-cn">克拉玛依</span>
