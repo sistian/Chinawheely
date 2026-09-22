@@ -4171,7 +4171,7 @@
        Explore Wuhan
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Chongqing
       </h4>
@@ -4182,7 +4182,7 @@
        Explore Chongqing
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Tianjin
       </h4>
@@ -4193,7 +4193,7 @@
        Explore Tianjin
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Suzhou
       </h4>
@@ -4204,7 +4204,7 @@
        Explore Suzhou
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Dalian
       </h4>
@@ -4215,7 +4215,7 @@
        Explore Dalian
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Nanjing
       </h4>
@@ -4226,7 +4226,7 @@
        Explore Nanjing
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Qingdao
       </h4>
@@ -4237,7 +4237,7 @@
        Explore Qingdao
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Xiamen
       </h4>
@@ -4248,7 +4248,7 @@
        Explore Xiamen
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Kunming
       </h4>
@@ -4259,7 +4259,7 @@
        Explore Kunming
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Changsha
       </h4>
@@ -4270,7 +4270,7 @@
        Explore Changsha
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Zhengzhou
       </h4>
@@ -4281,7 +4281,7 @@
        Explore Zhengzhou
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Harbin
       </h4>
@@ -4292,7 +4292,7 @@
        Explore Harbin
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Jinan
       </h4>
@@ -4303,7 +4303,7 @@
        Explore Jinan
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Fuzhou
       </h4>
@@ -4314,7 +4314,7 @@
        Explore Fuzhou
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Hefei
       </h4>
@@ -4325,7 +4325,7 @@
        Explore Hefei
       </a>
      </div>
-     <div class="card u-31848d08">
+     <div class="card u-31848d08 extra-hidden">
       <h4>
        Nanchang
       </h4>
@@ -4337,7 +4337,73 @@
       </a>
      </div>
     </div>
-  </section>
+  
+    <!-- Show More Cities Button -->
+    <style>
+    .show-more-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 400px;
+        margin: 2rem auto 0;
+        background: linear-gradient(135deg, #2d6a4f, #1B4D3E);
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+    }
+    .show-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+    }
+    .show-more-btn .arrow {
+        margin-left: 8px;
+        transition: transform 0.3s ease;
+    }
+    .show-more-btn.expanded .arrow {
+        transform: rotate(180deg);
+    }
+    .city-card-wrapper.extra-hidden {
+        display: none;
+    }
+    </style>
+    
+    <div style="text-align: center;">
+        <button class="show-more-btn" id="showMoreCitiesBtn" onclick="toggleShowMoreCities()">
+            <span>Show More Cities</span>
+            <span class="arrow">▼</span>
+        </button>
+    </div>
+
+    <script>
+    function toggleShowMoreCities() {
+        var btn = document.getElementById("showMoreCitiesBtn");
+        var extraCards = document.querySelectorAll(".city-card-wrapper.extra-hidden");
+        
+        if (btn.classList.contains("expanded")) {
+            // Collapse - hide extra cards
+            btn.classList.remove("expanded");
+            btn.innerHTML = "<span>Show More Cities</span><span class=\"arrow\">▼</span>";
+            extraCards.forEach(function(card) {
+                card.classList.add("extra-hidden");
+            });
+        } else {
+            // Expand - show all cards
+            btn.classList.add("expanded");
+            btn.innerHTML = "<span>Show Less Cities</span><span class=\"arrow\">▲</span>";
+            extraCards.forEach(function(card) {
+                card.classList.remove("extra-hidden");
+            });
+        }
+    }
+    </script>
+</section>
   <!-- Footer -->
   
   <div class="seo-keywords" style="margin:2.5rem auto;padding:1.5rem 2rem;max-width:900px;background:#f8f9fa;border-radius:10px;border-left:4px solid #2d6a4f;font-size:0.92rem;line-height:1.8;color:#333;">
