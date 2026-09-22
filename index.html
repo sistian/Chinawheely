@@ -4382,22 +4382,28 @@
     </div>
 
     <script>
+    // Cache hidden cards ONCE on page load - don't re-query after DOM changes
+    var _hiddenCityCards = null;
     function toggleShowMoreCities() {
         var btn = document.getElementById("showMoreCitiesBtn");
-        var extraCards = document.querySelectorAll(".card.extra-hidden");
         
-        if (btn.classList.contains("expanded")) {
-            // Currently showing more - switch to Show Less
-            btn.classList.remove("expanded");
+        // First call: cache the hidden cards
+        if (!_hiddenCityCards) {
+            _hiddenCityCards = document.querySelectorAll(".card.extra-hidden");
+        }
+        
+        if (btn.dataset.expanded === "true") {
+            // Currently showing MORE - collapse back to initial state
+            btn.dataset.expanded = "false";
             btn.innerHTML = "<span>Show More Cities</span><span class=\"arrow\">▼</span>";
-            extraCards.forEach(function(card) {
+            _hiddenCityCards.forEach(function(card) {
                 card.classList.add("extra-hidden");
             });
         } else {
-            // Currently showing less - switch to Show More
-            btn.classList.add("expanded");
+            // Currently showing LESS - expand to show ALL cities
+            btn.dataset.expanded = "true";
             btn.innerHTML = "<span>Show Less Cities</span><span class=\"arrow\">▲</span>";
-            extraCards.forEach(function(card) {
+            document.querySelectorAll(".card").forEach(function(card) {
                 card.classList.remove("extra-hidden");
             });
         }
