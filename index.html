@@ -815,10 +815,19 @@
         var cards = document.querySelectorAll(".city-card-wrapper");
         
         if (btn.classList.contains("active")) {
-            // Currently showing all - switch to Show Less (only photos)
+            // Currently in "Show Less" state (only photos visible) - switch to "Browse All"
             btn.classList.remove("active");
             btn.innerHTML = "<span>Browse All 346 China Cities</span><span class=\"arrow\">▼</span>";
             filter.classList.remove("visible");
+            // Show ALL cards (browse all)
+            cards.forEach(function(card) {
+                card.classList.remove("hidden");
+            });
+        } else {
+            // Currently in "Browse All" state (all visible) - switch to "Show Less"
+            btn.classList.add("active");
+            btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
+            filter.classList.add("visible");
             // Hide all cards except those with photos
             cards.forEach(function(card) {
                 var bg = card.querySelector(".city-card-bg");
@@ -828,15 +837,6 @@
                 } else {
                     card.classList.add("hidden");
                 }
-            });
-        } else {
-            // Currently showing less - expand to show all
-            btn.classList.add("active");
-            btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
-            filter.classList.add("visible");
-            // Show all cards
-            cards.forEach(function(card) {
-                card.classList.remove("hidden");
             });
         }
     }
