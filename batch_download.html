@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ChinaWheely Image Downloader</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+h1 { color: #2d6a4f; }
+.download-btn { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    background: #2d6a4f; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    margin: 5px;
+}
+.download-btn:hover { background: #1b4d3a; }
+.status { margin: 10px 0; padding: 10px; background: white; border-radius: 5px; }
+.success { color: green; }
+.error { color: red; }
+img { max-width: 200px; margin: 5px; border: 1px solid #ddd; }
+.grid { display: flex; flex-wrap: wrap; gap: 10px; }
+</style>
+</head>
+<body>
+<h1>ChinaWheely Image Downloader</h1>
+<p>Click "Start Download" to download all city images. Images will be saved to your Downloads folder.</p>
+<button class="download-btn" onclick="startDownload()">Start Download</button>
+<button class="download-btn" onclick="openUrls()">Open URLs (for manual download)</button>
+<div id="status" class="status">Ready</div>
+<div id="images" class="grid"></div>
+
+<script>
+// City image URLs from Unsplash
+const CITY_IMAGES = {
+"beijing": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?fm=jpg&q=80&w=1200",
+"shanghai": "https://images.unsplash.com/photo-1547937088-1d6c1916f22d?fm=jpg&q=80&w=1200",
+"chengdu": "https://images.unsplash.com/photo-1723242015936-ab12ca2626b3?fm=jpg&q=80&w=1200",
+"guangzhou": "https://images.unsplash.com/photo-1547919307-1ecb10702e6f?fm=jpg&q=80&w=1200",
+"shenzhen": "https://images.unsplash.com/photo-1536053343428-d73c1f6f6334?fm=jpg&q=80&w=1200",
+"wuhan": "https://images.unsplash.com/photo-1569646565-8f6a07a1a9e5?fm=jpg&q=80&w=1200",
+"hangzhou": "https://images.unsplash.com/photo-1566576721346-d4a1e8c2bdcc?fm=jpg&q=80&w=1200",
+"chongqing": "https://images.unsplash.com/photo-1570126619534-82a74f85a8b4?fm=jpg&q=80&w=1200"
+};
+
+async function downloadImage(city, url) {
+    return new Promise((resolve, reject) => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = city + '.jpg';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => resolve(city), 500);
+    });
+}
+
+async function startDownload() {
+    const status = document.getElementById('status');
+    const imagesDiv = document.getElementById('images');
+    status.textContent = 'Downloading...';
+    status.className = 'status';
+    
+    for (const [city, url] of Object.entries(CITY_IMAGES)) {
+        try {
+            await downloadImage(city, url);
+            status.textContent = `Downloaded: ${city}`;
+            // Show thumbnail
+            const img = document.createElement('img');
+            img.src = url;
+            img.title = city;
+            imagesDiv.appendChild(img);
+        } catch(e) {
+            status.innerHTML += `\n<span class="error">Error: ${city}</span>`;
+        }
+    }
+    
+    status.textContent = 'All downloads started! Check your Downloads folder.';
+    status.className = 'status success';
+}
+
+function openUrls() {
+    const urls = Object.entries(CITY_IMAGES).map(([city, url]) => city + ': ' + url).join('\n');
+    alert('Copy these URLs:\n\n' + urls);
+}
+</script>
+</body>
+</html>

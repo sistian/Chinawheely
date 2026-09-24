@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ChinaWheely Image Downloader</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+h1 { color: #2d6a4f; }
+.note { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; }
+.note strong { color: #856404; }
+.grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.city { background: #fff; padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px; }
+.city.done { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+.city.done::before { content: "✓ "; }
+</style>
+</head>
+<body>
+<h1>🖼️ ChinaWheely City Image Downloader</h1>
+
+<div class="note">
+<strong>Instructions:</strong>
+<ol style="margin:10px 0 0 20px;line-height:1.8;">
+<li>Click <strong>"Start"</strong> below - it will open search pages for cities needing photos</li>
+<li>In each tab: find a good city photo, <strong>right-click → Save image as</strong></li>
+<li>Save to your Desktop folder: <code>/Users/sisi/Desktop/Chinawheely 9.1  ni/images/</code></li>
+<li>Filename format: <code>{cityname}.webp</code> (e.g., <code>ankang.webp</code>)</li>
+<li>After saving all, refresh this page to see progress</li>
+</ol>
+</div>
+
+<button onclick="startAll()" style="padding:15px 30px;font-size:18px;background:#2d6a4f;color:white;border:none;border-radius:8px;cursor:pointer;">▶️ Start Downloading</button>
+
+<div class="grid" id="grid"></div>
+
+<script>
+// Cities that need real photos (those with small placeholder images < 30KB)
+const NEED_PHOTOS = [
+{name:'ankang',term:'ankang china'},{name:'anqing',term:'anqing china'},{name:'anshan',term:'anshan china'},{name:'anshun',term:'anshun china'},{name:'anyang',term:'anyang china'},{name:'baicheng',term:'baicheng china'},{name:'baise',term:'baise china'},{name:'baishan',term:'baishan china'},{name:'baiyin',term:'baiyin china'},{name:'baoding',term:'baoding china'},{name:'baoji',term:'baoji china'},{name:'baoshan',term:'baoshan china'},{name:'baotou',term:'baotou china'},{name:'bayannaoer',term:'bayannaoer china'},{name:'bazhong',term:'bazhong china'},{name:'beihai',term:'beihai china'},{name:'bengbu',term:'bengbu china'},{name:'benxi',term:'benxi china'},{name:'bijie',term:'bijie china'},{name:'binzhou',term:'binzhou china'},{name:'bozhou',term:'bozhou china'},{name:'cangzhou',term:'cangzhou china'},{name:'changchun',term:'changchun china'},{name:'changde',term:'changde china'},{name:'changzhi',term:'changzhi china'},{name:'changzhou',term:'changzhou china'},{name:'chaoyang',term:'chaoyang china'},{name:'chaozhou',term:'chaozhou china'},{name:'chengde',term:'chengde china'},{name:'chenzhou',term:'chenzhou china'},{name:'chifeng',term:'chifeng china'},{name:'chizhou',term:'chizhou china'},{name:'chongzuo',term:'chongzuo china'},{name:'chuzhou',term:'chuzhou china'},{name:'dandong',term:'dandong china'},{name:'danzhou',term:'danzhou hainan china'},{name:'daqing',term:'daqing china'},{name:'datong',term:'datong china'},{name:'dazhou',term:'dazhou china'},{name:'deyang',term:'deyang china'},{name:'dezhou',term:'dezhou china'},{name:'dingxi',term:'dingxi china'},{name:'dongguan',term:'dongguan china'},{name:'dongying',term:'dongying china'},{name:'eerduosi',term:'eerduosi china'},{name:'ezhou',term:'ezhou china'},{name:'fangchenggang',term:'fangchenggang china'},{name:'foshan',term:'foshan china'},{name:'fushun',term:'fushun china'},{name:'fuxin',term:'fuxin china'},{name:'fuyang',term:'fuyang china'},{name:'fuzhou_jiangxi',term:'fuzhou jiangxi china'},{name:'ganzhou',term:'ganzhou china'},{name:'guangan',term:'guangan china'},{name:'guangyuan',term:'guangyuan china'},{name:'guigang',term:'guigang china'},{name:'guilin',term:'guilin landscape china'},{name:'guiyang',term:'guiyang china'},{name:'guyuan',term:'guyuan china'},{name:'haidong',term:'haidong china'},{name:'haikou',term:'haikou hainan china'},{name:'hami',term:'hami xinjiang china'},{name:'handan',term:'handan china'},{name:'hanzhong',term:'hanzhong china'},{name:'hebi',term:'hebi china'},{name:'hechi',term:'hechi china'},{name:'hegang',term:'hegang china'},{name:'heihe',term:'heihe china'},{name:'hengshui',term:'hengshui china'},{name:'hengyang',term:'hengyang china'},{name:'heyuan',term:'heyuan china'},{name:'heze',term:'heze china'},{name:'hezhou',term:'hezhou china'},{name:'huaian',term:'huaian china'},{name:'huaibei',term:'huaibei china'},{name:'huaihua',term:'huaihua china'},{name:'huainan',term:'huainan china'},{name:'huanggang',term:'huanggang china'},{name:'huangshan',term:'huangshan china'},{name:'huangshi',term:'huangshi china'},{name:'huhehaote',term:'huhehaote china'},{name:'huizhou',term:'huizhou guangdong china'},{name:'huludao',term:'huludao china'},{name:'hulunbeier',term:'hulunbeier china'},{name:'huzhou',term:'huzhou china'},{name:'jiamusi',term:'jiamusi china'},{name:'jian',term:'jian china'},{name:'jiangmen',term:'jiangmen china'},{name:'jiaozuo',term:'jiaozuo china'},{name:'jiaxing',term:'jiaxing china'},{name:'jiayuguan',term:'jiayuguan china'},{name:'jieyang',term:'jieyang china'},{name:'jilin',term:'jilin city china'},{name:'jinchang',term:'jinchang china'},{name:'jincheng',term:'jincheng china'},{name:'jingdezhen',term:'jingdezhen china'},{name:'jingmen',term:'jingmen china'},{name:'jingzhou',term:'jingzhou china'},{name:'jinhua',term:'jinhua china'},{name:'jining',term:'jining china'},{name:'jinzhong',term:'jinzhong china'},{name:'jinzhou',term:'jinzhou china'},{name:'jiujiang',term:'jiujiang china'},{name:'jiuquan',term:'jiuquan china'},{name:'jixi',term:'jixi china'},{name:'kaifeng',term:'kaifeng china'},{name:'kelamayi',term:'kelamayi xinjiang china'},{name:'laibin',term:'laibin china'},{name:'langfang',term:'langfang china'},{name:'lanzhou',term:'lanzhou china'},{name:'leshan',term:'leshan china'},{name:'lianyungang',term:'lianyungang china'},{name:'liaocheng',term:'liaocheng china'},{name:'liaoyang',term:'liaoyang china'},{name:'liaoyuan',term:'liaoyuan china'},{name:'lijiang',term:'lijiang naxi china'},{name:'lincang',term:'lincang china'},{name:'linfen',term:'linfen china'},{name:'linyi',term:'linyi china'},{name:'linshi',term:'linshi china'},{name:'lishui',term:'lishui china'},{name:'liuan',term:'liuan china'},{name:'liupanshui',term:'liupanshui china'},{name:'liuzhou',term:'liuzhou china'},{name:'longnan',term:'longnan china'},{name:'longyan',term:'longyan china'},{name:'loudi',term:'loudi china'},{name:'luohe',term:'luohe china'},{name:'luoyang',term:'luoyang china'},{name:'luzhou',term:'luzhou china'},{name:'lvliang',term:'lvliang china'},{name:'maanshan',term:'maanshan china'},{name:'maoming',term:'maoming china'},{name:'meishan',term:'meishan china'},{name:'meizhou',term:'meizhou china'},{name:'mianyang',term:'mianyang china'},{name:'mudanjiang',term:'mudanjiang china'},{name:'nanchong',term:'nanchong china'},{name:'nanning',term:'nanning china'},{name:'nanping',term:'nanping china'},{name:'nantong',term:'nantong china'},{name:'nanyang',term:'nanyang china'},{name:'neijiang',term:'neijiang china'},{name:'ningbo',term:'ningbo china'},{name:'ningde',term:'ningde china'},{name:'panjin',term:'panjin china'},{name:'panzhihua',term:'panzhihua china'},{name:'pingdingshan',term:'pingdingshan china'},{name:'pingliang',term:'pingliang china'},{name:'pingxiang',term:'pingxiang jiangxi china'},{name:'puer',term:'puer tea yunnan china'},{name:'putian',term:'putian china'},{name:'puyang',term:'puyang china'},{name:'qingyang',term:'qingyang china'},{name:'qingyuan',term:'qingyuan china'},{name:'qinhuangdao',term:'qinhuangdao china'},{name:'qinzhou',term:'qinzhou china'},{name:'qiqihaer',term:'qiqihaer china'},{name:'qitaihe',term:'qitaihe china'},{name:'quanzhou',term:'quanzhou fujian china'},{name:'qujing',term:'qujing china'},{name:'quzhou',term:'quzhou china'},{name:'rizhao',term:'rizhao china'},{name:'rushan',term:'rushan china'},{name:'sanmenxia',term:'sanmenxia china'},{name:'sanming',term:'sanming china'},{name:'shangluo',term:'shangluo china'},{name:'shangqiu',term:'shangqiu china'},{name:'shangrao',term:'shangrao china'},{name:'shannan',term:'shannan tibet china'},{name:'shantou',term:'shantou china'},{name:'shanwei',term:'shanwei china'},{name:'shaoguan',term:'shaoguan china'},{name:'shaoxing',term:'shaoxing china'},{name:'shaoyang',term:'shaoyang china'},{name:'shiyan',term:'shiyan china'},{name:'shizuishan',term:'shizuishan china'},{name:'shuangyashan',term:'shuangyashan china'},{name:'shuozhou',term:'shuozhou china'},{name:'siping',term:'siping china'},{name:'songyuan',term:'songyuan china'},{name:'suihua',term:'suihua china'},{name:'suining',term:'suining sichuan china'},{name:'suizhou',term:'suizhou china'},{name:'suqian',term:'suqian china'},{name:'suzhou_ah',term:'suzhou anhui china'},{name:'taian',term:'taian shandong china'},{name:'taiyuan',term:'taiyuan china'},{name:'tianshui',term:'tianshui gansu china'},{name:'taizhou_js',term:'taizhou jiangsu china'},{name:'taizhou_zj',term:'taizhou zhejiang china'},{name:'tangshan',term:'tangshan china'},{name:'tengchong',term:'tengchong yunnan china'},{name:'tieling',term:'tieling china'},{name:'tongchuan',term:'tongchuan china'},{name:'tonghua',term:'tonghua china'},{name:'tongliao',term:'tongliao china'},{name:'tongling',term:'tongling china'},{name:'tongren',term:'tongren guizhou china'},{name:'tulufan',term:'tulufan xinjiang china'},{name:'weifang',term:'weifang china'},{name:'weihai',term:'weihai china'},{name:'wenshan',term:'wenshan china'},{name:'wenzhou',term:'wenzhou china'},{name:'wuhai',term:'wuhai china'},{name:'wuhu',term:'wuhu china'},{name:'wulanchabu',term:'wulanchabu china'},{name:'wulumuqi',term:'wulumuqi xinjiang china'},{name:'wuwei',term:'wuwei china'},{name:'wuxi',term:'wuxi jiangsu china'},{name:'wuzhong',term:'wuzhong china'},{name:'wuzhou',term:'wuzhou china'},{name:'xiangtan',term:'xiangtan china'},{name:'xiangxi',term:'xiangxi china'},{name:'xiangyang',term:'xiangyang china'},{name:'xianning',term:'xianning china'},{name:'xianyang',term:'xianyang china'},{name:'xiaogan',term:'xiaogan china'},{name:'xingtai',term:'xingtai china'},{name:'xining',term:'xining qinghai china'},{name:'xinxiang',term:'xinxiang china'},{name:'xinyang',term:'xinyang china'},{name:'xinyu',term:'xinyu china'},{name:'xinzhou',term:'xinzhou shanxi china'},{name:'xuancheng',term:'xuancheng china'},{name:'xuchang',term:'xuchang china'},{name:'xuzhou',term:'xuzhou china'},{name:'yaan',term:'yaan china'},{name:'yanan',term:'yanan shaanxi china'},{name:'yancheng',term:'yancheng jiangsu china'},{name:'yangjiang',term:'yangjiang china'},{name:'yangquan',term:'yangquan china'},{name:'yangzhou',term:'yangzhou china'},{name:'yantai',term:'yantai shandong china'},{name:'yibin',term:'yibin china'},{name:'yichang',term:'yichang hubei china'},{name:'yichun',term:'yichun jiangxi china'},{name:'yichun_jiangxi',term:'yichun jiangxi china'},{name:'yinchuan',term:'yinchuan china'},{name:'yingkou',term:'yingkou china'},{name:'yingtan',term:'yingtan china'},{name:'yiyang',term:'yiyang china'},{name:'yongchuan',term:'yongchuan china'},{name:'yongzhou',term:'yongzhou china'},{name:'yueyang',term:'yueyang hunan china'},{name:'yulin',term:'yulin guangxi china'},{name:'yulin_shaanxi',term:'yulin shaanxi china'},{name:'yuncheng',term:'yuncheng china'},{name:'yunfu',term:'yunfu china'},{name:'yuxi',term:'yuxi china'},{name:'zaozhuang',term:'zaozhuang china'},{name:'zhangjiajie',term:'zhangjiajie china'},{name:'zhangjiakou',term:'zhangjiakou china'},{name:'zhangye',term:'zhangye china'},{name:'zhangzhou',term:'zhangzhou china'},{name:'zhanjiang',term:'zhanjiang china'},{name:'zhaoqing',term:'zhaoqing china'},{name:'zhaotong',term:'zhaotong china'},{name:'zhenjiang',term:'zhenjiang china'},{name:'zhongshan',term:'zhongshan china'},{name:'zhongwei',term:'zhongwei china'},{name:'zhoukou',term:'zhoukou china'},{name:'zhoushan',term:'zhoushan archipelago china'},{name:'zhumadian',term:'zhumadian china'},{name:'zhuzhou',term:'zhuzhou china'},{name:'zibo',term:'zibo china'},{name:'zigong',term:'zigong china'},{name:'ziyang',term:'ziyang china'},{name:'zunyi',term:'zunyi guizhou china'}
+];
+
+const grid = document.getElementById('grid');
+NEED_PHOTOS.forEach(city => {
+    const div = document.createElement('div');
+    div.className = 'city';
+    div.textContent = city.name;
+    div.id = 'city-' + city.name;
+    grid.appendChild(div);
+});
+
+let current = 0;
+function startAll() {
+    if (current >= NEED_PHOTOS.length) {
+        alert('All pages opened! Download images and save to /Users/sisi/Desktop/Chinawheely 9.1  ni/images/');
+        return;
+    }
+    const city = NEED_PHOTOS[current];
+    const url = 'https://unsplash.com/s/photos/' + encodeURIComponent(city.term);
+    window.open(url, '_blank');
+    document.getElementById('city-' + city.name).className = 'city done';
+    current++;
+    if (current < NEED_PHOTOS.length) {
+        setTimeout(startAll, 500); // Open next after 0.5s
+    } else {
+        alert('All ' + NEED_PHOTOS.length + ' search pages opened! Right-click images to save.');
+    }
+}
+</script>
+</body>
+</html>
