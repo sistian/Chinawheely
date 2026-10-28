@@ -8,7 +8,8 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp.qq.com';
 const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const SMTP_USER = process.env.SMTP_USER || '';
 const SMTP_PASS = process.env.SMTP_PASS || process.env.QQ_AUTH_CODE || '';
-const MAIL_FROM = process.env.MAIL_FROM || process.env.EMAIL_FROM || SMTP_USER;
+// The From address must match the SMTP account, otherwise the server rejects it (501).
+const MAIL_FROM = process.env.MAIL_FROM || SMTP_USER;
 const MAIL_FROM_NAME = process.env.MAIL_FROM_NAME || 'Chinawheely';
 
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
