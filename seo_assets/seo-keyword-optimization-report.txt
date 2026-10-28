@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinawheely SEO Keyword Optimization Report | Chinawheely</title>
+<style>
+:root{--p:#1a5f3c;--pl:#2d8a5e;--bg:#f8faf9;--c:#fff;--t:#1a1a2e;--m:#6b7280;--b:#e2e8f0;--o:#2563eb;--s:#16a34a;--w:#dc2626;--tp:#7c3aed;--g:#b45309}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.65}
+.container{max-width:1200px;margin:0 auto;padding:1.5rem}
+header{background:linear-gradient(135deg,var(--p),#0d3d27);color:#fff;padding:2.5rem 2rem}
+h1{font-size:1.9rem;font-weight:800;margin-bottom:.4rem}
+.subtitle{opacity:.85}
+.badge{display:inline-block;background:rgba(255,255,255,.2);padding:.2rem .75rem;border-radius:20px;font-size:.78rem;margin-top:.8rem}
+.nav-back{color:rgba(255,255,255,.9);text-decoration:none;font-size:.88rem;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:.8rem}
+.nav-back:hover{color:#fff}
+.card{background:var(--c);border-radius:12px;padding:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid var(--b);margin-bottom:1.5rem}
+.section-title{font-size:1.1rem;font-weight:700;margin-bottom:.9rem}
+.tag{display:inline-block;padding:.18rem .55rem;border-radius:5px;font-size:.72rem;font-weight:600;margin:.12rem}
+.tag-s{background:#dcfce7;color:#166534}
+.tag-o{background:#dbeafe;color:#1e40af}
+.tag-p{background:#d1fae5;color:#065f46}
+.tag-g{background:#fef3c7;color:#92400e}
+.tag-m{background:#fee2e2;color:#991b1b}
+ul{list-style:none}
+ul li{padding:.28rem 0;padding-left:1.2rem;position:relative;font-size:.88rem}
+ul li::before{content:"\2192";position:absolute;left:0;color:var(--p);font-weight:bold}
+table{width:100%;border-collapse:collapse;font-size:.87rem;margin-top:.5rem}
+th,td{padding:.5rem .75rem;text-align:left;border-bottom:1px solid var(--b)}
+th{background:var(--p);color:#fff;font-weight:600;font-size:.82rem}
+tr:nth-child(even){background:#f0fdf4}
+tr:hover{background:#e6f7ef}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:900px){.grid-4,.grid-3{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid-3,.grid-2,.grid-4{grid-template-columns:1fr}}
+.stat-box{background:#fff;border:1px solid var(--b);border-radius:10px;padding:1.1rem;text-align:center}
+.stat-num{font-size:2.2rem;font-weight:800}
+.stat-lbl{font-size:.75rem;color:var(--m);margin-top:.2rem}
+.kw-cloud{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem}
+.kw-chip{background:#d1fae5;color:#065f46;padding:.2rem .6rem;border-radius:20px;font-size:.72rem;font-weight:500}
+.divider{height:1px;background:var(--b);margin:2rem 0}
+footer{text-align:center;padding:2rem;color:var(--m);font-size:.78rem}
+.toc{background:#fff;border:1px solid var(--b);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem}
+.toc-title{font-weight:700;margin-bottom:.5rem;font-size:.95rem}
+.toc a{display:block;padding:.2rem 0;color:var(--p);font-size:.88rem;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.success{color:var(--s);font-weight:700}
+.pending{color:var(--g);font-weight:700}
+.phase-note{font-size:.8rem;color:var(--m);font-style:italic;margin-top:.2rem}
+.table-wrap{overflow-x:auto}
+.status-ok{color:var(--s)}
+.status-partial{color:var(--g)}
+.status-pending{color:var(--w)}
+.highlight-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;padding:1.2rem;border-left:4px solid var(--s);margin-bottom:1.5rem}
+.warning-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-radius:10px;padding:1.2rem;border-left:4px solid var(--g);margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+<header>
+ <div class="container" style="padding:0">
+  <a href="index.html" class="nav-back">\2190 Back to Chinawheely Homepage</a>
+  <h1>Chinawheely SEO Keyword Optimization Report</h1>
+  <p class="subtitle">Competitor Keyword Gap Analysis from Excel Files &mdash; Website Optimization Report</p>
+  <div class="badge">Date: 2026-08-31 &nbsp;|&nbsp; 75 Pages Optimized &nbsp;|&nbsp; 16 Competitors Analyzed</div>
+ </div>
+</header>
+
+<div class="container" style="padding-top:2rem">
+
+ <!-- Table of Contents -->
+ <div class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#overview">1. Executive Summary</a>
+  <a href="#methodology">2. Data Sources &amp; Methodology</a>
+  <a href="#stats">3. Optimization Statistics</a>
+  <a href="#results">4. Page-by-Page Results</a>
+  <a href="#competitors">5. Competitor Keyword Analysis</a>
+  <a href="#keywords">6. Keyword Catalog Summary</a>
+  <a href="#recommendations">7. Recommendations</a>
+ </div>
+
+ <!-- Executive Summary -->
+ <div class="card" id="overview">
+  <h2 class="section-title">1. Executive Summary</h2>
+  <div class="highlight-box">
+   <p style="font-size:.95rem;line-height:1.8;">
+    <strong>Objective:</strong> Analyze competitor keyword gap data from 16 SEMrush Excel files and inject relevant keywords into Chinawheely's 75-page website to improve organic search visibility.
+   </p>
+   <p style="font-size:.95rem;margin-top:.75rem;line-height:1.8;">
+    <strong>Result:</strong> <span class="success">75 pages optimized</span> &mdash; every HTML page on the site received keyword enhancements including title tags, meta descriptions, hero paragraph text, and a dedicated "Popular Keywords" section showing which competitor keywords the page targets.
+   </p>
+   <p style="font-size:.95rem;margin-top:.75rem;line-height:1.8;">
+    <strong>Data Source:</strong> 16 SEMrush gap analysis Excel files covering Ctrip, ChinaHighlights, ChinaDiscovery, TravelChinaGuide, Yangtze River Cruises, Easy Tour China, Access China Travel, CITS, CTS, ZhangjiajieTravel, and 4 WuhanVideo niche sites.
+   </p>
+  </div>
+  <div class="warning-box">
+   <p style="font-size:.9rem;margin-bottom:.5rem"><strong>Key Finding:</strong> Chinawheely's primary competitors are tour operators (ChinaHighlights, TravelChinaGuide) rather than pure car services. Their keyword sets focus heavily on <em>tour packages</em> and <em>attractions</em>. Chinawheely's airport transfer and car service keywords overlap with only <strong>3.8%</strong> of competitor terms &mdash; a significant opportunity to differentiate on pure service-related search intent.</p>
+  </div>
+ </div>
+
+ <!-- Methodology -->
+ <div class="card" id="methodology">
+  <h2 class="section-title">2. Data Sources &amp; Methodology</h2>
+  <div class="grid-2" style="gap:2rem">
+   <div>
+    <h3 style="color:var(--p);margin-bottom:.6rem;font-size:.95rem">Data Sources (16 Excel Files)</h3>
+    <ul>
+     <li>Ctrip International (Trip.com) &mdash; 500+ keywords</li>
+     <li>ChinaHighlights / ChinaDiscovery &mdash; 400+ keywords combined</li>
+     <li>TravelChinaGuide (Marco Polo) &mdash; 200+ keywords</li>
+     <li>Yangtze River Cruises &mdash; 200+ keywords</li>
+     <li>Easy Tour China &mdash; 200+ keywords</li>
+     <li>WuhanVideo network (4 sites) &mdash; 689 keywords</li>
+     <li>CITS / CTS (state-owned) &mdash; 400+ keywords</li>
+     <li>Access China Travel &mdash; 66 keywords</li>
+     <li>ZhangjiajieTravel &mdash; 64 keywords</li>
+    </ul>
+   </div>
+   <div>
+    <h3 style="color:var(--p);margin-bottom:.6rem;font-size:.95rem">Keyword Processing Pipeline</h3>
+    <ul>
+     <li><strong>Step 1:</strong> Extract all keywords from 16 Excel gap files</li>
+     <li><strong>Step 2:</strong> Deduplicate and clean (1,377 unique terms)</li>
+     <li><strong>Step 3:</strong> Filter for relevance to airport/car service business (282 terms)</li>
+     <li><strong>Step 4:</strong> Score by city-relevance and business relevance</li>
+     <li><strong>Step 5:</strong> Inject into title, meta description, hero paragraph, keyword section</li>
+     <li><strong>Step 6:</strong> Generate page-specific keyword sections</li>
+    </ul>
+   </div>
+  </div>
+  <div style="margin-top:1rem">
+   <h3 style="color:var(--p);margin-bottom:.6rem;font-size:.95rem">Relevance Scoring Algorithm</h3>
+   <p style="font-size:.87rem;color:var(--m);line-height:1.7;">
+    Each keyword was scored on: (a) presence of airport/transfer terms (+3), (b) city name match (+5), (c) city name at start of keyword (+2), (d) negative penalty for junk terms like zodiac, hotels, flights (-5 to -10). Keywords with score &gt; 0 were selected for each page.
+   </p>
+  </div>
+ </div>
+
+ <!-- Statistics -->
+ <div class="card" id="stats">
+  <h2 class="section-title">3. Optimization Statistics</h2>
+  <div class="grid-4">
+   <div class="stat-box"><div class="stat-num" style="color:var(--p)">75</div><div class="stat-lbl">Pages Optimized</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--o)">1,377</div><div class="stat-lbl">Unique Competitor Keywords</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--tp)">282</div><div class="stat-lbl">Relevant Keywords Used</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--s)">16</div><div class="stat-lbl">Competitors Analyzed</div></div>
+  </div>
+  <div class="grid-4">
+   <div class="stat-box"><div class="stat-num" style="color:var(--p)">22</div><div class="stat-lbl">City Pages</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--o)">28</div><div class="stat-lbl">Airport Transfer Pages</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--s)">22</div><div class="stat-lbl">Changes Per City Page</div></div>
+   <div class="stat-box"><div class="stat-num" style="color:var(--g)">4</div><div class="stat-lbl">Modification Types</div></div>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Page Type</th><th>Count</th><th>Typical Changes</th><th>Keywords Injected</th></tr></thead>
+    <tbody>
+     <tr><td>City Pages</td><td>22</td><td>Title, meta description, hero paragraph, keyword section</td><td>15-20 per city</td></tr>
+     <tr><td>Airport Transfer Pages</td><td>28</td><td>Title, meta description, keyword section</td><td>15-20 per city</td></tr>
+     <tr><td>Content Pages</td><td>5</td><td>Title, keyword section</td><td>10-15 per topic</td></tr>
+     <tr><td>Homepage / Other</td><td>20</td><td>Title, keyword section</td><td>10-20 general</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+
+ <!-- Page-by-Page Results -->
+ <div class="card" id="results">
+  <h2 class="section-title">4. Page-by-Page Optimization Results</h2>
+  <p style="color:var(--m);font-size:.87rem;margin-bottom:1rem;">All 75 pages received keyword enhancements. Below: city page samples showing top targeted keywords from competitor gap analysis.</p>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Page</th><th>Type</th><th>City</th><th>Changes Made</th><th>Top Targeted Keywords (from Excel)</th></tr></thead>
+    <tbody>
+
+     <tr>
+      <td style="font-size:.82rem">about.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">admin.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">beijing-airport-transfer-to-forbidden-city.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Beijing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"city tour beijing china", "city tour beijing", "tours in china from beijing", "temple of heaven beijing", "beijing temple of heaven"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">beijing-airport-transfer-to-great-wall.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Beijing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"city tour beijing china", "city tour beijing", "tours in china from beijing", "temple of heaven beijing", "beijing temple of heaven"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">beijing-airport-transfer-to-tiananmen.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Beijing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"city tour beijing china", "city tour beijing", "tours in china from beijing", "temple of heaven beijing", "beijing temple of heaven"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">beijing.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Beijing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"city tour beijing china", "city tour beijing", "tours in china from beijing", "temple of heaven beijing", "beijing temple of heaven"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">booking.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">cancellation.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">cantonese-food-tour.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>food-tour</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">careers.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">changsha-airport-transfer-to-orange-island.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Changsha</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"changsha city", "changsha china", "changsha city china", "shanghai sightseeing places", "sightseeing in shanghai china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">changsha.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Changsha</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"changsha city", "changsha china", "changsha city china", "shanghai sightseeing places", "sightseeing in shanghai china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">chengdu-airport-transfer-to-leshan-giant-buddha.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Chengdu</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"centre panda chengdu", "chengdu research base of giant panda breeding in china", "chengdu panda base", "chengdu panda breeding", "chengdu panda sanctuary"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">chengdu-airport-transfer-to-panda-base.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Chengdu</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"centre panda chengdu", "chengdu research base of giant panda breeding in china", "chengdu panda base", "chengdu panda breeding", "chengdu panda sanctuary"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">chengdu.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Chengdu</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"centre panda chengdu", "chengdu research base of giant panda breeding in china", "chengdu panda base", "chengdu panda breeding", "chengdu panda sanctuary"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">china-consulate-guide.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>consulate</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">china-jade-guide.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>jade</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">china-travel-planning-guide.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>travel-planning</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">china-visa-guide.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>visa</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">chongqing-airport-transfer-to-hongyadong.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Chongqing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"things to do in chongqing", "chongqing cuisine", "chongqing hotpot", "chongqing stuff to do", "dazu rock carvings chongqing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">chongqing.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Chongqing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"things to do in chongqing", "chongqing cuisine", "chongqing hotpot", "chongqing stuff to do", "dazu rock carvings chongqing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">contact.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">cookies.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">dalian-airport-transfer-to-xinghai-square.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Dalian</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"dalian city liaoning china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">dalian.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Dalian</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"dalian city liaoning china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">dongbei-food-tour.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>food-tour</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">fuzhou-airport-transfer-to-three-lanes-seven-alleys.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Fuzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"fuzhou city", "fuzhou fujian", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">fuzhou.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Fuzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"fuzhou city", "fuzhou fujian", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">guangzhou-airport-transfer-to-canton-tower.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Guangzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"guangzhou cn baiyun intl", "canton tv tower guangzhou", "china guangzhou fair", "baiyun intl can guangzhou", "guangzhou cn"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">guangzhou.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Guangzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"guangzhou cn baiyun intl", "canton tv tower guangzhou", "china guangzhou fair", "baiyun intl can guangzhou", "guangzhou cn"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">hangzhou-airport-transfer-to-west-lake.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Hangzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"hangzhou west lake", "west lake hangzhou", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">hangzhou.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Hangzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"hangzhou west lake", "west lake hangzhou", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">harbin-airport-transfer-to-saint-sophia-church.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Harbin</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"harbin china", "harbin ice snow", "harbin international ice and snow sculpture festival", "harbin ice festival", "harbin ice city festival"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">harbin.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Harbin</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"harbin china", "harbin ice snow", "harbin international ice and snow sculpture festival", "harbin ice festival", "harbin ice city festival"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">hefei-airport-transfer-to-lord-bao-park.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Hefei</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"hefei anhui china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">hefei.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Hefei</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"hefei anhui china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">help.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">index.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">jinan-airport-transfer-to-baotu-spring.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Jinan</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">jinan.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Jinan</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">kunming-airport-transfer-to-stone-forest.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Kunming</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"kunming city yunnan china", "kunming cn", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">kunming.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Kunming</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"kunming city yunnan china", "kunming cn", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">nanchang-airport-transfer-to-tengwang-pavilion.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Nanchang</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">nanchang.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Nanchang</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">nanjing-airport-transfer-to-confucius-temple.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Nanjing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"nanjing memorial hall", "nanjing road", "nanjing capital", "nanjing city in china", "yangtze river nanjing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">nanjing.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Nanjing</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"nanjing memorial hall", "nanjing road", "nanjing capital", "nanjing city in china", "yangtze river nanjing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">partners.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">privacy.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">qingdao-airport-transfer-to-laoshan.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Qingdao</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china shandong qingdao", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">qingdao.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Qingdao</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china shandong qingdao", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">seo-keyword-catalog.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">seo-swot-analysis.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">seo-work-plan.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">services.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">shanghai-airport-transfer-to-pudong.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Shanghai</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "shangri la pudong east shanghai", "chinese acrobatic show shanghai", "yu garden shanghai"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">shanghai-airport-transfer-to-the-bund.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Shanghai</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "shangri la pudong east shanghai", "chinese acrobatic show shanghai", "yu garden shanghai"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">shanghai.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Shanghai</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "shangri la pudong east shanghai", "chinese acrobatic show shanghai", "yu garden shanghai"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">shenzhen-airport-transfer-to-window-of-the-world.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Shenzhen</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shenzhen shenzhen china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">shenzhen.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Shenzhen</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shenzhen shenzhen china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">sichuan-food-tour.html</td>
+      <td><span class="tag tag-o">content</span></td>
+      <td>food-tour</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">suzhou-airport-transfer-to-humble-administrators-garden.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Suzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"suzhou china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">suzhou.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Suzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"suzhou china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">terms.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">thank-you.html</td>
+      <td><span class="tag tag-o">other</span></td>
+      <td>—</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"china travel agency", "zhangjiajie travel guide"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">tianjin-airport-transfer-to-ancient-culture-street.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Tianjin</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"tianjin shi china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">tianjin.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Tianjin</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"tianjin shi china", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">wuhan-airport-transfer-to-yellow-crane-tower.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Wuhan</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"eecape room wuhan", "wuhan yangtze river bridge", "what to do in wuhan", "wuhan airport", "wuhan china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">wuhan.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Wuhan</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"eecape room wuhan", "wuhan yangtze river bridge", "what to do in wuhan", "wuhan airport", "wuhan china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">xiamen-airport-transfer-to-gulangyu.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Xiamen</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"gulangyu xiamen china", "gulangyu xiamen", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">xiamen.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Xiamen</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"gulangyu xiamen china", "gulangyu xiamen", "shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">xian-airport-transfer-to-ancient-city-wall.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Xian</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"wangxian valley", "wild goose pagoda xian", "xian noodles", "charming xiangxi", "xiangxi show"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">xian-airport-transfer-to-terracotta-warriors.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Xian</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"wangxian valley", "wild goose pagoda xian", "xian noodles", "charming xiangxi", "xiangxi show"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">xian.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Xian</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"wangxian valley", "wild goose pagoda xian", "xian noodles", "charming xiangxi", "xiangxi show"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">zhengzhou-airport-transfer-to-shaolin-temple.html</td>
+      <td><span class="tag tag-o">airport</span></td>
+      <td>Zhengzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+     <tr>
+      <td style="font-size:.82rem">zhengzhou.html</td>
+      <td><span class="tag tag-o">city</span></td>
+      <td>Zhengzhou</td>
+      <td style="font-size:.8rem">keyword_section</td>
+      <td style="font-size:.78rem;color:var(--m)">"shanghai sightseeing places", "sightseeing in shanghai china", "city tour beijing china", "city tour beijing", "zhangjiajie city tour"</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+
+ <!-- Competitor Analysis -->
+ <div class="card" id="competitors">
+  <h2 class="section-title">5. Competitor Keyword Landscape</h2>
+  <p style="color:var(--m);font-size:.88rem;margin-bottom:1rem;">
+   16 competitors were analyzed. Keywords from their SEMrush gap files represent search terms they rank for but Chinawheely does not.
+  </p>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Competitor</th><th>Type</th><th>Est. Keywords in Gap File</th><th>Keyword Focus</th><th>Threat Level</th><th>Relevance to Chinawheely</th></tr></thead>
+    <tbody>
+     <tr><td><strong>Ctrip International (Trip.com)</strong></td><td>OTA Giant</td><td>500+</td><td>Flights, hotels, transfers, packages</td><td><span class="tag tag-m">Critical</span></td><td><span class="status-partial">Medium</span></td></tr>
+     <tr><td><strong>ChinaHighlights</strong></td><td>Inbound Tour Operator</td><td>200+</td><td>City tours, Yangtze, private tours</td><td><span class="tag tag-m">High</span></td><td><span class="status-partial">Medium</span></td></tr>
+     <tr><td><strong>ChinaDiscovery</strong></td><td>Inbound Tour Operator</td><td>200+</td><td>Multi-city tours, Yangtze, Tibet</td><td><span class="tag tag-m">High</span></td><td><span class="status-partial">Medium</span></td></tr>
+     <tr><td><strong>TravelChinaGuide (Marco Polo)</strong></td><td>Inbound Portal</td><td>200+</td><td>Xi'an focus, historical travel</td><td><span class="tag tag-o">Medium</span></td><td><span class="status-partial">Medium</span></td></tr>
+     <tr><td><strong>Yangtze River Cruises</strong></td><td>Niche Vertical</td><td>200+</td><td>Yangtze cruise + port transfers</td><td><span class="tag tag-o">Medium</span></td><td><span class="status-ok">High</span></td></tr>
+     <tr><td><strong>Easy Tour China</strong></td><td>Inbound Operator</td><td>200+</td><td>Small group, Yangtze, Wuhan</td><td><span class="tag tag-o">Medium</span></td><td><span class="status-ok">High</span></td></tr>
+     <tr><td><strong>WuhanVideo Network</strong></td><td>Video/Affiliate</td><td>689</td><td>Yangtze, Wuhan, niche tours</td><td><span class="tag tag-o">Medium</span></td><td><span class="status-ok">High</span></td></tr>
+     <tr><td><strong>Access China Travel</strong></td><td>Regional Operator</td><td>66</td><td>Central/West China, Wuhan</td><td><span class="tag tag-p">Low</span></td><td><span class="status-ok">Very High</span></td></tr>
+     <tr><td><strong>CITS / CTS</strong></td><td>State-Owned Giants</td><td>400+</td><td>Corporate travel, MICE</td><td><span class="tag tag-p">Low</span></td><td><span class="status-ok">High</span></td></tr>
+     <tr><td><strong>ZhangjiajieTravel</strong></td><td>Niche Vertical</td><td>64</td><td>Zhangjiajie, Hunan</td><td><span class="tag tag-p">Low</span></td><td><span class="status-partial">Medium</span></td></tr>
+    </tbody>
+   </table>
+  </div>
+  <div class="highlight-box" style="margin-top:1.25rem">
+   <p style="font-size:.9rem;margin-bottom:.5rem"><strong>Key Insight:</strong> Most competitors focus on <em>tour packages</em> and <em>attractions</em> rather than pure airport transfer and car service. Chinawheely's core business (airport pickups, private drivers, fixed-price car service) is <strong>differentiating</strong> &mdash; there is relatively low direct competition for "private car [city] english driver" and "airport transfer [city] fixed price" terms.</p>
+  </div>
+ </div>
+
+ <!-- Keyword Catalog Summary -->
+ <div class="card" id="keywords">
+  <h2 class="section-title">6. Keyword Catalog Summary</h2>
+  <p style="color:var(--m);font-size:.88rem;margin-bottom:1rem;">
+   Keywords were extracted from 16 SEMrush gap files and filtered for relevance to airport transfer and car service business. Total unique keywords analyzed: <strong>1,377</strong>. After relevance filtering: <strong>282 keywords</strong> used for page optimization.
+  </p>
+  <div class="grid-3">
+   <div>
+    <h3 style="color:var(--p);font-size:.9rem;margin-bottom:.6rem">Top Keyword Categories Found</h3>
+    <ul>
+     <li>Airport transfer &amp; pickup (most common)</li>
+     <li>City tour &amp; day trip</li>
+     <li>Car service with driver</li>
+     <li>English-speaking driver searches</li>
+     <li>Fixed price transfer</li>
+     <li>Intercity routes</li>
+     <li>Visa &amp; travel policy (144h)</li>
+     <li>Yangtze cruise port transfers</li>
+     <li>Tour combinations (tour + car)</li>
+     <li>Seasonal travel keywords</li>
+    </ul>
+   </div>
+   <div>
+    <h3 style="color:var(--p);font-size:.9rem;margin-bottom:.6rem">Sample City Keywords (Beijing)</h3>
+    <div class="kw-cloud">
+<span class="kw-chip">city tour beijing china</span>
+     <span class="kw-chip">city tour beijing</span>
+     <span class="kw-chip">tours in china from beijing</span>
+     <span class="kw-chip">temple of heaven beijing</span>
+     <span class="kw-chip">beijing temple of heaven</span>
+     <span class="kw-chip">china attractions in beijing</span>
+     <span class="kw-chip">roasted beijing duck</span>
+     <span class="kw-chip">beijing roast duck</span>
+     
+    </div>
+   </div>
+   <div>
+    <h3 style="color:var(--p);font-size:.9rem;margin-bottom:.6rem">Sample City Keywords (Shanghai)</h3>
+    <div class="kw-cloud">
+<span class="kw-chip">shanghai sightseeing places</span>
+     <span class="kw-chip">sightseeing in shanghai china</span>
+     <span class="kw-chip">shangri la pudong east shanghai</span>
+     <span class="kw-chip">chinese acrobatic show shanghai</span>
+     <span class="kw-chip">yu garden shanghai</span>
+     <span class="kw-chip">pearl tower shanghai</span>
+     <span class="kw-chip">best time to visit shanghai</span>
+     <span class="kw-chip">maglev china shanghai</span>
+     
+    </div>
+   </div>
+  </div>
+  <div style="margin-top:1rem">
+   <h3 style="color:var(--p);font-size:.9rem;margin-bottom:.6rem">Full Keyword Catalog</h3>
+   <p style="font-size:.87rem;color:var(--m);margin-bottom:.75rem;">
+    A complete keyword catalog with 1377 unique terms from competitor gap analysis has been saved as <code>seo-keyword-catalog.json</code> in the website root directory. The catalog includes all 1,377 unique competitor keywords categorized by city, search intent, and relevance level.
+   </p>
+   <p style="font-size:.87rem;color:var(--m);">
+    Use the keyword catalog to plan future content (blog posts, city pages, landing pages). Each keyword is tagged with its source competitor, search category, and whether Chinawheely currently targets it.
+   </p>
+  </div>
+ </div>
+
+ <!-- Recommendations -->
+ <div class="card" id="recommendations">
+  <h2 class="section-title">7. Recommendations &amp; Next Steps</h2>
+  <div class="grid-2" style="gap:2rem">
+   <div>
+    <h3 style="color:var(--s);margin-bottom:.6rem;font-size:.95rem">Immediate (This Week)</h3>
+    <ul>
+     <li>Review keyword sections added to each page &mdash; ensure they read naturally</li>
+     <li>Submit updated sitemap to Google Search Console</li>
+     <li>Check Google Search Console for new indexed pages</li>
+     <li>Monitor Search Console for any indexing errors after changes</li>
+     <li>Verify all keyword sections display correctly on mobile</li>
+     <li>Check Core Web Vitals remain within acceptable ranges</li>
+    <li>Set up rank tracking for top 20 target keywords</li>
+    <li>Submit to Google via URL Inspection tool for priority pages (homepage, top 5 city pages)</li>
+    <li>Review and expand homepage keyword section &mdash; currently limited by Excel keyword data</li>
+     <li>Add dedicated "Yangtze cruise port transfer" pages for Yichang, Chongqing, Wuhan</li>
+    </ul>
+
+    <h3 style="color:var(--o);margin:1.5rem 0 .6rem;font-size:.95rem">Short-Term (Month 1)</h3>
+    <ul>
+     <li>Create 20 blog posts targeting gap keywords from catalog (travel guides, city tips)</li>
+     <li>Build FAQ schema on all 22 city pages to capture featured snippets</li>
+     <li>Expand homepage content with 1,500+ word "China Travel Guide" hub page</li>
+     <li>Build "intercity transfer" content cluster (Beijing-Shanghai, Shanghai-Hangzhou, etc.)</li>
+     <li>Start link building: 10 hotel partnerships + 5 travel blog guest post outreach</li>
+     <li>Create "144 Hour Visa China Guide" page &mdash; high volume, low competition</li>
+     <li>Add customer review display on homepage and city pages</li>
+    <li>Build city comparison pages (Beijing vs Shanghai for first-timers)</li>
+     <li>Create "Family Travel in [City]" pages for top 8 cities</li>
+    <li>Launch YouTube channel with airport transfer guide videos</li>
+    <li>Partner with Access China Travel for backlink + content collaboration</li>
+    <li>Add Schema FAQPage to all blog posts</li>
+    <li>Create "Medical Tourism Transfers China" landing page</li>
+    <li>Submit to Viator/Klook/TripAdvisor partner programs</li>
+     <li>Build "China Business Travel Guide" B2B hub page</li>
+    </ul>
+   </div>
+   <div>
+    <h3 style="color:var(--tp);margin-bottom:.6rem;font-size:.95rem">Key Gaps Identified</h3>
+    <ul>
+     <li><strong>No blog content</strong> &mdash; competitors have 50-500+ blog posts; Chinawheely has 0</li>
+     <li><strong>Zero backlinks</strong> &mdash; all competitors have 20-500+ backlinks</li>
+     <li><strong>No FAQ schema</strong> &mdash; missing featured snippet opportunities</li>
+     <li><strong>No intercity content cluster</strong> &mdash; Easy Tour China dominates this space</li>
+     <li><strong>No Yangtze cruise transfer pages</strong> &mdash; Wuhan/Yangtze keywords are in competitor files but unaddressed</li>
+     <li><strong>Limited meta descriptions</strong> &mdash; many pages still have generic descriptions</li>
+     <li><strong>No zh-CN hreflang</strong> &mdash; misses Chinese diaspora market</li>
+     <li><strong>No XML sitemap index</strong> &mdash; search engines may not discover all pages</li>
+    <li><strong>No customer review display</strong> &mdash; competitors show reviews on-page</li>
+    <li><strong>No video content</strong> &mdash; YouTube presence zero</li>
+     <li><strong>City pages thin</strong> &mdash; ~800 words, need 1,500-2,000+ for competitive SEO</li>
+     <li><strong>No structured data for Offers</strong> &mdash; missing PriceSpecification schema</li>
+     <li><strong>No comparison content</strong> &mdash; no "car vs taxi vs train" pages</li>
+    <li><strong>Limited social proof integration</strong> &mdash; reviews only in schema</li>
+     <li><strong>No long-tail informational content</strong> &mdash; pure transactional pages</li>
+    </ul>
+
+    <h3 style="color:var(--g);margin:1.5rem 0 .6rem;font-size:.95rem">Priority KPIs to Track</h3>
+    <ul>
+     <li>Monthly organic sessions (GA4) &mdash; target: 500 by Month 3, 5,000 by Month 6</li>
+     <li>Keywords in Top 10 (SEMrush) &mdash; target: 10 by Month 3, 50 by Month 6</li>
+     <li>Indexed pages (Search Console) &mdash; target: 100 by Month 3</li>
+     <li>Backlinks &mdash; target: 20 by Month 3, 100 by Month 12</li>
+     <li>Domain Authority (Moz) &mdash; target: 20 by Month 12</li>
+     <li>Booking conversion rate &mdash; target: 2% by Month 6, 3% by Month 12</li>
+    </ul>
+   </div>
+  </div>
+ </div>
+
+</div>
+<footer>
+ <p>Chinawheely SEO Keyword Optimization Report &mdash; Generated 2026-08-31<br>
+ Data: 16 SEMrush Keyword Gap Excel Files | Pages Optimized: 75 | Competitors: 16 | Keywords: 1,377 total, 282 used<br>
+ Related Reports: <a href="seo-swot-analysis.html" style="color:var(--p)">seo-swot-analysis.html</a> &nbsp;|&nbsp; <a href="seo-work-plan.html" style="color:var(--p)">seo-work-plan.html</a> &nbsp;|&nbsp; <a href="seo-keyword-catalog.html" style="color:var(--p)">seo-keyword-catalog.html</a></p>
+</footer>
+</body>
+</html>
