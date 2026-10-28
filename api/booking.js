@@ -1,10 +1,8 @@
-const https = require('https');
 const querystring = require('querystring');
+const { mailerConfigured, sendMail } = require('./_lib/mailer');
 
 const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || '15527771775@qq.com';
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'noreply@chinawheely.com';
-const SUCCESS_URL = process.env.SUCCESS_URL || '/thank-you.html';
+const SUCCESS_URL = process.env.SUCCESS_URL || 'https://www.chinawheely.com/thank-you.html';
 const REPLY_TO_FIELD = process.env.REPLY_TO_FIELD || 'email';
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim()).filter(Boolean);
 
@@ -184,10 +182,10 @@ module.exports = async (req, res) => {
     return res.end('Invalid email address');
   }
 
-  if (!SENDGRID_API_KEY) {
+  if (!mailerConfigured()) {
     setCorsHeaders(res, req);
     res.statusCode = 503;
-    return res.end('SendGrid API key is not configured. Set SENDGRID_API_KEY in the Vercel dashboard.');
+    return res.end('Mail service is not configured. Set SMTP_USER/SMTP_PASS in the Vercel dashboard.');
   }
 
   const submitterIP = req.headers['x-forwarded-for'] || (req.socket && req.socket.remoteAddress) || '';
@@ -199,48 +197,22 @@ module.exports = async (req, res) => {
   const { html, plain } = buildEmail(data, { reference, submittedAt, submitterIP });
 
   const replyEmail = data[REPLY_TO_FIELD] && String(data[REPLY_TO_FIELD]).trim();
-  const payload = {
-    personalizations: [{ to: [{ email: RECIPIENT_EMAIL }] }],
-    from: { email: SENDGRID_FROM_EMAIL },
-    subject: subject,
-    content: [
-      { type: 'text/plain', value: plain },
-      { type: 'text/html', value: html }
-    ]
-  };
-  if (replyEmail) {
-    payload.reply_to = { email: replyEmail };
-  }
 
-  const postData = JSON.stringify(payload);
-  const request = https.request({
-    hostname: 'api.sendgrid.com',
-    port: 443,
-    path: '/v3/mail/send',
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + SENDGRID_API_KEY,
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(postData)
-    }
-  }, (response) => {
-    let responseBody = '';
-    response.on('data', chunk => responseBody += chunk);
-    response.on('end', () => {
-      setCorsHeaders(res, req);
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        res.writeHead(302, { Location: SUCCESS_URL });
-        return res.end();
-      }
-      res.statusCode = 502;
-      res.end('SendGrid error: ' + responseBody);
+  try {
+    await sendMail({
+      to: RECIPIENT_EMAIL,
+      subject,
+      html,
+      text: plain,
+      replyTo: replyEmail
     });
-  });
-  request.on('error', (err) => {
+    setCorsHeaders(res, req);
+    res.writeHead(302, { Location: SUCCESS_URL });
+    return res.end();
+  } catch (err) {
+    console.error('Chinawheely booking mail error:', err && err.message);
     setCorsHeaders(res, req);
     res.statusCode = 502;
-    res.end('Request failed: ' + err.message);
-  });
-  request.write(postData);
-  request.end();
+    return res.end('Mail error: ' + (err && err.message ? err.message : 'unknown error'));
+  }
 };
