@@ -1118,5 +1118,44 @@
   if (el) el.value = String(Date.now());
 })();
 </script>
+
+ <script>
+ // 落地页预填：从 ?city=&service=&vehicle= 自动选择（由内链 CTA 传入）
+ (function () {
+   var q = new URLSearchParams(window.location.search);
+   var city = (q.get('city') || '').toLowerCase().trim();
+   var sel = document.getElementById('city');
+   if (city && sel) {
+     var slug = city.replace(/\s+/g, '-');
+     var hit = Array.prototype.some.call(sel.options, function (o) { return o.value === slug; });
+     if (!hit) {
+       // 名称匹配兜底
+       Array.prototype.some.call(sel.options, function (o) {
+         if (o.value && o.textContent.toLowerCase().indexOf(city) === 0) { slug = o.value; hit = true; return true; }
+         return false;
+       });
+     }
+     if (hit) {
+       sel.value = slug;
+       sel.dispatchEvent(new Event('change', { bubbles: true }));
+     }
+   }
+   var v = q.get('vehicle');
+   if (v) {
+     var vs = document.querySelector('input[name="vehicle"][value="' + v + '"]');
+     if (vs) { vs.checked = true; vs.dispatchEvent(new Event('change', { bubbles: true })); }
+   }
+   var st = q.get('service');
+   if (st) {
+     var ss = document.querySelector('select[name="service_type"], select[id*="service"]');
+     if (ss) {
+       Array.prototype.some.call(ss.options, function (o) {
+         if (o.value.toLowerCase() === st.toLowerCase()) { ss.value = o.value; ss.dispatchEvent(new Event('change', { bubbles: true })); return true; }
+         return false;
+       });
+     }
+   }
+ })();
+ </script>
 </body>
 </html>
