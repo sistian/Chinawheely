@@ -1,6 +1,9 @@
 # Chinawheely robots.txt
 # https://www.chinawheely.com/robots.txt
 
+# 说明：每个 User-agent 组是独立匹配的，不会继承 * 组的规则。
+# 因此所有具体爬虫组都必须重复列出敏感路径，否则 Googlebot/Bingbot 会绕过 * 组的 Disallow。
+
 User-agent: *
 Allow: /
 Disallow: /admin.html
@@ -13,34 +16,68 @@ Crawl-delay: 1
 # Search engine crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /thank-you.html
+Disallow: /cancellation.html
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /thank-you.html
+Disallow: /cancellation.html
 
 User-agent: Googlebot-Image
 Allow: /images/
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 # Allow AI / Crawl bots
 User-agent: GPTBot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: CCBot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: Bytespider
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: AnthropicAI
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: GoogleExtended
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /api/
 
 # Block aggressive SEO crawlers
 User-agent: SemrushBot
