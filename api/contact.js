@@ -1,5 +1,8 @@
 const querystring = require('querystring');
 const { mailerConfigured, sendMail } = require('./_lib/mailer');
+const { createLead, markMail } = require('./_lib/leads');
+const { buildLeadRecord, clientIp } = require('./_lib/fields');
+const { isRateLimited, filledTooFast } = require('./_lib/guard');
 
 const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || '15527771775@qq.com';
 const SUCCESS_URL = process.env.SUCCESS_URL || 'https://www.chinawheely.com/thank-you.html';
@@ -114,6 +117,22 @@ module.exports = async (req, res) => {
     return res.end();
   }
 
+  // P1 - 频率限制（同一 IP 每分钟最多 5 次）
+  const ip = clientIp(req);
+  const rl = await isRateLimited(ip);
+  if (rl.limited) {
+    setCorsHeaders(res, req);
+    res.statusCode = 429;
+    return res.end('Too many submissions. Please try again later.');
+  }
+
+  // P1 - 填写时长异常（脚本机器人），静默成功但不落库
+  if (filledTooFast(data)) {
+    setCorsHeaders(res, req);
+    res.writeHead(302, { Location: SUCCESS_URL });
+    return res.end();
+  }
+
   const required = ['firstName', 'lastName', 'email', 'message'];
   for (const field of required) {
     if (!data[field] || String(data[field]).trim() === '') {
@@ -129,16 +148,25 @@ module.exports = async (req, res) => {
     return res.end('Invalid email address');
   }
 
+  // P1 - 先落库：即使邮件发送失败，线索也不会丢
+  const lead = await createLead(buildLeadRecord(data, 'contact', req));
+  const reference = lead.ref;
+  if (!lead.ok) {
+    console.error('Chinawheely contact lead insert failed:', lead.error);
+  }
+
   if (!mailerConfigured()) {
+    await markMail(reference, 'failed', 'mailer not configured');
     setCorsHeaders(res, req);
     res.statusCode = 503;
     return res.end('Mail service is not configured. Set SMTP_USER/SMTP_PASS in the Vercel dashboard.');
   }
 
   const name = getSubmitterName(data);
-  const subject = data.subject && String(data.subject).trim()
+  const baseSubject = data.subject && String(data.subject).trim()
     ? `Contact: ${String(data.subject).trim()} - ${name}`
     : `New Contact Form Submission - ${name}`;
+  const subject = `${baseSubject} [${reference}]`;
   const { html, plain } = buildEmail(data);
 
   const replyTo = data[REPLY_TO_FIELD] && String(data[REPLY_TO_FIELD]).trim();
@@ -151,11 +179,13 @@ module.exports = async (req, res) => {
       text: plain,
       replyTo
     });
+    await markMail(reference, 'sent');
     setCorsHeaders(res, req);
     res.writeHead(302, { Location: SUCCESS_URL });
     return res.end();
   } catch (err) {
     console.error('Chinawheely contact mail error:', err && err.message);
+    await markMail(reference, 'failed', (err && err.message) || 'unknown error');
     setCorsHeaders(res, req);
     res.statusCode = 502;
     return res.end('Mail error: ' + (err && err.message ? err.message : 'unknown error'));

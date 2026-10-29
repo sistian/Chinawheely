@@ -1086,5 +1086,14 @@
  <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
 
- </body>
+ 
+<!-- P1: 表单渲染时间戳（后端用于识别脚本机器人） -->
+<input type="hidden" name="_t" id="cwgFormTimestamp" value="">
+<script>
+(function () {
+  var el = document.getElementById('cwgFormTimestamp');
+  if (el) el.value = String(Date.now());
+})();
+</script>
+</body>
 </html>
