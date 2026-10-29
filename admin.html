@@ -1,224 +1,419 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<link rel="canonical" href="https://www.chinawheely.com/admin.html">
-<meta name="robots" content="noindex, follow">
 <meta charset="utf-8"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" http-equiv="Content-Security-Policy"/>
-<meta content="nosniff" http-equiv="X-Content-Type-Options"/>
-<meta content="DENY" http-equiv="X-Frame-Options"/>
-<meta content="strict-origin-when-cross-origin" http-equiv="Referrer-Policy"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
+<meta name="googlebot" content="noindex, nofollow"/>
+<meta content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.chinawheely.com https://chinawheely-backend-api.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" http-equiv="Content-Security-Policy"/>
+<meta content="noindex, nofollow" name="robots"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Admin Dashboard | Manage Chinawheely Bookings &amp; Drivers | China travel guide</title>
-<meta content="Secure admin dashboard for managing Chinawheely private car bookings, drivers, vehicles, payments and analytics across China. Staff access only." name="description"/>
-<meta content="https://www.chinawheely.com/images/og-image.jpg" property="og:image"/>
-<meta content="Admin Dashboard | Chinawheely | China travel guide" property="og:title"/>
-<meta content="Book private airport transfer and car service in China with Professional licensed drivers.. China travel guide." property="og:description"/>
-<meta content="website" property="og:type"/>
-<meta content="https://www.chinawheely.com/admin.html" property="og:url"/>
-<meta content="Chinawheely" property="og:site_name"/>
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="Admin Dashboard | Chinawheely" name="twitter:title"/>
-<meta content="Book private airport transfer and car service in China with Professional licensed drivers." name="twitter:description"/>
-<link href="https://www.chinawheely.com/admin.html" rel="canonical"/>
-<meta content="index, follow" name="robots"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<title>线索管理后台 | Chinawheely</title>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="favicon.png" rel="icon" sizes="120x120" type="image/png"/>
-<link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-<link color="#E63946" href="favicon.png" rel="mask-icon"/>
-<link href="favicon.png" rel="shortcut icon"/>
-<link href="styles.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/inline-fixes.css">
-<link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="favicon.png" rel="icon" sizes="120x120" type="image/png"/>
-<link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-<link color="#E63946" href="favicon.png" rel="mask-icon"/>
-<link href="favicon.png" rel="shortcut icon"/>
-<link href="admin-styles.css" rel="stylesheet"/>
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Admin Dashboard | Chinawheely",
-    "description": "Book private airport transfer and car service in China with Professional licensed drivers.",
-    "url": "https://www.chinawheely.com/admin.html",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Chinawheely",
-      "url": "https://www.chinawheely.com/"
-    }
+<style>
+  :root{
+    --green:#1B4D3E; --green-2:#2E6B57; --light:#F4F7F5; --line:#E2E8E5;
+    --text:#1F2A26; --muted:#6B7C75; --danger:#B3261E; --warn:#B26A00;
   }
-  </script>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--light);color:var(--text);}
+  header{background:var(--green);color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  header h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px;}
+  header .who{font-size:13px;opacity:.85;}
+  .wrap{max-width:1280px;margin:0 auto;padding:18px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .stat .n{font-size:26px;font-weight:700;color:var(--green);}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:2px;}
+  .stat.alert .n{color:var(--danger);}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  input,select,textarea,button{font:inherit;}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--text);}
+  .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  button{cursor:pointer;border:1px solid var(--green);background:var(--green);color:#fff;padding:8px 16px;border-radius:6px;font-size:14px;}
+  button:hover{background:var(--green-2);}
+  button.ghost{background:#fff;color:var(--green);}
+  button.ghost:hover{background:#EFF4F1;}
+  button.danger{background:#fff;color:var(--danger);border-color:#E7C6C3;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-size:12px;color:var(--muted);font-weight:600;background:#FAFCFB;position:sticky;top:0;}
+  tbody tr:hover{background:#F7FAF8;cursor:pointer;}
+  .tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+  .t-new{background:#E7F0FA;color:#1B4D8F;} .t-contacted{background:#FFF4E0;color:var(--warn);}
+  .t-confirmed{background:#E4F4EC;color:var(--green);} .t-completed{background:#EDEFEE;color:var(--muted);}
+  .t-lost{background:#FBE9E7;color:var(--danger);} .t-cold{background:#F1F3F2;color:var(--muted);}
+  .mail-sent{color:var(--green);font-weight:600;} .mail-failed{color:var(--danger);font-weight:600;} .mail-pending{color:var(--muted);}
+  .login{max-width:380px;margin:9vh auto;}
+  .login h2{margin:0 0 4px;font-size:19px;}
+  .login p.sub{margin:0 0 18px;color:var(--muted);font-size:13px;}
+  .fld{margin-bottom:12px;}
+  .err{color:var(--danger);font-size:13px;min-height:18px;}
+  .hidden{display:none !important;}
+  .drawer{position:fixed;top:0;right:0;width:min(520px,100%);height:100%;background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(0,0,0,.08);padding:18px;overflow:auto;z-index:50;}
+  .drawer h3{margin:0 0 12px;font-size:16px;}
+  .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:13px;margin-bottom:14px;}
+  .kv dt{color:var(--muted);} .kv dd{margin:0;word-break:break-word;}
+  .mask{position:fixed;inset:0;background:rgba(20,30,26,.35);z-index:40;}
+  .note{white-space:pre-wrap;}
+  .empty{padding:28px;text-align:center;color:var(--muted);font-size:14px;}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px;}
+</style>
 </head>
-<body class="admin-body">
-<aside class="admin-sidebar">
-<div class="admin-sidebar-logo">
-<picture><source srcset="images/logo.webp" type="image/webp"/><img alt="Chinawheely" decoding="async" height="120" loading="lazy" src="images/logo.png" width="120"/ class="u-42bfb081" /></picture>
-<span>Chinawheely</span>
-</div>
-<ul class="admin-nav">
-<li><a class="active" href="#">📋 Bookings</a></li>
-<li><a href="#">👤 Customers</a></li>
-<li><a href="#">🚗 Drivers</a></li>
-<li><a href="#">💰 Payments</a></li>
-<li><a href="#">📊 Analytics</a></li>
-<li><a href="#">⚙️ Settings</a></li>
-<li><a href="index.html">🏠 Back to Site</a></li>
-</ul>
-</aside>
-<main class="admin-main">
-<div class="admin-header">
-<h1>Dashboard</h1>
-<div class="u-a3182ecb">
-<span class="u-5e8d7e69">Welcome, CC</span>
-<button class="admin-btn admin-btn-outline" type="button">Logout</button>
-</div>
-</div>
-<div class="admin-stats">
-<div class="admin-stat-card">
-<h2 class="lvl-h3">Today's Bookings</h2>
-<div class="stat-value">12</div>
-</div>
-<div class="admin-stat-card">
-<h3>Pending Confirmation</h3>
-<div class="stat-value">5</div>
-</div>
-<div class="admin-stat-card">
-<h3>Monthly Revenue</h3>
-<div class="stat-value">$4,280</div>
-</div>
-<div class="admin-stat-card">
-<h3>Active Customers</h3>
-<div class="stat-value">87</div>
-</div>
-</div>
-<div class="admin-table">
-<div class="u-77c8140b"><table>
-<thead>
-<tr>
-<th>Booking ID</th>
-<th>Customer</th>
-<th>Service</th>
-<th>Route</th>
-<th>Date</th>
-<th>Status</th>
-<th>Amount</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>#CW-2026-001</td>
-<td>James Davidson<br/><span class="u-9317d6b5">15527771775@qq.com</span></td>
-<td>Airport Transfer</td>
-<td>Local → Beijing CBD</td>
-<td>Jun 15, 2026<br/>10:00 AM</td>
-<td><span class="badge-status badge-confirmed">Confirmed</span></td>
-<td>$52</td>
-<td>
-<button class="admin-btn admin-btn-sm admin-btn-outline" type="button">View</button>
-<button class="admin-btn admin-btn-sm admin-btn-primary" type="button">Assign</button>
-</td>
-</tr>
-<tr>
-<td>#CW-2026-002</td>
-<td>Sarah &amp; Family<br/><span class="u-9317d6b5">15527771775@qq.com</span></td>
-<td>City Tour (8h)</td>
-<td>Shanghai Downtown</td>
-<td>Jun 16, 2026<br/>09:00 AM</td>
-<td><span class="badge-status badge-pending">Pending</span></td>
-<td>$345</td>
-<td>
-<button class="admin-btn admin-btn-sm admin-btn-outline" type="button">View</button>
-<button class="admin-btn admin-btn-sm admin-btn-primary" type="button">Confirm</button>
-</td>
-</tr>
-<tr>
-<td>#CW-2026-003</td>
-<td>Michael K.<br/><span class="u-9317d6b5">15527771775@qq.com</span></td>
-<td>Intercity</td>
-<td>Beijing → Admin Attraction</td>
-<td>Jun 17, 2026<br/>08:00 AM</td>
-<td><span class="badge-status badge-pending">Pending</span></td>
-<td>$120</td>
-<td>
-<button class="admin-btn admin-btn-sm admin-btn-outline" type="button">View</button>
-<button class="admin-btn admin-btn-sm admin-btn-primary" type="button">Confirm</button>
-</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-</main>
-<script src="js/security.js"></script>
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="u-b049a955">
-<button aria-label="Close" type="button" class="u-34025d67">×</button>
-<div class="u-72b7280d">
-<a href="index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="index.html#cities">Cities</a>
-<a href="about.html">About</a>
-<a href="contact.html">Contact</a>
-</div>
-</div>
-<script>
- function toggleMenu {
- var menu = document.getElementById('mobileMenu');
- if (menu.style.display === 'none') {
- menu.style.display = 'block';
- document.body.style.overflow = 'hidden';
- } else {
- menu.style.display = 'none';
- document.body.style.overflow = '';
- }
- }
- // Close menu on link click
- document.querySelectorAll('#mobileMenu a').forEach(function(a) {
- a.addEventListener('click', function {
- document.getElementById('mobileMenu').style.display = 'none';
- document.body.style.overflow = '';
- });
- });
- </script>
-<script src="scripts.js"></script>
-<script src="js/security.js"></script>
-<!-- WhatsApp QR Modal -->
-<div class="whatsapp-modal-overlay" data-action="close-whatsapp" id="whatsappModal">
-<div class="whatsapp-modal-box" data-action="stop-propagation">
-<button aria-label="Close" class="whatsapp-modal-close" data-action="close-whatsapp" type="button">×</button>
-<h3>Chat on WhatsApp</h3>
-<picture><source srcset="images/whatsapp-qr.webp" type="image/webp"/><img alt="WhatsApp QR Code" decoding="async" height="426" loading="lazy" src="images/whatsapp-qr.png" width="379"/></picture>
-<p>Scan the QR code with WhatsApp to add us and start chatting.</p>
-<p>Or add us directly: <strong>+86-155-2777-1775</strong></p>
-<a class="btn btn-whatsapp u-20989682" href="https://wa.me/8615527771775" rel="noopener noreferrer" target="_blank">Open WhatsApp Chat</a>
-</div>
-</div>
-<!-- Floating WhatsApp Button -->
-<button aria-label="Chat on WhatsApp" class="fab-whatsapp" data-action="open-whatsapp" type="button">
-<picture><source srcset="images/whatsapp-btn.webp" type="image/webp"/><img alt="WhatsApp" decoding="async" height="500" loading="lazy" src="images/whatsapp-btn.png" width="500"/></picture>
-</button>
+<body>
 
- <div class="seo-keywords" style="margin:2.5rem auto;padding:1.5rem 2rem;max-width:900px;background:#f8f9fa;border-radius:10px;border-left:4px solid #2d6a4f;font-size:0.92rem;line-height:1.8;color:#333;">
- <p style="margin:0 0 1rem 0;"><strong>Explore Admin with Chinawheely Admin with Chinawheely China with Chinawheely</strong> — Your trusted partner for professional china car service. Whether you need a china airport transfer from major airports, a full-day china city tour, or reliable hourly car hire with a licensed professional licensed driver, Chinawheely delivers comfortable, fixed-price transportation across China and beyond.</p>
- 
- <p style="margin:0 0 0.75rem 0;"><strong>Airport Transfers & Ground Transportation in China:</strong><br/>
- <span style="color:#555;font-size:0.88rem;">China airport transfer · China hotel to airport · China city transfer</span></p>
- 
- <p style="margin:0 0 0.75rem 0;"><strong>Top Destinations & Tours in China:</strong><br/>
- <span style="color:#555;font-size:0.88rem;"></span></p>
- 
- <p style="margin:0 0 0.75rem 0;"><strong>Premium & Business Car Service in China:</strong><br/>
- <span style="color:#555;font-size:0.88rem;"></span></p>
- 
- <p style="margin:0;"><strong>Why Choose Chinawheely?</strong> Licensed travel agency (not a car rental) arranging verified professional drivers. Fixed pricing with no hidden fees. Free flight tracking for airport pickups. Support via WhatsApp and WeChat: Beijing time 8AM-12AM (16 hours). Book online or contact +86-155-2777-1775.</p>
+<!-- 登录 -->
+<div id="loginView" class="wrap login">
+  <div class="card">
+    <h2>线索管理后台</h2>
+    <p class="sub">Chinawheely · 内部使用，请勿外传</p>
+    <div class="fld"><label for="loginEmail">邮箱</label><input id="loginEmail" type="email" autocomplete="username" placeholder="sistian@foxmail.com"/></div>
+    <div class="fld"><label for="loginPw">密码</label><input id="loginPw" type="password" autocomplete="current-password"/></div>
+    <div id="loginErr" class="err"></div>
+    <button id="loginBtn" style="width:100%">登录</button>
+    <p class="hint">忘记密码请联系系统维护者重置。</p>
+  </div>
 </div>
- 
- </body>
+
+<!-- 主体 -->
+<div id="appView" class="hidden">
+  <header>
+    <h1>Chinawheely 线索管理</h1>
+    <div class="row">
+      <span class="who" id="whoami"></span>
+      <button class="ghost" id="btnPwd" style="padding:6px 12px;">修改密码</button>
+      <button class="ghost" id="btnLogout" style="padding:6px 12px;">退出</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <div class="filters">
+        <div><label>状态</label><select id="fStatus"><option value="all">全部</option><option value="new">new 新线索</option><option value="contacted">contacted 已联系</option><option value="confirmed">confirmed 已确认</option><option value="completed">completed 已完成</option><option value="cold">cold 待激活</option><option value="lost">lost 已流失</option></select></div>
+        <div><label>来源</label><select id="fSource"><option value="all">全部</option><option value="contact">contact 咨询</option><option value="booking">booking 预订</option></select></div>
+        <div><label>开始日期</label><input id="fFrom" type="date"/></div>
+        <div><label>结束日期</label><input id="fTo" type="date"/></div>
+        <div><label>关键词</label><input id="fQ" type="search" placeholder="姓名 / 邮箱 / 电话 / 参考号 / 城市"/></div>
+        <div class="row"><button id="btnSearch">筛选</button><button class="ghost" id="btnReset">重置</button><button class="ghost" id="btnExport">导出 CSV</button></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:auto;">
+      <table>
+        <thead><tr>
+          <th>时间</th><th>参考号</th><th>来源</th><th>姓名</th><th>城市</th>
+          <th>联系方式</th><th>主题 / 摘要</th><th>邮件</th><th>状态</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="empty hidden" id="empty">没有符合条件的线索。</div>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-bottom:40px;">
+      <span class="hint" id="countInfo"></span>
+      <span class="row"><button class="ghost" id="btnPrev">上一页</button><button class="ghost" id="btnNext">下一页</button></span>
+    </div>
+  </div>
+</div>
+
+<!-- 详情抽屉 -->
+<div class="mask hidden" id="mask"></div>
+<div class="drawer hidden" id="drawer">
+  <h3>线索详情</h3>
+  <dl class="kv" id="dKv"></dl>
+  <div class="fld"><label>备注（仅后台可见）</label><textarea id="dNote" rows="3"></textarea></div>
+  <div class="row" style="margin-bottom:14px;">
+    <div style="flex:1"><label>状态</label><select id="dStatus"><option value="new">new 新线索</option><option value="contacted">contacted 已联系</option><option value="confirmed">confirmed 已确认</option><option value="completed">completed 已完成</option><option value="cold">cold 待激活</option><option value="lost">lost 已流失</option></select></div>
+    <div style="flex:1"><label>评级</label><select id="dScore"><option value="">未评级</option><option value="hot">hot 高意向</option><option value="warm">warm 一般</option><option value="cold">cold 低意向</option></select></div>
+  </div>
+  <div class="row" style="margin-bottom:20px;">
+    <button id="dSave">保存</button>
+    <button class="ghost" id="dWhatsapp">WhatsApp</button>
+    <button class="ghost" id="dMail">发邮件</button>
+    <button class="ghost" id="dCopy">复制信息</button>
+    <button class="ghost" id="dClose">关闭</button>
+  </div>
+  <div id="dMsg" class="err"></div>
+</div>
+
+<!-- 修改密码 -->
+<div class="mask hidden" id="pwdMask"></div>
+<div class="drawer hidden" id="pwdPanel" style="width:min(380px,100%)">
+  <h3>修改密码</h3>
+  <div class="fld"><label>当前密码</label><input id="pwdCur" type="password"/></div>
+  <div class="fld"><label>新密码（至少 8 位）</label><input id="pwdNew" type="password"/></div>
+  <div class="row"><button id="pwdSave">保存</button><button class="ghost" id="pwdClose">取消</button></div>
+  <div id="pwdMsg" class="err"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var API = 'https://api.chinawheely.com/api';
+  var TOKEN_KEY = 'cw_admin_token';
+  var LIMIT = 50;
+  var offset = 0, total = 0, current = null, token = null;
+
+  function $(id){ return document.getElementById(id); }
+  function show(el, on){ el.classList.toggle('hidden', !on); }
+
+  function api(path, opts){
+    opts = opts || {};
+    var headers = opts.headers || {};
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    if (opts.body) headers['Content-Type'] = 'application/json';
+    return fetch(API + path, {
+      method: opts.method || 'GET',
+      headers: headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    }).then(function(res){
+      var ct = res.headers.get('content-type') || '';
+      if (ct.indexOf('application/json') >= 0) {
+        return res.json().then(function(j){ return { ok: res.ok, status: res.status, data: j }; });
+      }
+      return res.text().then(function(t){ return { ok: res.ok, status: res.status, data: t }; });
+    });
+  }
+
+  function fmtTime(iso){
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    var p = function(n){ return n < 10 ? '0' + n : '' + n; };
+    return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  /* ---------- 登录 ---------- */
+  function doLogin(){
+    var email = $('loginEmail').value.trim();
+    var pw = $('loginPw').value;
+    $('loginErr').textContent = '';
+    if (!email || !pw) { $('loginErr').textContent = '请输入邮箱和密码'; return; }
+    $('loginBtn').disabled = true;
+    api('/admin/session', { method:'POST', body:{ email: email, password: pw } })
+      .then(function(r){
+        $('loginBtn').disabled = false;
+        if (!r.ok) { $('loginErr').textContent = (r.data && r.data.error) || '登录失败'; return; }
+        token = r.data.token;
+        try {
+          sessionStorage.setItem(TOKEN_KEY, token);
+          sessionStorage.setItem('cw_admin_email', r.data.email || '');
+        } catch(e){}
+        $('whoami').textContent = r.data.email;
+        show($('loginView'), false); show($('appView'), true);
+        load();
+      })
+      .catch(function(){ $('loginBtn').disabled = false; $('loginErr').textContent = '网络错误，请重试'; });
+  }
+
+  /* ---------- 列表 ---------- */
+  function query(){
+    var p = [];
+    var st = $('fStatus').value, so = $('fSource').value, q = $('fQ').value.trim();
+    var fr = $('fFrom').value, to = $('fTo').value;
+    if (st && st !== 'all') p.push('status=' + encodeURIComponent(st));
+    if (so && so !== 'all') p.push('source=' + encodeURIComponent(so));
+    if (q) p.push('q=' + encodeURIComponent(q));
+    if (fr) p.push('from=' + encodeURIComponent(fr));
+    if (to) p.push('to=' + encodeURIComponent(to) + 'T23:59:59');
+    p.push('limit=' + LIMIT);
+    p.push('offset=' + offset);
+    return p.join('&');
+  }
+
+  function load(){
+    api('/admin/leads?' + query()).then(function(r){
+      if (r.status === 401) { logout(true); return; }
+      if (!r.ok) { alert('加载失败：' + ((r.data && r.data.error) || r.status)); return; }
+      renderStats(r.data.stats || {});
+      renderRows(r.data.rows || []);
+    }).catch(function(){ alert('网络错误'); });
+  }
+
+  function renderStats(s){
+    var cards = [
+      ['全部线索', s.total || 0, false],
+      ['今日新增', s.today || 0, false],
+      ['待跟进(new)', (s.byStatus && s.byStatus.new) || 0, false],
+      ['已联系', (s.byStatus && s.byStatus.contacted) || 0, false],
+      ['已确认', (s.byStatus && s.byStatus.confirmed) || 0, false],
+      ['邮件失败', s.failedMail || 0, (s.failedMail || 0) > 0]
+    ];
+    $('stats').innerHTML = cards.map(function(c){
+      return '<div class="stat' + (c[2] ? ' alert' : '') + '"><div class="n">' + c[1] + '</div><div class="l">' + c[0] + '</div></div>';
+    }).join('');
+  }
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function renderRows(rows){
+    var tb = $('rows');
+    total = rows.length;
+    show($('empty'), rows.length === 0);
+    tb.innerHTML = rows.map(function(r){
+      var contact = (r.email || '') + (r.phone ? ' / ' + r.phone : '');
+      var summary = r.subject || r.message || '';
+      return '<tr data-ref="' + esc(r.ref) + '">' +
+        '<td>' + esc(fmtTime(r.created_at)) + '</td>' +
+        '<td>' + esc(r.ref) + '</td>' +
+        '<td>' + esc(r.source) + '</td>' +
+        '<td>' + esc(r.name || '-') + '</td>' +
+        '<td>' + esc(r.city || '-') + '</td>' +
+        '<td>' + esc(contact) + '</td>' +
+        '<td>' + esc(String(summary).slice(0, 60)) + '</td>' +
+        '<td class="mail-' + esc(r.mail_status) + '">' + esc(r.mail_status) + '</td>' +
+        '<td><span class="tag t-' + esc(r.status) + '">' + esc(r.status) + '</span></td>' +
+      '</tr>';
+    }).join('');
+    $('countInfo').textContent = '当前 ' + rows.length + ' 条 · 偏移 ' + offset;
+  }
+
+  /* ---------- 详情 ---------- */
+  function openDetail(ref){
+    api('/admin/leads?limit=200').then(function(r){
+      if (!r.ok) return;
+      var row = null;
+      (r.data.rows || []).forEach(function(x){ if (x.ref === ref) row = x; });
+      if (!row) return;
+      current = row;
+      var p = row.payload || {};
+      var items = [];
+      items.push(['参考号', row.ref]);
+      items.push(['时间', fmtTime(row.created_at)]);
+      items.push(['来源', row.source]);
+      items.push(['姓名', row.name]);
+      items.push(['邮箱', row.email]);
+      items.push(['电话', row.phone]);
+      items.push(['城市', row.city]);
+      items.push(['语言', row.lang]);
+      items.push(['邮件状态', row.mail_status + (row.mail_error ? '（' + row.mail_error + '）' : '')]);
+      Object.keys(p).forEach(function(k){
+        if (k === '__sig') return;
+        var v = p[k];
+        items.push([k, Array.isArray(v) ? v.join(', ') : v]);
+      });
+      $('dKv').innerHTML = items.map(function(it){
+        return '<dt>' + esc(it[0]) + '</dt><dd>' + esc(it[1] == null ? '' : it[1]) + '</dd>';
+      }).join('');
+      $('dStatus').value = row.status || 'new';
+      $('dScore').value = row.score || '';
+      $('dNote').value = row.admin_note || '';
+      $('dMsg').textContent = '';
+      show($('mask'), true); show($('drawer'), true);
+    });
+  }
+
+  function saveDetail(){
+    if (!current) return;
+    $('dMsg').textContent = '';
+    api('/admin/leads', { method:'PATCH', body:{ ref: current.ref, status: $('dStatus').value, score: $('dScore').value, admin_note: $('dNote').value } })
+      .then(function(r){
+        if (!r.ok) { $('dMsg').textContent = (r.data && r.data.error) || '保存失败'; return; }
+        $('dMsg').textContent = '已保存';
+        load();
+      });
+  }
+
+  /* ---------- 导出 ---------- */
+  function exportCsv(){
+    api('/admin/leads?limit=200' + (query() ? '&' + query() : '')).then(function(r){
+      if (!r.ok) return;
+      var rows = r.data.rows || [];
+      var head = ['ref','created_at','source','status','score','name','email','phone','city','subject','message','mail_status','admin_note'];
+      var csv = [head.join(',')];
+      rows.forEach(function(row){
+        csv.push(head.map(function(h){
+          var v = row[h] == null ? '' : String(row[h]);
+          return '"' + v.replace(/"/g,'""') + '"';
+        }).join(','));
+      });
+      var blob = new Blob(['\ufeff' + csv.join('\n')], { type:'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'chinawheely-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
+  }
+
+  /* ---------- 密码 ---------- */
+  function savePassword(){
+    $('pwdMsg').textContent = '';
+    api('/admin/password', { method:'PATCH', body:{ currentPassword: $('pwdCur').value, newPassword: $('pwdNew').value } })
+      .then(function(r){
+        if (!r.ok) { $('pwdMsg').textContent = (r.data && r.data.error) || '修改失败'; return; }
+        $('pwdMsg').textContent = '密码已更新';
+        $('pwdCur').value = ''; $('pwdNew').value = '';
+      });
+  }
+
+  function logout(silent){
+    token = null;
+    try { sessionStorage.removeItem(TOKEN_KEY); } catch(e){}
+    show($('appView'), false); show($('loginView'), true);
+    show($('drawer'), false); show($('mask'), false);
+    if (!silent) $('loginErr').textContent = '';
+  }
+
+  /* ---------- 绑定 ---------- */
+  document.addEventListener('DOMContentLoaded', function(){
+    $('loginBtn').addEventListener('click', doLogin);
+    $('loginPw').addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+    $('btnSearch').addEventListener('click', function(){ offset = 0; load(); });
+    $('btnReset').addEventListener('click', function(){
+      $('fStatus').value = 'all'; $('fSource').value = 'all'; $('fFrom').value = '';
+      $('fTo').value = ''; $('fQ').value = ''; offset = 0; load();
+    });
+    $('btnExport').addEventListener('click', exportCsv);
+    $('btnPrev').addEventListener('click', function(){ offset = Math.max(0, offset - LIMIT); load(); });
+    $('btnNext').addEventListener('click', function(){ offset += LIMIT; load(); });
+    $('btnLogout').addEventListener('click', function(){ logout(false); });
+    $('btnPwd').addEventListener('click', function(){ $('pwdMsg').textContent=''; show($('pwdMask'), true); show($('pwdPanel'), true); });
+    $('pwdClose').addEventListener('click', function(){ show($('pwdPanel'), false); show($('pwdMask'), false); });
+    $('pwdSave').addEventListener('click', savePassword);
+    $('dClose').addEventListener('click', function(){ show($('drawer'), false); show($('mask'), false); });
+    $('mask').addEventListener('click', function(){ show($('drawer'), false); show($('mask'), false); });
+    $('dSave').addEventListener('click', saveDetail);
+    $('dWhatsapp').addEventListener('click', function(){
+      if (!current) return;
+      var text = 'Hi ' + (current.name || '') + ' (' + current.ref + ')';
+      window.open('https://wa.me/8615527771775?text=' + encodeURIComponent(text), '_blank');
+    });
+    $('dMail').addEventListener('click', function(){
+      if (!current) return;
+      window.location.href = 'mailto:' + encodeURIComponent(current.email || '') +
+        '?subject=' + encodeURIComponent('Chinawheely inquiry ' + current.ref);
+    });
+    $('dCopy').addEventListener('click', function(){
+      if (!current) return;
+      var txt = [current.ref, current.name, current.email, current.phone, current.city, current.subject, current.message].join('\n');
+      if (navigator.clipboard) { navigator.clipboard.writeText(txt); $('dMsg').textContent = '已复制'; }
+      else { $('dMsg').textContent = '请手动复制'; }
+    });
+    $('rows').addEventListener('click', function(e){
+      var tr = e.target.closest ? e.target.closest('tr') : null;
+      if (tr && tr.getAttribute('data-ref')) openDetail(tr.getAttribute('data-ref'));
+    });
+
+    try {
+      token = sessionStorage.getItem(TOKEN_KEY);
+      $('whoami').textContent = sessionStorage.getItem('cw_admin_email') || '';
+    } catch(e){ token = null; }
+    if (token) {
+      show($('loginView'), false); show($('appView'), true);
+      api('/admin/leads?limit=1').then(function(r){
+        if (r.status === 401) { logout(true); return; }
+        load();
+      });
+    }
+  });
+})();
+</script>
+</body>
 </html>
