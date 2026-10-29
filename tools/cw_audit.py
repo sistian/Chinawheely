@@ -143,7 +143,7 @@ ALIASES = {"beijing_detailed.html","erdos.html","hulunbeier.html","jdz.html","jl
            "wulumuqi.html","kelamayi.html","jinzhou_ln.html","taizhou_js.html",
            "taizhou_zj.html","yichun_hlj.html","yichun_jx.html","yichun-heilongjiang.html",
            "suzhou-jiangsu.html","suzhou_ah.html","fuzhou_jx.html","juncheng.html",
-           "yan_an.html","yulin_sx.html","zhongwei.html"}
+           "yan_an.html","yulin_sx.html"}
 html_files = set(files) - set(TOOLS_PAGES) - {"admin.html"} - INTENTIONAL_NO_SITEMAP - ALIASES
 missing_sm = sorted(html_files - sm_files)
 if missing_sm:
