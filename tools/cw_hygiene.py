@@ -34,6 +34,7 @@ SAFE_MERGE = {
 NEEDS_CONTENT = [
     "taizhou_zj.html", "yichun_hlj.html", "yichun_jx.html",
     "yichun-heilongjiang.html", "suzhou_ah.html", "fuzhou_jx.html", "jdz.html",
+    "yulin_sx.html",
 ]
 # ---- 内部工具/策略页：全部不索引 ----
 BLOCK_ALL = NOINDEX_PAGES + ["batch_download.html", "image_downloader.html",
