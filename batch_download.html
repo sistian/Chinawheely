@@ -28,8 +28,8 @@ img { max-width: 200px; margin: 5px; border: 1px solid #ddd; }
 <body>
 <h1>ChinaWheely Image Downloader</h1>
 <p>Click "Start Download" to download all city images. Images will be saved to your Downloads folder.</p>
-<button class="download-btn" onclick="startDownload()">Start Download</button>
-<button class="download-btn" onclick="openUrls()">Open URLs (for manual download)</button>
+<button class="download-btn" onclick="startDownload">Start Download</button>
+<button class="download-btn" onclick="openUrls">Open URLs (for manual download)</button>
 <div id="status" class="status">Ready</div>
 <div id="images" class="grid"></div>
 
@@ -47,45 +47,45 @@ const CITY_IMAGES = {
 };
 
 async function downloadImage(city, url) {
-    return new Promise((resolve, reject) => {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = city + '.jpg';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => resolve(city), 500);
-    });
+ return new Promise((resolve, reject) => {
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = city + '.jpg';
+ a.target = '_blank';
+ document.body.appendChild(a);
+ a.click;
+ document.body.removeChild(a);
+ setTimeout( => resolve(city), 500);
+ });
 }
 
-async function startDownload() {
-    const status = document.getElementById('status');
-    const imagesDiv = document.getElementById('images');
-    status.textContent = 'Downloading...';
-    status.className = 'status';
-    
-    for (const [city, url] of Object.entries(CITY_IMAGES)) {
-        try {
-            await downloadImage(city, url);
-            status.textContent = `Downloaded: ${city}`;
-            // Show thumbnail
-            const img = document.createElement('img');
-            img.src = url;
-            img.title = city;
-            imagesDiv.appendChild(img);
-        } catch(e) {
-            status.innerHTML += `\n<span class="error">Error: ${city}</span>`;
-        }
-    }
-    
-    status.textContent = 'All downloads started! Check your Downloads folder.';
-    status.className = 'status success';
+async function startDownload {
+ const status = document.getElementById('status');
+ const imagesDiv = document.getElementById('images');
+ status.textContent = 'Downloading...';
+ status.className = 'status';
+ 
+ for (const [city, url] of Object.entries(CITY_IMAGES)) {
+ try {
+ await downloadImage(city, url);
+ status.textContent = `Downloaded: ${city}`;
+ // Show thumbnail
+ const img = document.createElement('img');
+ img.src = url;
+ img.title = city;
+ imagesDiv.appendChild(img);
+ } catch(e) {
+ status.innerHTML += `\n<span class="error">Error: ${city}</span>`;
+ }
+ }
+ 
+ status.textContent = 'All downloads started! Check your Downloads folder.';
+ status.className = 'status success';
 }
 
-function openUrls() {
-    const urls = Object.entries(CITY_IMAGES).map(([city, url]) => city + ': ' + url).join('\n');
-    alert('Copy these URLs:\n\n' + urls);
+function openUrls {
+ const urls = Object.entries(CITY_IMAGES).map(([city, url]) => city + ': ' + url).join('\n');
+ alert('Copy these URLs:\n\n' + urls);
 }
 </script>
 </body>

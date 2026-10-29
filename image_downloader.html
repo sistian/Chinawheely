@@ -23,13 +23,13 @@ h1 { color: #2d6a4f; }
 <ol style="margin:10px 0 0 20px;line-height:1.8;">
 <li>Click <strong>"Start"</strong> below - it will open search pages for cities needing photos</li>
 <li>In each tab: find a good city photo, <strong>right-click → Save image as</strong></li>
-<li>Save to your Desktop folder: <code>/Users/sisi/Desktop/Chinawheely 9.1  ni/images/</code></li>
+<li>Save to your Desktop folder: <code>/Users/sisi/Desktop/Chinawheely 9.1 ni/images/</code></li>
 <li>Filename format: <code>{cityname}.webp</code> (e.g., <code>ankang.webp</code>)</li>
 <li>After saving all, refresh this page to see progress</li>
 </ol>
 </div>
 
-<button onclick="startAll()" style="padding:15px 30px;font-size:18px;background:#2d6a4f;color:white;border:none;border-radius:8px;cursor:pointer;">▶️ Start Downloading</button>
+<button onclick="startAll" style="padding:15px 30px;font-size:18px;background:#2d6a4f;color:white;border:none;border-radius:8px;cursor:pointer;">▶️ Start Downloading</button>
 
 <div class="grid" id="grid"></div>
 
@@ -41,29 +41,29 @@ const NEED_PHOTOS = [
 
 const grid = document.getElementById('grid');
 NEED_PHOTOS.forEach(city => {
-    const div = document.createElement('div');
-    div.className = 'city';
-    div.textContent = city.name;
-    div.id = 'city-' + city.name;
-    grid.appendChild(div);
+ const div = document.createElement('div');
+ div.className = 'city';
+ div.textContent = city.name;
+ div.id = 'city-' + city.name;
+ grid.appendChild(div);
 });
 
 let current = 0;
-function startAll() {
-    if (current >= NEED_PHOTOS.length) {
-        alert('All pages opened! Download images and save to /Users/sisi/Desktop/Chinawheely 9.1  ni/images/');
-        return;
-    }
-    const city = NEED_PHOTOS[current];
-    const url = 'https://unsplash.com/s/photos/' + encodeURIComponent(city.term);
-    window.open(url, '_blank');
-    document.getElementById('city-' + city.name).className = 'city done';
-    current++;
-    if (current < NEED_PHOTOS.length) {
-        setTimeout(startAll, 500); // Open next after 0.5s
-    } else {
-        alert('All ' + NEED_PHOTOS.length + ' search pages opened! Right-click images to save.');
-    }
+function startAll {
+ if (current >= NEED_PHOTOS.length) {
+ alert('All pages opened! Download images and save to /Users/sisi/Desktop/Chinawheely 9.1 ni/images/');
+ return;
+ }
+ const city = NEED_PHOTOS[current];
+ const url = 'https://unsplash.com/s/photos/' + encodeURIComponent(city.term);
+ window.open(url, '_blank');
+ document.getElementById('city-' + city.name).className = 'city done';
+ current++;
+ if (current < NEED_PHOTOS.length) {
+ setTimeout(startAll, 500); // Open next after 0.5s
+ } else {
+ alert('All ' + NEED_PHOTOS.length + ' search pages opened! Right-click images to save.');
+ }
 }
 </script>
 </body>
