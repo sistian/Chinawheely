@@ -9,8 +9,10 @@ Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 Disallow: /thank-you.html
-Disallow: /cancellation.html
 Crawl-delay: 1
 
 # Search engine crawlers
@@ -19,22 +21,29 @@ Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 Disallow: /thank-you.html
-Disallow: /cancellation.html
 
 User-agent: Bingbot
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 Disallow: /thank-you.html
-Disallow: /cancellation.html
 
 User-agent: Googlebot-Image
 Allow: /images/
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 # Allow AI / Crawl bots
 User-agent: GPTBot
@@ -42,42 +51,63 @@ Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: CCBot
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: Bytespider
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: AnthropicAI
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 User-agent: GoogleExtended
 Allow: /
 Disallow: /admin.html
 Disallow: /admin/
 Disallow: /api/
+Disallow: /batch_download.html
+Disallow: /image_downloader.html
+Disallow: /seo-swot-analysis.html
 
 # Block aggressive SEO crawlers
 User-agent: SemrushBot

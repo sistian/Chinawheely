@@ -243,3 +243,52 @@
 .u-4d2e9c7b { background:var(--color-white);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md);transition:transform var(--transition-base),box-shadow var(--transition-base); }
 .u-4d2e9c7b:hover { transform:translateY(-4px);box-shadow:var(--shadow-xl); }
 .u-fabc8aea { padding:var(--space-6); }
+
+/* ============================================
+   2026-10-29 W1D3：子页页头 / 面包屑 / h1
+   ============================================ */
+.page-head {
+  padding: calc(72px + var(--space-16)) 0 var(--space-10);
+  background: linear-gradient(180deg, var(--color-cream) 0%, rgba(255,255,255,0) 100%);
+}
+.page-title {
+  margin-bottom: var(--space-3);
+  color: var(--color-gray-800);
+}
+.page-title + .text-lead {
+  max-width: 760px;
+  margin-bottom: 0;
+}
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-4);
+}
+.breadcrumb a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span:not(.breadcrumb-current) { color: var(--color-gray-400); }
+.breadcrumb-current {
+  color: var(--color-gray-600);
+  font-weight: 500;
+}
+@media (max-width: 768px) {
+  .page-head { padding: calc(72px + var(--space-10)) 0 var(--space-8); }
+}
+
+/* ============================================
+   2026-10-29 W1D5：城市卡片渐变兜底
+   首页 274 张卡片原本 style=""（无图）显示为空白，现用品牌渐变填充
+   ============================================ */
+.city-card-bg {
+  background-image: linear-gradient(135deg, #1B4D3E 0%, #0d3d27 100%);
+  background-size: cover;
+  background-position: center;
+}
+.city-card:hover .city-card-bg { transform: scale(1.08); }

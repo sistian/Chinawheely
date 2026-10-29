@@ -1,0 +1,51 @@
+name: Chinawheely CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  site-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: HTML 完整性校验（标签配平 / JSON-LD / 资源存在 / title / description / h1）
+        run: python3 tools/cw_html_check.py .
+
+      - name: 站点体检（OG / 内链 / 薄页 / 图片体积 / sitemap / robots）
+        run: python3 tools/cw_audit.py .
+
+      - name: JSON-LD 全量语法校验
+        run: |
+          python3 - <<'PY'
+          import os, re, json, sys
+          bad = 0
+          for f in sorted(os.listdir('.')):
+              if not f.endswith('.html'):
+                  continue
+              s = open(f, encoding='utf-8', errors='ignore').read()
+              for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', s, re.S):
+                  try:
+                      json.loads(b)
+                  except Exception as e:
+                      bad += 1
+                      print(f"{f}: {e}")
+          print(f"JSON-LD 非法块: {bad}")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: sitemap 与实际页面一致性
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          sm = open('sitemap.xml', encoding='utf-8').read()
+          urls = {u.rsplit('/', 1)[-1] for u in re.findall(r'<loc>([^<]+)</loc>', sm)}
+          dead = sorted(u for u in urls if u.endswith('.html') and not os.path.exists(u))
+          print(f"sitemap 条目 {len(urls)}, 死链 {len(dead)}")
+          if dead:
+              print(dead[:20])
+          sys.exit(1 if dead else 0)
+          PY
