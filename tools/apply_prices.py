@@ -47,7 +47,7 @@ def usd(cny):
 
 
 def fmt(cny):
-    return f"¥{cny} (≈ ${usd(cny)})"
+    return f"From ¥{cny} (≈ ${usd(cny)})"
 
 
 def airport_floor(slug):
@@ -119,6 +119,14 @@ def price_for(slug, ctx):
     return p
 
 
+PRICE_TOKEN = re.compile(r"(?:From )?¥\d+(?:\.\d+)? \(≈ \$\d+(?:\.\d+)?\)")
+
+# 非城市页（站点/工具页）不参与城市页价格替换
+NON_CITY = {"index", "prices", "manage-order", "thank-you", "booking", "admin",
+            "about", "contact", "services", "help", "terms", "privacy", "careers",
+            "partners", "cookies", "cancellation", "faq", "404", "batch_download",
+            "image_downloader", "seo-swot-analysis"}
+
 # ---------------------------------------------------------------- 城市页
 CITY_PAGE = re.compile(r"^[a-z_]+\.html$")
 stats = {"priced": 0, "unpriced": 0, "replaced": 0, "files": 0, "skipped": 0}
@@ -126,12 +134,12 @@ stats = {"priced": 0, "unpriced": 0, "replaced": 0, "files": 0, "skipped": 0}
 for fname in sorted(os.listdir(BASE)):
     if not fname.endswith(".html") or not CITY_PAGE.match(fname):
         continue
-    if fname == "index.html":
+    if fname == "index.html" or fname[:-5] in NON_CITY:
         continue
     slug = fname[:-5]
     path = os.path.join(BASE, fname)
     s = open(path, encoding="utf-8").read()
-    if "From $" not in s:
+    if not PRICE_TOKEN.search(s):
         continue
     orig = s
     pslug = SLUG_ALIAS.get(slug, slug)
@@ -145,7 +153,7 @@ for fname in sorted(os.listdir(BASE)):
             p = price_for(pslug, ctx)
             return fmt(p) if p is not None else m.group(0)
 
-        s = re.sub(r"From \$\d+", repl2, s)
+        s = re.sub(PRICE_TOKEN, repl2, s)
     else:
         stats["unpriced"] += 1
 
@@ -153,7 +161,7 @@ for fname in sorted(os.listdir(BASE)):
             stats["replaced"] += 1
             return "Quote on request"
 
-        s = re.sub(r"From \$\d+", repl3, s)
+        s = re.sub(PRICE_TOKEN, repl3, s)
 
     if s != orig:
         stats["files"] += 1
@@ -166,7 +174,7 @@ print(f"城市页: 有价 {stats['priced']} / 无价 {stats['unpriced']}, "
 # ---------------------------------------------------------------- index.html
 idx_path = os.path.join(BASE, "index.html")
 idx = open(idx_path, encoding="utf-8").read()
-if "From $" in idx:
+if PRICE_TOKEN.search(idx):
     def idx_repl(m):
         ctx = idx[max(0, m.start() - 700):m.start()]
         for label, cslug in INDEX_ROUTES:
@@ -178,7 +186,7 @@ if "From $" in idx:
         stats["replaced"] += 1
         return "Quote on request"
 
-    new_idx = re.sub(r"From \$\d+", idx_repl, idx)
+    new_idx = re.sub(PRICE_TOKEN, idx_repl, idx)
     if new_idx != idx:
         stats["files"] += 1
         if not DRY:

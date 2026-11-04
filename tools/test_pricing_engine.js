@@ -71,21 +71,42 @@ for (const slug of ['beijing', 'shanghai', 'chengdu']) {
     `${slug} intercity 应与 airport 同价: ${a.total} vs ${i.total}`);
 }
 
-// ---------- 4. 银川 = 威海、台州 = 嘉兴 整城同价 ----------
-const pairs = [['yinchuan', 'weihai'], ['taizhou', 'jiaxing']];
-for (const [t, s] of pairs) {
+// ---------- 4. 银川←威海、台州←嘉兴 单元格级补全（显式优先） ----------
+// 显式车型（接送机全部套餐价 / 包车 sedan_4、coach_19_55）用表内价，
+// 缺失车型（包车 mpv_6、van_8_11、van_12_18）应与参照城同价
+const pairs = [['yinchuan', 'weihai', { sedan_4: 221, coach_19_55: 809 }],
+               ['taizhou', 'jiaxing', { sedan_4: 247, coach_19_55: 890 }]];
+const FILLED_VEHICLES = ['mpv_6', 'van_8_11', 'van_12_18'];
+for (const [t, s, explicit2h] of pairs) {
+  // 接送机：套餐价 = 表内显式价；超时/超里程单价 = 参照城填充值
   for (const vkey of Object.keys(data.cities[t].airport)) {
+    const tv = data.cities[t].airport[vkey];
+    const sv = data.cities[s].airport[vkey];
     const a = pricing.quote({ city: t, product: 'airport', vehicle: vkey, pax: 1 });
-    const b = pricing.quote({ city: s, product: 'airport', vehicle: vkey, pax: 1 });
-    check(a.ok && b.ok && a.total === b.total,
-      `${t}/${vkey} 应与 ${s} 同价: ${a.total} vs ${b.total}`);
+    check(a.ok && a.total === tv.pkg,
+      `${t}/${vkey} 接送机应为表内显式价 ${tv.pkg}，实为 ${a.total}`);
+    check(tv.perMin === sv.perMin && tv.perKm === sv.perKm,
+      `${t}/${vkey} 超时/超里程单价应从 ${s} 填充`);
   }
-  for (const vkey of Object.keys(data.cities[t].charter)) {
+  // 包车填充车型：三档与参照城同价
+  for (const vkey of FILLED_VEHICLES) {
     for (const tk of Object.keys(data.cities[t].charter[vkey].tiers)) {
       const a = pricing.quote({ city: t, product: 'charter', vehicle: vkey, tier: tk, pax: 1 });
       const b = pricing.quote({ city: s, product: 'charter', vehicle: vkey, tier: tk, pax: 1 });
       check(a.ok && b.ok && a.total === b.total,
-        `${t}/包车/${vkey}/${tk} 应与 ${s} 同价`);
+        `${t}/包车/${vkey}/${tk} 应与 ${s} 同价(填充)`);
+    }
+  }
+  // 显式车型：2h 档必须等于表内显式价（而非参照城价）
+  for (const [vkey, expect2h] of Object.entries(explicit2h)) {
+    const a = pricing.quote({ city: t, product: 'charter', vehicle: vkey, tier: '2h_35km', pax: 1 });
+    check(a.ok && a.total === expect2h,
+      `${t}/包车/${vkey}/2h 应为表内显式价 ${expect2h}，实为 ${a.total}`);
+    const b = pricing.quote({ city: s, product: 'charter', vehicle: vkey, tier: '2h_35km', pax: 1 });
+    if (b.ok && b.total === expect2h) {
+      // 参照城恰好同价也 OK（如台州 coach = 嘉兴）
+    } else {
+      check(true, `${t}/${vkey} 显式价 ${expect2h}（${s} 为 ${b.total}，允许不同）`);
     }
   }
 }

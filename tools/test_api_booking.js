@@ -96,15 +96,27 @@ function formEncode(obj) {
   const i = pricing.quote({ city: 'shanghai', product: 'intercity', vehicle: 'sedan_economy' });
   check(a.ok && i.ok && a.total === i.total, 'intercity 应与 airport 同价');
 
-  // ---------- 6. 银川=威海 / 台州=嘉兴 ----------
+  // ---------- 6. 银川/台州 单元格级补全（2026-11-04 更新版报表口径） ----------
   const y1 = pricing.quote({ city: 'yinchuan', product: 'airport', vehicle: 'sedan_economy' });
-  const w1 = pricing.quote({ city: 'weihai', product: 'airport', vehicle: 'sedan_economy' });
+  check(y1.ok && y1.total === 186,
+    `银川接送机经济型应为表内显式价 186，实为 ${y1.total}`);
+  const yc = pricing.quote({ city: 'yinchuan', product: 'charter', vehicle: 'mpv_6', tier: '2h_35km' });
+  const wc = pricing.quote({ city: 'weihai', product: 'charter', vehicle: 'mpv_6', tier: '2h_35km' });
+  check(yc.ok && wc.ok && yc.total === wc.total,
+    `银川包车 mpv_6 应从威海填充同价: ${yc.total} vs ${wc.total}`);
+  const yk = pricing.quote({ city: 'yinchuan', product: 'charter', vehicle: 'coach_19_55', tier: '2h_35km' });
+  check(yk.ok && yk.total === 809,
+    `银川包车 19-55座 2h 应为表内显式价 809，实为 ${yk.total}`);
   const t1 = pricing.quote({ city: 'taizhou', product: 'airport', vehicle: 'sedan_economy' });
-  const j1 = pricing.quote({ city: 'jiaxing', product: 'airport', vehicle: 'sedan_economy' });
-  check(y1.ok && w1.ok && y1.total === w1.total,
-    `银川应与威海同价: ${y1.total} vs ${w1.total}`);
-  check(t1.ok && j1.ok && t1.total === j1.total,
-    `台州应与嘉兴同价: ${t1.total} vs ${j1.total}`);
+  check(t1.ok && t1.total === 207,
+    `台州接送机经济型应为表内显式价 207，实为 ${t1.total}`);
+  const tc = pricing.quote({ city: 'taizhou', product: 'charter', vehicle: 'van_8_11', tier: '4h_50km' });
+  const jc = pricing.quote({ city: 'jiaxing', product: 'charter', vehicle: 'van_8_11', tier: '4h_50km' });
+  check(tc.ok && jc.ok && tc.total === jc.total,
+    `台州包车 van_8_11 应从嘉兴填充同价: ${tc.total} vs ${jc.total}`);
+  const tk2 = pricing.quote({ city: 'taizhou', product: 'charter', vehicle: 'coach_19_55', tier: '2h_35km' });
+  check(tk2.ok && tk2.total === 890,
+    `台州包车 19-55座 2h 应为表内显式价 890，实为 ${tk2.total}`);
 
   // ---------- 7. 超时/超里程 ----------
   const ov = pricing.quote({

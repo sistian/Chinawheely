@@ -15,7 +15,7 @@ import sys
 import openpyxl
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC_XLSX = "/Users/w/Desktop/入境游包车报价单_游客版 2026年 报价单.xlsx"
+SRC_XLSX = "/Users/w/Desktop/入境游包车报价单_游客版 2026年 报价单 更新版本.xlsx"
 PRICING = os.path.join(BASE, "pricing", "pricing.json")
 
 sys.path.insert(0, os.path.join(BASE, "tools"))
@@ -73,19 +73,30 @@ def main():
             per_min = ws.cell(r, base + 1).value
             per_km = ws.cell(r, base + 3).value
             got = entry["airport"].get(key)
-            # 整城同价城市：整行改为与源城比对
+            # 同价城市：单元格级 —— 显式值对表，缺失字段对参照城
             if sl in FILL_FROM:
                 src = FILL_FROM[sl]
                 srow = row_of(ws, src)
                 check(srow is not None, f"{sl} 补全源 {src} 在接送机表找不到")
-                if srow and got:
-                    check(got["pkg"] == ws.cell(srow, base).value,
-                          f"{sl}/{key} 套餐价 ≠ 同价城 {src}: "
-                          f"json={got['pkg']} src={ws.cell(srow, base).value}")
-                    check(got["perMin"] == ws.cell(srow, base + 1).value,
-                          f"{sl}/{key} 超时单价 ≠ 同价城 {src}")
-                    check(got["perKm"] == ws.cell(srow, base + 3).value,
-                          f"{sl}/{key} 超里程单价 ≠ 同价城 {src}")
+                if isinstance(pkg, (int, float)):
+                    check(got is not None, f"{sl}/{key} 显式车型缺失")
+                    if got:
+                        check(got["pkg"] == pkg,
+                              f"{sl}/{key} 显式套餐价不符: "
+                              f"json={got['pkg']} xlsx={pkg}")
+                        for off, fname in ((1, "perMin"), (3, "perKm")):
+                            xv = ws.cell(r, base + off).value
+                            if isinstance(xv, (int, float)):
+                                check(got[fname] == xv,
+                                      f"{sl}/{key} {fname} 显式不符: "
+                                      f"json={got[fname]} xlsx={xv}")
+                            elif srow is not None:
+                                check(got[fname] == ws.cell(srow, base + off).value,
+                                      f"{sl}/{key} {fname} 应从 {src} 填充: "
+                                      f"json={got[fname]} src={ws.cell(srow, base + off).value}")
+                elif srow and isinstance(ws.cell(srow, base).value, (int, float)):
+                    check(got is not None and got["pkg"] == ws.cell(srow, base).value,
+                          f"{sl}/{key} 缺失车型应整段从 {src} 补全")
                 continue
             if not isinstance(pkg, (int, float)):
                 check(got is None,
@@ -114,14 +125,28 @@ def main():
             if not entry:
                 continue
             got_v = entry["charter"].get(vkey)
+            fill_src = FILL_FROM.get(sl)
+            fill_srow = row_of(ws, fill_src) if fill_src else None
+            explicit_tiers = 0
             for i, (tkey, tname, hours, km) in enumerate(CHARTER_TIERS):
                 base = 2 + i * 3
                 pkg = ws.cell(r, base).value
                 if not isinstance(pkg, (int, float)):
-                    if sl not in FILL_FROM:
+                    if fill_src:
+                        # 表内无价：参照城有价则应填充，否则不应存在
+                        src_pkg = ws.cell(fill_srow, base).value if fill_srow else None
+                        got_t0 = (got_v or {}).get("tiers", {}).get(tkey)
+                        if isinstance(src_pkg, (int, float)):
+                            check(got_t0 is not None and got_t0["pkg"] == src_pkg,
+                                  f"{sl}/{vkey}/{tkey} 缺失档应从 {fill_src} 补全")
+                        else:
+                            check(got_t0 is None,
+                                  f"{sl}/{vkey}/{tkey} 参照城也无价却生成了价格")
+                    else:
                         check(got_v is None or tkey not in got_v.get("tiers", {}),
                               f"{sl}/{vkey}/{tkey} 原表无价却生成了价格")
                     continue
+                explicit_tiers += 1
                 check(got_v is not None, f"{sl}/{vkey} 缺失包车车型")
                 if not got_v:
                     continue
@@ -130,13 +155,19 @@ def main():
                     src = FILL_FROM[sl]
                     srow = row_of(ws, src)
                     check(srow is not None, f"{sl} 补全源 {src} 在 {sheet_name} 找不到")
-                    if srow and got_t:
-                        check(got_t["pkg"] == ws.cell(srow, base).value,
-                              f"{sl}/{vkey}/{tkey} 套餐价 ≠ 同价城 {src}")
-                        check(got_t["perMin"] == ws.cell(srow, base + 1).value,
-                              f"{sl}/{vkey}/{tkey} 超时单价 ≠ 同价城 {src}")
-                        check(got_t["perKm"] == ws.cell(srow, base + 2).value,
-                              f"{sl}/{vkey}/{tkey} 超里程单价 ≠ 同价城 {src}")
+                    check(got_t is not None, f"{sl}/{vkey}/{tkey} 显式档缺失")
+                    if got_t:
+                        check(got_t["pkg"] == pkg,
+                              f"{sl}/{vkey}/{tkey} 显式套餐价不符: "
+                              f"json={got_t['pkg']} xlsx={pkg}")
+                        for off, fname in ((1, "perMin"), (2, "perKm")):
+                            xv = ws.cell(r, base + off).value
+                            if isinstance(xv, (int, float)):
+                                check(got_t[fname] == xv,
+                                      f"{sl}/{vkey}/{tkey} {fname} 显式不符")
+                            elif srow is not None:
+                                check(got_t[fname] == ws.cell(srow, base + off).value,
+                                      f"{sl}/{vkey}/{tkey} {fname} 应从 {src} 填充")
                     continue
                 check(got_t is not None, f"{sl}/{vkey}/{tkey} 缺失时长档")
                 if not got_t:
@@ -148,7 +179,7 @@ def main():
                 check(got_t["perKm"] == ws.cell(r, base + 2).value,
                       f"{sl}/{vkey}/{tkey} 超里程单价 不符")
 
-    # ---------- 3. 补全口径验证 ----------
+    # ---------- 3. 补全口径验证（单元格级：显式优先，缺失才填充） ----------
     for target, src in FILL_FROM.items():
         t, s = cities.get(target), cities.get(src)
         check(t is not None and s is not None, f"补全源缺失 {target}/{src}")
@@ -156,27 +187,22 @@ def main():
             continue
         check(t.get("priceFilledFrom") == src,
               f"{target} 未记录 priceFilledFrom={src}")
+        check(t.get("priceFillPolicy") == "cell_level_missing_only",
+              f"{target} 未记录 priceFillPolicy=cell_level_missing_only")
+        # 覆盖完整性：补全后必须 6 车型接送机 + 5 车型包车×5 档，且无 null 字段
+        check(len(t["airport"]) == len(AIRPORT_VEHICLES),
+              f"{target} 接送机车型数 {len(t['airport'])} ≠ {len(AIRPORT_VEHICLES)}")
         for vkey, v in t["airport"].items():
-            sv = s["airport"].get(vkey)
-            check(sv is not None, f"{target}/{vkey} 补全源 {src} 无此车型")
-            if sv:
-                check(v["pkg"] == sv["pkg"],
-                      f"{target}/{vkey} 补全后套餐价 ≠ {src}")
-                check(v["perMin"] == sv["perMin"],
-                      f"{target}/{vkey} 补全后超时单价 ≠ {src}")
-                check(v["perKm"] == sv["perKm"],
-                      f"{target}/{vkey} 补全后超里程单价 ≠ {src}")
+            check(v.get("pkg") is not None, f"{target}/{vkey} 补全后 pkg 仍缺失")
+            check(v.get("perMin") is not None, f"{target}/{vkey} 补全后 perMin 仍缺失")
+            check(v.get("perKm") is not None, f"{target}/{vkey} 补全后 perKm 仍缺失")
         for vkey, v in t["charter"].items():
-            sv = s["charter"].get(vkey)
-            check(sv is not None, f"{target}/包车/{vkey} 补全源 {src} 无此车型")
-            if sv:
-                for tk, tv in v["tiers"].items():
-                    check(tv["pkg"] == sv["tiers"][tk]["pkg"],
-                          f"{target}/包车/{vkey}/{tk} 补全后套餐价 ≠ {src}")
-                    check(tv["perMin"] == sv["tiers"][tk]["perMin"],
-                          f"{target}/包车/{vkey}/{tk} 补全后超时单价 ≠ {src}")
-                    check(tv["perKm"] == sv["tiers"][tk]["perKm"],
-                          f"{target}/包车/{vkey}/{tk} 补全后超里程单价 ≠ {src}")
+            check(len(v.get("tiers", {})) == len(CHARTER_TIERS),
+                  f"{target}/包车/{vkey} 档位数不完整")
+            for tk, tv in v["tiers"].items():
+                check(tv.get("pkg") is not None, f"{target}/{vkey}/{tk} 补全后 pkg 仍缺失")
+                check(tv.get("perMin") is not None, f"{target}/{vkey}/{tk} 补全后 perMin 仍缺失")
+                check(tv.get("perKm") is not None, f"{target}/{vkey}/{tk} 补全后 perKm 仍缺失")
 
     # ---------- 4. 推导关系（原表恒等式） ----------
     n30 = n5 = 0

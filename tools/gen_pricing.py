@@ -4,11 +4,14 @@
 Chinawheely 定价数据生成器 (P0)
 读 xlsx 报价单 → pricing/pricing.json（唯一价格真相源）
 
-口径（2026-11-04 用户确认）:
+口径（2026-11-04 用户确认，同日更新版微调）:
   - 币种 CNY 为主，USD 参考，固定汇率 1 USD = 7.10 CNY
   - Intercity 城际 与 接送机 同价（intercity 复用 airport 表）
-  - 银川 Yinchuan = 威海 Weihai 同价；台州 Taizhou = 嘉兴 Jiaxing 同价
-    （原表这两城缺 24 格接送机超时/超里程单价 + 40 格大车包车价）
+  - 银川 Yinchuan ← 威海 Weihai；台州 Taizhou ← 嘉兴 Jiaxing：
+    **单元格级填充** —— 报价单显式值一律保留（表是唯一真相源），
+    仅缺失（"-"）的单元格从参照城同位填充
+    （更新版报表：银川/台州补齐 19-55座包车价；两城接送机套餐价与
+    4座包车价一直有显式值，改用显式值而非参照城价）
 
 用法: python3 tools/gen_pricing.py
 """
@@ -22,7 +25,7 @@ from datetime import datetime, timezone
 import openpyxl
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC_XLSX = "/Users/w/Desktop/入境游包车报价单_游客版 2026年 报价单.xlsx"
+SRC_XLSX = "/Users/w/Desktop/入境游包车报价单_游客版 2026年 报价单 更新版本.xlsx"
 OUT_DIR = os.path.join(BASE, "pricing")
 OUT_JSON = os.path.join(OUT_DIR, "pricing.json")
 OUT_META = os.path.join(OUT_DIR, "pricing.meta.json")
@@ -151,23 +154,50 @@ def main():
                     "tiers": tiers,
                 }
 
-    # ---------- 缺口补全 ----------
+    # ---------- 缺口补全（单元格级：显式值优先，仅缺失才从参照城填充） ----------
     fills = []
     for target, src in FILL_FROM.items():
         if target not in cities or src not in cities:
             fills.append(f"✗ 无法补全 {target} ← {src}（缺城市）")
             continue
         t, s = cities[target], cities[src]
-        # 口径：整城同价 —— 目标城的所有车型/时长档完全采用源城价格
-        # 1) 接送机：整段替换
-        for vkey, v in s["airport"].items():
-            t["airport"][vkey] = json.loads(json.dumps(v))
-            fills.append(f"  {t['cn']} 接送机 {v['name']} ← {s['cn']} 同价")
-        # 2) 包车：整段替换
-        for vkey, v in s["charter"].items():
-            t["charter"][vkey] = json.loads(json.dumps(v))
-            fills.append(f"  {t['cn']} 包车 {v['name']} ← {s['cn']} 同价")
+        # 1) 接送机：车型缺失→整段复制；字段缺失→同位补
+        for vkey, sv in s["airport"].items():
+            tv = t["airport"].get(vkey)
+            if tv is None:
+                t["airport"][vkey] = json.loads(json.dumps(sv))
+                fills.append(f"  {t['cn']} 接送机 {sv['name']} 整段 ← {s['cn']}")
+                continue
+            for f in ("pkg", "perMin", "perKm"):
+                if tv.get(f) is None and sv.get(f) is not None:
+                    tv[f] = sv[f]
+                    fills.append(f"  {t['cn']} 接送机 {sv['name']}.{f} ← {s['cn']} ({sv[f]})")
+        # 2) 包车：车型缺失→整段；时长档缺失→整档；字段缺失→同位补
+        for vkey, sv in s["charter"].items():
+            tv = t["charter"].get(vkey)
+            if tv is None:
+                t["charter"][vkey] = json.loads(json.dumps(sv))
+                fills.append(f"  {t['cn']} 包车 {sv['name']} 整段 ← {s['cn']}")
+                continue
+            for tk, st in sv["tiers"].items():
+                tt = tv["tiers"].get(tk)
+                if tt is None:
+                    tv["tiers"][tk] = json.loads(json.dumps(st))
+                    fills.append(f"  {t['cn']} 包车 {sv['name']} {st['name']} 整档 ← {s['cn']}")
+                    continue
+                for f in ("pkg", "perMin", "perKm"):
+                    if tt.get(f) is None and st.get(f) is not None:
+                        tt[f] = st[f]
+                        fills.append(f"  {t['cn']} 包车 {sv['name']} {st['name']}.{f} ← {s['cn']} ({st[f]})")
         t["priceFilledFrom"] = src
+        t["priceFillPolicy"] = "cell_level_missing_only"
+
+    # ---------- 车型按键序规范化（保持 UI 卡片顺序稳定：小车→大巴） ----------
+    AIRPORT_ORDER = [v[0] for v in AIRPORT_VEHICLES]
+    CHARTER_ORDER = [v[1] for v in CHARTER_SHEETS]
+    for sl, c in cities.items():
+        c["airport"] = {k: c["airport"][k] for k in AIRPORT_ORDER if k in c["airport"]}
+        c["charter"] = {k: c["charter"][k] for k in CHARTER_ORDER if k in c["charter"]}
 
     # ---------- 覆盖检查 ----------
     coverage = {"complete": [], "gaps": []}
