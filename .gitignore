@@ -31,3 +31,5 @@ npm-debug.log*
 
 # P0-P4 报价体系：原始报价单不入库（商业敏感，仅保留生成结果）
 pricing/source/
+.vercel
+.env*
