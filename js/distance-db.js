@@ -910,12 +910,33 @@ function getDistanceMultiplier(range) {
 
 function getAirportsForCity(city) {
   var cityData = cityZones[city];
-  if (!cityData) return [{ code: 'INTL', name: 'International Airport', dist: 30 }];
-  var result = [];
-  for (var code in cityData.airports) {
-    result.push({ code: code, name: getAirportName(city, code), dist: cityData.airports[code] });
+  if (cityData) {
+    var result = [];
+    for (var code in cityData.airports) {
+      result.push({ code: code, name: getAirportName(city, code), dist: cityData.airports[code] });
+    }
+    return result;
   }
-  return result;
+  // 回落到全量机场库（js/airport-db.js，覆盖 53 个有报价城市）
+  if (typeof AIRPORT_DB !== 'undefined' && AIRPORT_DB[city]) {
+    return AIRPORT_DB[city].map(function (a) {
+      return { code: a.code, name: a.name, dist: a.dist };
+    });
+  }
+  return [];
+}
+
+// 机场到市中心距离（km）；优先 cityZones，其次机场库
+function getAirportDistance(city, code) {
+  var cityData = cityZones[city];
+  if (cityData && cityData.airports && cityData.airports[code] != null) {
+    return cityData.airports[code];
+  }
+  if (typeof AIRPORT_DB !== 'undefined' && AIRPORT_DB[city]) {
+    var hit = AIRPORT_DB[city].filter(function (a) { return a.code === code; })[0];
+    if (hit) return hit.dist;
+  }
+  return null;
 }
 
 function getAirportName(city, code) {

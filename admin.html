@@ -7,7 +7,7 @@
 <meta content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.chinawheely.com https://chinawheely-backend-api.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" http-equiv="Content-Security-Policy"/>
 <meta content="noindex, nofollow" name="robots"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>线索管理后台 | Chinawheely</title>
+<title>线索与订单管理后台 | Chinawheely</title>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <style>
   :root{
@@ -19,6 +19,14 @@
   header{background:var(--green);color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
   header h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px;}
   header .who{font-size:13px;opacity:.85;}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab-btn{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;}
+  .tab-btn.active{background:var(--green);border-color:var(--green);color:#fff;}
+  .tab-btn .cnt{display:inline-block;min-width:20px;padding:1px 6px;border-radius:10px;background:#EFF4F1;font-size:11px;color:var(--green);margin-left:6px;}
+  .tab-btn.active .cnt{background:rgba(255,255,255,.25);color:#fff;}
+  .o-pay-unpaid{background:#FBE9E7;color:var(--danger);} .o-pay-submitted{background:#FFF4E0;color:var(--warn);}
+  .o-pay-paid{background:#E4F4EC;color:var(--green);} .o-pay-refunded,.o-pay-failed{background:#F1F3F2;color:var(--muted);}
+  .t-in_service{background:#E7F0FA;color:#1B4D8F;} .t-no_show{background:#FBE9E7;color:var(--danger);}
   .wrap{max-width:1280px;margin:0 auto;padding:18px;}
   .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;}
@@ -69,7 +77,7 @@
 <!-- 登录 -->
 <div id="loginView" class="wrap login">
   <div class="card">
-    <h2>线索管理后台</h2>
+    <h2>线索与订单管理后台</h2>
     <p class="sub">Chinawheely · 内部使用，请勿外传</p>
     <div class="fld"><label for="loginEmail">邮箱</label><input id="loginEmail" type="email" autocomplete="username" placeholder="sistian@foxmail.com"/></div>
     <div class="fld"><label for="loginPw">密码</label><input id="loginPw" type="password" autocomplete="current-password"/></div>
@@ -82,7 +90,7 @@
 <!-- 主体 -->
 <div id="appView" class="hidden">
   <header>
-    <h1>Chinawheely 线索管理</h1>
+    <h1>Chinawheely 线索 · 订单管理</h1>
     <div class="row">
       <span class="who" id="whoami"></span>
       <button class="ghost" id="btnPwd" style="padding:6px 12px;">修改密码</button>
@@ -91,6 +99,12 @@
   </header>
 
   <div class="wrap">
+    <div class="tabs">
+      <button class="tab-btn active" id="tabLeads" data-tab="leads">线索<span class="cnt" id="cntLeads"></span></button>
+      <button class="tab-btn" id="tabOrders" data-tab="orders">订单<span class="cnt" id="cntOrders"></span></button>
+    </div>
+
+    <div id="viewLeads">
     <div class="stats" id="stats"></div>
 
     <div class="card">
@@ -119,6 +133,39 @@
       <span class="hint" id="countInfo"></span>
       <span class="row"><button class="ghost" id="btnPrev">上一页</button><button class="ghost" id="btnNext">下一页</button></span>
     </div>
+    </div><!-- /viewLeads -->
+
+    <!-- ==================== 订单视图 ==================== -->
+    <div id="viewOrders" class="hidden">
+    <div class="stats" id="oStats"></div>
+
+    <div class="card">
+      <div class="filters">
+        <div><label>服务状态</label><select id="oFStatus"><option value="all">全部</option><option value="pending">pending 待确认</option><option value="confirmed">confirmed 已确认</option><option value="in_service">in_service 用车中</option><option value="completed">completed 已完成</option><option value="cancelled">cancelled 已取消</option><option value="no_show">no_show 未出现</option></select></div>
+        <div><label>支付状态</label><select id="oFPay"><option value="all">全部</option><option value="unpaid">unpaid 未支付</option><option value="payment_submitted">payment_submitted 待核销</option><option value="paid">paid 已支付</option><option value="refunded">refunded 已退款</option><option value="failed">failed 支付失败</option></select></div>
+        <div><label>出发日期从</label><input id="oFFrom" type="date"/></div>
+        <div><label>至</label><input id="oFTo" type="date"/></div>
+        <div><label>关键词</label><input id="oFQ" type="search" placeholder="订单号 / 姓名 / 邮箱 / 电话 / 城市"/></div>
+        <div class="row"><button id="oBtnSearch">筛选</button><button class="ghost" id="oBtnReset">重置</button><button class="ghost" id="oBtnExport">导出 CSV</button></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:auto;">
+      <table>
+        <thead><tr>
+          <th>下单时间</th><th>订单号</th><th>客户</th><th>城市</th><th>服务</th><th>车型</th>
+          <th>出发</th><th>金额</th><th>支付</th><th>状态</th>
+        </tr></thead>
+        <tbody id="oRows"></tbody>
+      </table>
+      <div class="empty hidden" id="oEmpty">没有符合条件的订单。</div>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-bottom:40px;">
+      <span class="hint" id="oCountInfo"></span>
+      <span class="row"><button class="ghost" id="oBtnPrev">上一页</button><button class="ghost" id="oBtnNext">下一页</button></span>
+    </div>
+    </div><!-- /viewOrders -->
   </div>
 </div>
 
@@ -142,6 +189,30 @@
   <div id="dMsg" class="err"></div>
 </div>
 
+<!-- 订单详情抽屉 -->
+<div class="mask hidden" id="oMask"></div>
+<div class="drawer hidden" id="oDrawer">
+  <h3>订单详情</h3>
+  <dl class="kv" id="oDKv"></dl>
+  <div class="row" style="margin-bottom:14px;">
+    <div style="flex:1"><label>服务状态</label><select id="oDStatus"><option value="pending">pending 待确认</option><option value="confirmed">confirmed 已确认</option><option value="in_service">in_service 用车中</option><option value="completed">completed 已完成</option><option value="cancelled">cancelled 已取消</option><option value="no_show">no_show 未出现</option></select></div>
+    <div style="flex:1"><label>支付状态</label><select id="oDPay"><option value="unpaid">unpaid 未支付</option><option value="payment_submitted">payment_submitted 待核销</option><option value="paid">paid 已支付</option><option value="refunded">refunded 已退款</option><option value="failed">failed 支付失败</option></select></div>
+  </div>
+  <div class="fld"><label>备注（仅后台可见）</label><textarea id="oDNote" rows="3"></textarea></div>
+  <div class="row" style="margin-bottom:14px;">
+    <div style="flex:1"><label>出发日期</label><input id="oDDate" type="date"/></div>
+    <div style="flex:1"><label>出发时间</label><input id="oDTime" type="time"/></div>
+  </div>
+  <div class="row" style="margin-bottom:20px;">
+    <button id="oDSave">保存</button>
+    <button class="ghost" id="oDWhatsapp">WhatsApp</button>
+    <button class="ghost" id="oDMail">发邮件</button>
+    <button class="ghost" id="oDCopy">复制信息</button>
+    <button class="ghost" id="oDClose">关闭</button>
+  </div>
+  <div id="oDMsg" class="err"></div>
+</div>
+
 <!-- 修改密码 -->
 <div class="mask hidden" id="pwdMask"></div>
 <div class="drawer hidden" id="pwdPanel" style="width:min(380px,100%)">
@@ -159,6 +230,12 @@
   var TOKEN_KEY = 'cw_admin_token';
   var LIMIT = 50;
   var offset = 0, total = 0, current = null, token = null;
+
+  // 订单视图状态
+  var oOffset = 0, oCurrent = null, activeTab = 'leads';
+  var PRODUCT_LABEL = { airport: '接送机', charter: '包车', intercity: '城际' };
+  var PAY_LABEL = { unpaid: '未支付', payment_submitted: '待核销', paid: '已支付', refunded: '已退款', failed: '失败' };
+  var ST_LABEL = { pending: '待确认', confirmed: '已确认', in_service: '用车中', completed: '已完成', cancelled: '已取消', no_show: '未出现' };
 
   function $(id){ return document.getElementById(id); }
   function show(el, on){ el.classList.toggle('hidden', !on); }
@@ -187,6 +264,158 @@
     if (isNaN(d.getTime())) return iso;
     var p = function(n){ return n < 10 ? '0' + n : '' + n; };
     return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  /* ---------- Tab 切换 ---------- */
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    });
+    $('viewLeads').classList.toggle('hidden', tab !== 'leads');
+    $('viewOrders').classList.toggle('hidden', tab !== 'orders');
+    if (tab === 'orders') loadOrders();
+    else load();
+  }
+
+  /* ---------- 订单列表 ---------- */
+  function oQuery() {
+    var p = [];
+    var st = $('oFStatus').value, py = $('oFPay').value, q = $('oFQ').value.trim();
+    var fr = $('oFFrom').value, to = $('oFTo').value;
+    if (st && st !== 'all') p.push('status=' + encodeURIComponent(st));
+    if (py && py !== 'all') p.push('payment=' + encodeURIComponent(py));
+    if (q) p.push('q=' + encodeURIComponent(q));
+    if (fr) p.push('from=' + encodeURIComponent(fr));
+    if (to) p.push('to=' + encodeURIComponent(to) + 'T23:59:59');
+    p.push('limit=' + LIMIT);
+    p.push('offset=' + oOffset);
+    return p.join('&');
+  }
+
+  function loadOrders() {
+    api('/admin/orders?' + oQuery()).then(function(r) {
+      if (r.status === 401) { logout(true); return; }
+      if (!r.ok) { alert('加载失败：' + ((r.data && r.data.error) || r.status)); return; }
+      renderOStats(r.data.stats || {});
+      renderORows(r.data.rows || []);
+    }).catch(function(){ alert('网络错误'); });
+  }
+
+  function renderOStats(s) {
+    var cards = [
+      ['全部订单', s.total || 0, false],
+      ['今日新增', s.today || 0, false],
+      ['待确认', (s.byStatus && s.byStatus.pending) || 0, ((s.byStatus && s.byStatus.pending) || 0) > 0],
+      ['待核销支付', (s.byPayment && s.byPayment.payment_submitted) || 0, ((s.byPayment && s.byPayment.payment_submitted) || 0) > 0],
+      ['未收金 ¥', s.pendingValueCny || 0, false],
+      ['已收金 ¥', s.paidValueCny || 0, false]
+    ];
+    $('oStats').innerHTML = cards.map(function(c) {
+      return '<div class="stat' + (c[2] ? ' alert' : '') + '"><div class="n">' + c[1] + '</div><div class="l">' + c[0] + '</div></div>';
+    }).join('');
+    $('cntOrders').textContent = s.total || 0;
+  }
+
+  function renderORows(rows) {
+    var tb = $('oRows');
+    show($('oEmpty'), rows.length === 0);
+    tb.innerHTML = rows.map(function(r) {
+      var pay = r.payment_status || 'unpaid';
+      var payCls = pay === 'payment_submitted' ? 'o-pay-submitted' : 'o-pay-' + pay;
+      var contact = (r.customer_name || '-') + '<br><span style="color:var(--muted);font-size:11px">' + esc(r.email || '') + (r.phone ? ' / ' + esc(r.phone) : '') + '</span>';
+      var amount = r.total_cny != null ? '¥' + r.total_cny : '-';
+      return '<tr data-oref="' + esc(r.ref) + '">' +
+        '<td>' + esc(fmtTime(r.created_at)) + '</td>' +
+        '<td style="font-weight:600">' + esc(r.ref) + '</td>' +
+        '<td>' + contact + '</td>' +
+        '<td>' + esc(r.city || '-') + '</td>' +
+        '<td>' + esc(PRODUCT_LABEL[r.product] || r.product || '-') + '</td>' +
+        '<td>' + esc(r.vehicle || '-') + (r.tier ? '<br><span style="color:var(--muted);font-size:11px">' + esc(r.tier) + '</span>' : '') + '</td>' +
+        '<td>' + esc(r.pickup_date || '-') + (r.pickup_time ? ' ' + esc(r.pickup_time) : '') + '</td>' +
+        '<td style="font-weight:600;color:var(--danger)">' + esc(amount) + '</td>' +
+        '<td><span class="tag ' + payCls + '">' + esc(PAY_LABEL[pay] || pay) + '</span></td>' +
+        '<td><span class="tag t-' + esc(r.status) + '">' + esc(ST_LABEL[r.status] || r.status) + '</span></td>' +
+      '</tr>';
+    }).join('');
+    $('oCountInfo').textContent = '当前 ' + rows.length + ' 条 · 偏移 ' + oOffset;
+  }
+
+  /* ---------- 订单详情 ---------- */
+  var oCache = [];
+  function openODetail(ref) {
+    api('/admin/orders?limit=200').then(function(r) {
+      if (!r.ok) return;
+      oCache = r.data.rows || [];
+      var row = null;
+      oCache.forEach(function(x){ if (x.ref === ref) row = x; });
+      if (!row) return;
+      oCurrent = row;
+      var items = [
+        ['订单号', row.ref],
+        ['下单时间', fmtTime(row.created_at)],
+        ['客户', row.customer_name],
+        ['邮箱', row.email],
+        ['电话', row.phone],
+        ['城市', row.city],
+        ['服务', PRODUCT_LABEL[row.product] || row.product],
+        ['车型', row.vehicle],
+        ['时长档', row.tier],
+        ['金额', row.total_cny != null ? '¥' + row.total_cny + (row.total_usd != null ? ' (≈$' + row.total_usd + ')' : '') : '-'],
+        ['支付方式', row.payment_method || '-'],
+        ['人数', row.pax],
+        ['出发', (row.pickup_date || '-') + (row.pickup_time ? ' ' + row.pickup_time : '')],
+        ['备注', row.admin_note || '']
+      ];
+      $('oDKv').innerHTML = items.map(function(it) {
+        return '<dt>' + esc(it[0]) + '</dt><dd>' + esc(it[1] == null ? '' : it[1]) + '</dd>';
+      }).join('');
+      $('oDStatus').value = row.status || 'pending';
+      $('oDPay').value = row.payment_status || 'unpaid';
+      $('oDNote').value = row.admin_note || '';
+      $('oDDate').value = row.pickup_date || '';
+      $('oDTime').value = row.pickup_time || '';
+      $('oDMsg').textContent = '';
+      show($('oMask'), true); show($('oDrawer'), true);
+    });
+  }
+
+  function saveODetail() {
+    if (!oCurrent) return;
+    $('oDMsg').textContent = '';
+    var body = {
+      ref: oCurrent.ref,
+      status: $('oDStatus').value,
+      payment_status: $('oDPay').value,
+      admin_note: $('oDNote').value
+    };
+    if ($('oDDate').value && $('oDDate').value !== oCurrent.pickup_date) body.pickup_date = $('oDDate').value;
+    if ($('oDTime').value && $('oDTime').value !== oCurrent.pickup_time) body.pickup_time = $('oDTime').value;
+    api('/admin/orders', { method:'PATCH', body: body }).then(function(r) {
+      if (!r.ok) { $('oDMsg').textContent = (r.data && r.data.error) || '保存失败'; return; }
+      $('oDMsg').textContent = '已保存';
+      loadOrders();
+    });
+  }
+
+  function exportOrdersCsv() {
+    api('/admin/orders?limit=200' + (oQuery() ? '&' + oQuery() : '')).then(function(r) {
+      if (!r.ok) return;
+      var rows = r.data.rows || [];
+      var head = ['ref','created_at','status','payment_status','payment_method','customer_name','email','phone','city','product','vehicle','tier','total_cny','total_usd','pickup_date','pickup_time','pax','admin_note'];
+      var csv = [head.join(',')];
+      rows.forEach(function(row) {
+        csv.push(head.map(function(h) {
+          var v = row[h] == null ? '' : String(row[h]);
+          return '"' + v.replace(/"/g,'""') + '"';
+        }).join(','));
+      });
+      var blob = new Blob(['\ufeff' + csv.join('\n')], { type:'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'chinawheely-orders-' + new Date().toISOString().slice(0,10) + '.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
   }
 
   /* ---------- 登录 ---------- */
@@ -404,6 +633,40 @@
       if (tr && tr.getAttribute('data-ref')) openDetail(tr.getAttribute('data-ref'));
     });
 
+    // 订单视图绑定
+    $('tabLeads').addEventListener('click', function(){ switchTab('leads'); });
+    $('tabOrders').addEventListener('click', function(){ switchTab('orders'); });
+    $('oBtnSearch').addEventListener('click', function(){ oOffset = 0; loadOrders(); });
+    $('oBtnReset').addEventListener('click', function(){
+      $('oFStatus').value='all'; $('oFPay').value='all'; $('oFFrom').value='';
+      $('oFTo').value=''; $('oFQ').value=''; oOffset = 0; loadOrders();
+    });
+    $('oBtnExport').addEventListener('click', exportOrdersCsv);
+    $('oBtnPrev').addEventListener('click', function(){ oOffset = Math.max(0, oOffset - LIMIT); loadOrders(); });
+    $('oBtnNext').addEventListener('click', function(){ oOffset += LIMIT; loadOrders(); });
+    $('oDClose').addEventListener('click', function(){ show($('oDrawer'), false); show($('oMask'), false); });
+    $('oMask').addEventListener('click', function(){ show($('oDrawer'), false); show($('oMask'), false); });
+    $('oDSave').addEventListener('click', saveODetail);
+    $('oDWhatsapp').addEventListener('click', function(){
+      if (!oCurrent) return;
+      var text = 'Hi ' + (oCurrent.customer_name || '') + ' (' + oCurrent.ref + ')';
+      window.open('https://wa.me/' + String(oCurrent.phone || '8615527771775').replace(/\D/g,'') + '?text=' + encodeURIComponent(text), '_blank');
+    });
+    $('oDMail').addEventListener('click', function(){
+      if (!oCurrent) return;
+      window.location.href = 'mailto:' + encodeURIComponent(oCurrent.email || '') +
+        '?subject=' + encodeURIComponent('Chinawheely order ' + oCurrent.ref);
+    });
+    $('oDCopy').addEventListener('click', function(){
+      if (!oCurrent) return;
+      var txt = [oCurrent.ref, oCurrent.customer_name, oCurrent.email, oCurrent.phone, oCurrent.city, oCurrent.pickup_date, oCurrent.pickup_time, oCurrent.total_cny].join('\n');
+      if (navigator.clipboard) { navigator.clipboard.writeText(txt); $('oDMsg').textContent = '已复制'; }
+    });
+    $('oRows').addEventListener('click', function(e){
+      var tr = e.target.closest ? e.target.closest('tr') : null;
+      if (tr && tr.getAttribute('data-oref')) openODetail(tr.getAttribute('data-oref'));
+    });
+
     try {
       token = sessionStorage.getItem(TOKEN_KEY);
       $('whoami').textContent = sessionStorage.getItem('cw_admin_email') || '';
@@ -413,6 +676,10 @@
       api('/admin/leads?limit=1').then(function(r){
         if (r.status === 401) { logout(true); return; }
         load();
+        // 预取订单计数
+        api('/admin/orders?limit=1').then(function(r2){
+          if (r2.ok && r2.data.stats) $('cntOrders').textContent = r2.data.stats.total || 0;
+        });
       });
     }
   });

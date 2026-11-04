@@ -20,7 +20,7 @@ CITY_PROV = {
     "Baotou": "Inner Mongolia", "Bayannur": "Inner Mongolia", "Chifeng": "Inner Mongolia",
     "Hohhot": "Inner Mongolia", "Hulunbuir": "Inner Mongolia", "Ordos": "Inner Mongolia",
     "Ulanqab": "Inner Mongolia", "Wuhai": "Inner Mongolia", "Xilinhot": "Inner Mongolia",
-    "Hoting": "Inner Mongolia", "Tongliao": "Inner Mongolia", "Shuangyashan": "Inner Mongolia",
+    "Tongliao": "Inner Mongolia", "Shuangyashan": "Inner Mongolia",
     # 辽宁
     "Anshan": "Liaoning", "Benxi": "Liaoning", "Chaoyang": "Liaoning", "Dalian": "Liaoning",
     "Dandong": "Liaoning", "Fushun": "Liaoning", "Fuxin": "Liaoning", "Huludao": "Liaoning",
@@ -43,7 +43,7 @@ CITY_PROV = {
     # 江苏
     "Changzhou": "Jiangsu", "Huaihua": "Hunan", "Huaian": "Jiangsu", "Huaiyin": "Jiangsu",
     "Lianyungang": "Jiangsu", "Nanjing": "Jiangsu", "Nantong": "Jiangsu", "Suzhou": "Jiangsu",
-    "Suqian": "Jiangsu", "Taizhou": "Jiangsu", "Wuxi": "Jiangsu", "Xuzhou": "Jiangsu",
+    "Suqian": "Jiangsu", "Taizhou": "Zhejiang", "Wuxi": "Jiangsu", "Xuzhou": "Jiangsu",
     "Yancheng": "Jiangsu", "Yangzhou": "Jiangsu",
     # 浙江
     "Haining": "Zhejiang", "Huzhou": "Zhejiang", "Jiaxing": "Zhejiang", "Jinhua": "Zhejiang",
@@ -144,14 +144,14 @@ CITY_PROV = {
     "Karakax (Hotan)": "Xinjiang", "Hotan": "Xinjiang", "Kuytun": "Xinjiang",
     "Kashgar": "Xinjiang", "Aksu": "Xinjiang",
     # ---- 补齐 ----
-    "Baishan": "Jilin", "Bitu": "Inner Mongolia", "Changdu": "Tibet", "Gannan": "Gansu",
-    "Guilin": "Guangxi", "Hangzhou": "Zhejiang", "Hezhou": "Guangxi", "Huaning": "Hainan",
-    "Jian": "Shaanxi", "Jiaxian": "Shaanxi", "Jining": "Shandong", "Jiuquan": "Gansu",
-    "Jixi": "Heilongjiang", "Juncheng": "Hunan", "Laohekou": "Yunnan", "Leiyang": "Hunan",
+    "Baishan": "Jilin", "Bitu": "Guizhou", "Changdu": "Tibet", "Gannan": "Gansu",
+    "Guilin": "Guangxi", "Hangzhou": "Zhejiang", "Hezhou": "Guangxi", "Huaning": "Yunnan",
+    "Jianyang": "Sichuan", "Jiaxian": "Shaanxi", "Jining": "Shandong", "Jiuquan": "Gansu",
+    "Jixi": "Heilongjiang", "Juncheng": "Hunan", "Laohekou": "Hubei", "Leiyang": "Hunan",
     "Libo": "Guizhou", "Lingyuan": "Liaoning", "Liuan": "Anhui", "Lufeng": "Yunnan",
     "Luoping": "Yunnan", "Luzhi": "Jiangsu", "Lvliang": "Shanxi", "Nanchong": "Sichuan",
     "Rikaze": "Tibet", "Shenzhen": "Guangdong", "Taian": "Shandong", "Tongchuan": "Shaanxi",
-    "Weinan": "Shaanxi", "Wulingyuan": "Jiangxi", "Xiangxi": "Hunan", "Xuwen": "Guangdong",
+    "Weinan": "Shaanxi", "Wulingyuan": "Hunan", "Xiangxi": "Hunan", "Xuwen": "Guangdong",
     "Yanbian": "Jilin", "Yingtan": "Jiangxi", "Yongchuan": "Chongqing", "Yongxi": "Hunan",
     "Yueyang": "Hunan", "Yulin": "Guangxi", "Yuxian": "Yunnan", "Zhaodong": "Heilongjiang", "Zhaoqing": "Guangdong",
     "Zhenjiang": "Jiangsu", "Zhongwei": "Ningxia", "Zhouzhuang": "Jiangsu", "Zhuzhou": "Hunan",

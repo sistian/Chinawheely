@@ -10,7 +10,7 @@
   <title>Booking Confirmed — Thank You | Chinawheely | China travel guide</title>
   <meta name="robots" content="noindex, follow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <meta name="description" content="Book Thank You private car service with licensed driver. Fixed price airport transfers and city tours. No hidden fees.">
+  <meta name="description" content="Your Chinawheely booking request has been received. Check your email for your order number, payment instructions and your personal booking management link.">
   <link rel="canonical" href="https://www.chinawheely.com/thank-you.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
 <link rel="alternate" hreflang="en" href="https://www.chinawheely.com/thank-you.html">
   <link rel="alternate" hreflang="x-default" href="https://www.chinawheely.com/thank-you.html">
 <meta property="og:title" content="Thank You | Chinawheely Booking Request Received | China travel guide">
-  <meta property="og:description" content="Thank you for your booking request with Chinawheely. Our team will contact you shortly.. China travel guide, car service in China.">
+  <meta property="og:description" content="Your Chinawheely booking request has been received. Check your email for your order number and management link.">
   <meta property="og:image" content="https://www.chinawheely.com/images/og-image.webp">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -135,6 +135,12 @@
  <h1 class="u-f6cd61e6">Booking Received!</h1>
  <p class="u-ea33a3ed">
  Thank you for choosing Chinawheely. Your booking details have been sent to our team. </p>
+
+ <div id="orderRefBox" style="display:none;background:#fff;border:2px solid #1B4D3E;border-radius:14px;padding:18px 22px;margin:18px auto;max-width:520px;text-align:center">
+  <p style="margin:0 0 4px;font-size:14px;color:#64748b">Your order number</p>
+  <p id="orderRefText" style="margin:0;font-size:24px;font-weight:700;color:#1B4D3E;letter-spacing:.5px">—</p>
+  <p style="margin:8px 0 0;font-size:13px;color:#64748b">We've emailed you a personal management link — use it to view details or reschedule (free up to 48 hours before pickup). <a href="manage-order.html">Manage booking</a></p>
+ </div>
 
  <div class="u-cf69b12b">
  <h2 class="lvl-h3 u-5534b3b3">📋 What Happens Next</h2>
@@ -324,5 +330,14 @@
  <picture><source srcset="images/whatsapp-btn.webp" type="image/webp"><img loading="lazy" width="500" height="500" decoding="async" src="images/whatsapp-btn.png" alt="WhatsApp"></picture>
 </button>
 
+<script>
+(function () {
+  var m = new URLSearchParams(location.search).get('ref');
+  if (m && /^CWO-\d{8}-[A-F0-9]{8}$/.test(m)) {
+    document.getElementById('orderRefText').textContent = m;
+    document.getElementById('orderRefBox').style.display = 'block';
+  }
+})();
+</script>
  </body>
 </html>

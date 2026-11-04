@@ -3,6 +3,8 @@ const { mailerConfigured, sendMail } = require('./_lib/mailer');
 const { createLead, markMail } = require('./_lib/leads');
 const { buildLeadRecord, clientIp } = require('./_lib/fields');
 const { isRateLimited, filledTooFast } = require('./_lib/guard');
+const pricing = require('./_lib/pricing');
+const { createOrder, getOrderByRef, updateOrder, generateManageToken, sha256, canSelfModify } = require('./_lib/orders');
 
 const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || '15527771775@qq.com';
 const SUCCESS_URL = process.env.SUCCESS_URL || 'https://www.chinawheely.com/thank-you.html';
@@ -11,8 +13,9 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s =>
 
 const serviceLabels = {
   'airport': 'Airport Pickup',
-  'city': 'City Transfer',
+  'city': 'Hourly Charter',
   'intercity': 'Intercity Transfer',
+  'charter': 'Hourly Charter',
   'hourly': 'Hourly Charter',
   'airport-transfer': 'Airport Transfer',
   'intercity-transfer': 'Intercity Transfer',
@@ -25,8 +28,39 @@ const vehicleLabels = {
   'economy': 'Economy Sedan',
   'business': 'Business Sedan',
   'mpv': 'MPV / Van',
-  'luxury': 'Luxury Vehicle'
+  'luxury': 'Luxury Vehicle',
+  'sedan_economy': '4座 经济型专车 / 4-seat Economy Sedan',
+  'sedan_comfort': '4座 舒适型专车 / 4-seat Comfort Sedan',
+  'sedan_4': '4座 专车 / 4-seat Sedan',
+  'mpv_6': '6座 商务车 / 6-seat MPV',
+  'van_8_11': '8-11座 商务车 / 8-11-seat Minivan',
+  'van_12_18': '12-18座 商务车 / 12-18-seat Van',
+  'coach_19_55': '19-55座 大巴 / 19-55-seat Coach'
 };
+
+/**
+ * 服务端算价（权威值）
+ * 前端传来的 price 一律不采信；用 pricing 引擎重算。
+ * 返回 { ok, quote, priced } —— priced=false 表示该组合无公开价（转询价）。
+ */
+function computePrice(data) {
+  try {
+    const q = pricing.quote({
+      city: data.city,
+      product: data.product || data.serviceType || 'airport',
+      vehicle: data.vehicle,
+      tier: data.tier,
+      extraMinutes: data.extraMinutes,
+      extraKm: data.extraKm,
+      pax: data.passengers,
+      bags: data.luggage
+    });
+    if (q.ok) return { ok: true, quote: q, priced: true };
+    return { ok: false, quote: q, priced: false, reason: q.error };
+  } catch (e) {
+    return { ok: false, priced: false, reason: 'PRICING_ERROR', message: e && e.message };
+  }
+}
 
 function getOrigin(req) {
   const requestOrigin = req.headers.origin || req.headers.referer || '';
@@ -49,6 +83,16 @@ function getBody(req) {
     req.on('end', () => resolve(body));
     req.on('error', reject);
   });
+}
+
+// P4 - 产品类型英文标签（客户邮件用）
+function productLabelOf(p) {
+  const map = {
+    airport: 'Airport Transfer',
+    charter: 'Hourly Charter',
+    intercity: 'Intercity Transfer'
+  };
+  return map[String(p || '').toLowerCase()] || null;
 }
 
 function escapeHtml(text) {
@@ -77,6 +121,28 @@ function getSubmitterName(data) {
   return `${first} ${last}`.trim();
 }
 
+/** 用服务端算出的结果重建行程摘要 */
+function buildRouteSummary(data, quoted) {
+  const parts = [];
+  const city = quoted ? quoted.city : (data.city || '');
+  if (city) parts.push(city);
+
+  const product = quoted ? quoted.product : (data.product || data.serviceType || 'airport');
+  if (product === 'airport' || product === 'intercity') {
+    if (data.airport) parts.push(data.airport);
+    if (data.transferDirection === 'airport-to-hotel') parts.push('→ Hotel');
+    if (data.transferDirection === 'hotel-to-airport') parts.push('Hotel →');
+    if (data.hotelAddress) parts.push(data.hotelAddress);
+  } else if (product === 'charter') {
+    if (data.charterRoute) parts.push(data.charterRoute);
+    if (quoted && quoted.tierName) parts.push(quoted.tierName);
+  } else {
+    if (data.fromCity) parts.push(data.fromCity);
+    if (data.toCity) parts.push('→ ' + data.toCity);
+  }
+  return parts.join(' ');
+}
+
 function buildSubject(data) {
   const parts = [];
   const serviceLabel = (data.serviceTypeLabel && String(data.serviceTypeLabel).trim()) ||
@@ -92,7 +158,10 @@ function buildSubject(data) {
 }
 
 function buildEmail(data, meta = {}) {
-  const hidden = new Set(['website', '_honey', '_subject', '_next', '_template', '_captcha', '_replyto', '_cc']);
+  const hidden = new Set(['website', '_honey', '_subject', '_next', '_template', '_captcha', '_replyto', '_cc',
+    'quoteTotalCny', 'quoteTotalUsd', 'quoteBreakdown', 'formPrice', 'formRouteSummary',
+    'formServiceType', 'formVehicleLabel', 'formProduct', 'formVehicleKey', 'formTierKey',
+    'formExtraMinutes', 'formExtraKm']);
   const entries = Object.entries(data).filter(([k, v]) => {
     if (hidden.has(k)) return false;
     if (v === undefined || v === null) return false;
@@ -101,7 +170,7 @@ function buildEmail(data, meta = {}) {
     return true;
   });
 
-  const importantFields = new Set(['routeSummary', 'serviceTypeLabel', 'price', 'totalPrice', 'vehicleLabel', 'date', 'time', 'pickupDate', 'pickupTime']);
+  const importantFields = new Set(['routeSummary', 'serviceTypeLabel', 'price', 'totalPrice', 'vehicleLabel', 'date', 'time', 'pickupDate', 'pickupTime', 'city', 'product', 'vehicle', 'tier']);
 
   const rows = entries.map(([k, v]) => {
     const label = formatLabel(k);
@@ -111,6 +180,9 @@ function buildEmail(data, meta = {}) {
   }).join('');
 
   const metaRows = [];
+  if (meta.orderRef) {
+    metaRows.push(`<tr><td style="padding:8px 12px;border:1px solid #ddd;background:#E8F5E9"><strong>Order Number</strong></td><td style="padding:8px 12px;border:1px solid #ddd;font-weight:700">${escapeHtml(meta.orderRef)}</td></tr>`);
+  }
   if (meta.reference) {
     metaRows.push(`<tr><td style="padding:8px 12px;border:1px solid #ddd;background:#f8f8f8"><strong>Booking Reference</strong></td><td style="padding:8px 12px;border:1px solid #ddd">${escapeHtml(meta.reference)}</td></tr>`);
   }
@@ -121,22 +193,49 @@ function buildEmail(data, meta = {}) {
     metaRows.push(`<tr><td style="padding:8px 12px;border:1px solid #ddd;background:#f8f8f8"><strong>Submitter IP</strong></td><td style="padding:8px 12px;border:1px solid #ddd">${escapeHtml(meta.submitterIP)}</td></tr>`);
   }
 
+  // 报价明细（服务端算出）
+  let quoteBlock = '';
+  let quotePlain = '';
+  if (data.quoteJson) {
+    try {
+      const q = JSON.parse(data.quoteJson);
+      const qrows = (q.lines || []).map(l =>
+        `<tr><td style="padding:6px 12px;border:1px solid #ddd">${escapeHtml(l.label)}</td><td style="padding:6px 12px;border:1px solid #ddd;text-align:right">¥${escapeHtml(String(l.amount))}</td></tr>`
+      ).join('');
+      quoteBlock = `<h3 style="color:#1B4D3E;margin:18px 0 8px">Server-Calculated Price</h3>
+<table style="border-collapse:collapse;width:100%;max-width:600px">
+${qrows}
+<tr style="background:#E8F5E9;font-weight:700"><td style="padding:8px 12px;border:1px solid #ddd">Total</td><td style="padding:8px 12px;border:1px solid #ddd;text-align:right">¥${escapeHtml(String(q.total))} CNY</td></tr>
+<tr><td style="padding:6px 12px;border:1px solid #ddd">USD reference</td><td style="padding:6px 12px;border:1px solid #ddd;text-align:right">≈ $${escapeHtml(String(q.usd))} @ ${escapeHtml(String(q.usdRate))}</td></tr>
+</table>`;
+      quotePlain = '\nServer-Calculated Price:\n' +
+        (q.lines || []).map(l => `  ${l.label}: ¥${l.amount}`).join('\n') +
+        `\n  Total: ¥${q.total} CNY (≈ $${q.usd} @ ${q.usdRate})`;
+    } catch (e) { /* ignore */ }
+  } else if (data.pricingStatus === 'quote_requested') {
+    quoteBlock = `<p style="color:#b45309">This combination has no published price — the customer is requesting a quote. Our team will respond within 2 hours.</p>`;
+    quotePlain = '\nNo published price for this combination — quote request pending.';
+  }
+
   const html = `<h2 style="color:#1B4D3E">New Chinawheely Booking Request</h2>
-<p style="color:#555">Booking Reference: <strong>${escapeHtml(meta.reference || 'N/A')}</strong></p>
-<table style="border-collapse:collapse;width:100%;max-width:600px">${metaRows.join('')}${rows}</table>`;
+<p style="color:#555">Order Number: <strong>${escapeHtml(meta.orderRef || meta.reference || 'N/A')}</strong></p>
+<table style="border-collapse:collapse;width:100%;max-width:600px">${metaRows.join('')}${rows}</table>
+${quoteBlock}`;
 
   const plainMeta = [
     meta.submittedAt ? `Submitted At: ${meta.submittedAt}` : '',
     meta.submitterIP ? `Submitter IP: ${meta.submitterIP}` : ''
   ].filter(Boolean).join('\n');
 
-  const plain = ['New Chinawheely Booking Request', `Booking Reference: ${meta.reference || 'N/A'}`, plainMeta, '']
+  const plain = ['New Chinawheely Booking Request',
+    `Order Number: ${meta.orderRef || meta.reference || 'N/A'}`, plainMeta, '']
     .filter(Boolean)
     .concat(entries.map(([k, v]) => {
       const label = formatLabel(k);
       const value = Array.isArray(v) ? v.join(', ') : String(v);
       return `${label}: ${value}`;
     }))
+    .concat(quotePlain ? [quotePlain] : [])
     .join('\n');
   return { html, plain };
 }
@@ -201,6 +300,40 @@ module.exports = async (req, res) => {
     return res.end('Invalid email address');
   }
 
+  // ===== 服务端算价（权威值）：不采信前端传来的 price =====
+  const priceResult = computePrice(data);
+  const quoted = priceResult.priced && priceResult.quote;
+  if (quoted) {
+    data.price = '¥' + quoted.total + ' CNY';
+    data.totalPrice = String(quoted.total);
+    data.vehicleLabel = quoted.vehicleName;
+    data.serviceTypeLabel = quoted.productLabel;
+    data.routeSummary = buildRouteSummary(data, quoted);
+  } else {
+    // 无公开价组合 → 询价
+    data.price = 'Quote on request';
+    data.totalPrice = '';
+    delete data.quoteTotalCny;
+    delete data.quoteTotalUsd;
+    delete data.quoteBreakdown;
+    if (!data.vehicleLabel && data.vehicle) {
+      data.vehicleLabel = vehicleLabels[data.vehicle] || data.vehicle;
+    }
+  }
+  data.pricingStatus = quoted ? 'priced' : 'quote_requested';
+  data.quoteJson = quoted ? JSON.stringify({
+    total: quoted.total,
+    usd: quoted.usd,
+    usdRate: quoted.usdRate,
+    lines: quoted.lines,
+    city: quoted.city,
+    product: quoted.product,
+    vehicle: quoted.vehicle,
+    tier: quoted.tier,
+    includedKm: quoted.includedKm,
+    warnings: quoted.warnings
+  }) : '';
+
   if (!mailerConfigured()) {
     await markMail(reference, 'failed', 'mailer not configured');
     setCorsHeaders(res, req);
@@ -218,11 +351,114 @@ module.exports = async (req, res) => {
     console.error('Chinawheely booking lead insert failed:', lead.error);
   }
 
+  // P4 - 创建订单（订单号 + 状态机）
+  let orderRef = null;
+  let manageToken = null;
+  try {
+    const order = await createOrder({
+      email: data.email,
+      phone: data.phone,
+      customerName: [data.firstName, data.lastName].filter(Boolean).join(' '),
+      city: quoted ? quoted.city : (data.city || null),
+      product: quoted ? quoted.product : (data.product || data.serviceType || null),
+      vehicle: quoted ? quoted.vehicle : (data.vehicle || null),
+      tier: quoted ? quoted.tier : (data.tier || null),
+      quote: quoted ? {
+        total: quoted.total, usd: quoted.usd, usdRate: quoted.usdRate,
+        lines: quoted.lines, includedKm: quoted.includedKm, warnings: quoted.warnings
+      } : null,
+      trip: {
+        date: data.date, time: data.time,
+        pax: data.passengers, luggage: data.luggage
+      },
+      contact: {
+        airport: data.airport, transferDirection: data.transferDirection,
+        hotelAddress: data.hotelAddress, charterRoute: data.charterRoute,
+        fromCity: data.fromCity, toCity: data.toCity,
+        flightNumber: data.flightNumber, airline: data.airline,
+        extras: data.extras
+      },
+      notes: data.notes,
+      payment: { method: data.paymentMethod }
+    });
+    if (order.ok) {
+      orderRef = order.ref;
+      manageToken = order.manageToken;
+    } else {
+      console.error('Chinawheely order create failed:', order.error);
+    }
+  } catch (e) {
+    console.error('Chinawheely order create error:', e && e.message);
+  }
+
   const baseSubject = buildSubject(data);
-  const subject = reference ? `${baseSubject} [${reference}]` : baseSubject;
-  const { html, plain } = buildEmail(data, { reference, submittedAt, submitterIP });
+  const subject = (reference || orderRef) ? `${baseSubject} [${orderRef || reference}]` : baseSubject;
+  const { html, plain } = buildEmail(data, {
+    reference: reference || orderRef,
+    orderRef,
+    manageToken,
+    submittedAt,
+    submitterIP
+  });
 
   const replyEmail = data[REPLY_TO_FIELD] && String(data[REPLY_TO_FIELD]).trim();
+
+  // P4 - 客户确认邮件（含订单号 + 自助管理链接）；失败不阻断主流程
+  try {
+    if (data.email && orderRef) {
+      const siteBase = SUCCESS_URL.replace(/thank-you\.html.*$/i, '').replace(/\/+$/, '') || 'https://www.chinawheely.com';
+      const manageUrl = `${siteBase}/manage-order.html?ref=${encodeURIComponent(orderRef)}&token=${encodeURIComponent(manageToken)}`;
+      const q = quoted || {};
+      const priceLine = quoted
+        ? `<p style="font-size:18px"><strong>¥${q.total} CNY</strong> <span style=\"color:#64748b\">(≈ $${q.usd} USD)</span></p>`
+        : `<p><strong>Price:</strong> We'll send you a confirmed quote within 2 hours.</p>`;
+      const custHtml = `<div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:600px;margin:0 auto;color:#1f2937">
+<h2 style="color:#1B4D3E;margin:0 0 4px">Booking received — ${escapeHtml(orderRef)}</h2>
+<p style="color:#64748b;margin:0 0 16px">Thank you, ${escapeHtml(String(data.firstName || data.lastName || 'traveller'))}! Your booking request is confirmed and our team is reviewing it now.</p>
+<table style="border-collapse:collapse;width:100%;font-size:14px">
+<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;background:#f8fafc;width:140px">Order Number</td><td style="padding:6px 10px;border:1px solid #e2e8f0;font-weight:700">${escapeHtml(orderRef)}</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;background:#f8fafc">Service</td><td style="padding:6px 10px;border:1px solid #e2e8f0">${escapeHtml(String(q.serviceTypeLabel || productLabelOf(data.product) || 'Private car service'))}</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;background:#f8fafc">City</td><td style="padding:6px 10px;border:1px solid #e2e8f0">${escapeHtml(String(q.city || data.city || ''))}</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;background:#f8faff">Pickup</td><td style="padding:6px 10px;border:1px solid #e2e8f0">${escapeHtml(String(data.date || ''))} ${escapeHtml(String(data.time || ''))}</td></tr>
+${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;background:#f8fafc">Vehicle</td><td style="padding:6px 10px;border:1px solid #e2e8f0">${escapeHtml(String(q.vehicleLabel))}</td></tr>` : ''}
+</table>
+<div style="margin:14px 0">${priceLine}</div>
+<h3 style="color:#1B4D3E;font-size:15px;margin:18px 0 6px">How to pay</h3>
+<p style="font-size:14px">Pay via <strong>PayPal</strong> or <strong>Alipay</strong> — scan the QR code on our <a href="${siteBase}/booking.html">booking page</a>, then send the payment screenshot to our WhatsApp below. We confirm within 10 minutes.</p>
+<h3 style="color:#1B4D3E;font-size:15px;margin:18px 0 6px">Manage your booking</h3>
+<p style="font-size:14px">View details or reschedule (free up to 48 hours before pickup):<br>
+<a href="${manageUrl}">${manageUrl}</a></p>
+<p style="font-size:12px;color:#64748b">This link is personal — keep it safe. It is valid for 30 days.</p>
+<h3 style="color:#1B4D3E;font-size:15px;margin:18px 0 6px">Need help?</h3>
+<p style="font-size:14px">WhatsApp / WeChat: <strong>+86 155 2777 1775</strong> (Beijing time 8:00–24:00)<br>Email: ${escapeHtml(RECIPIENT_EMAIL)}</p>
+<p style="font-size:12px;color:#94a3b8;margin-top:20px">Chinawheely · Licensed travel agency L-HUB-101603 · <a href="${siteBase}/index.html" style=\"color:#94a3b8\">www.chinawheely.com</a></p>
+</div>`;
+      const custPlain = [
+        `Booking received — ${orderRef}`,
+        `Service: ${q.serviceTypeLabel || productLabelOf(data.product) || 'Private car service'}`,
+        `City: ${q.city || data.city || ''}`,
+        `Pickup: ${data.date || ''} ${data.time || ''}`,
+        q.vehicleLabel ? `Vehicle: ${q.vehicleLabel}` : '',
+        quoted ? `Price: ¥${q.total} CNY (≈ $${q.usd} USD)` : 'Price: quote to follow within 2 hours',
+        '',
+        'How to pay: PayPal or Alipay QR on the booking page; send screenshot to WhatsApp +86 155 2777 1775.',
+        '',
+        `Manage your booking (reschedule up to 48h before pickup):`,
+        manageUrl,
+        '',
+        `Support: WhatsApp/WeChat +86 155 2777 1775 (8:00-24:00 Beijing) · ${RECIPIENT_EMAIL}`
+      ].filter(l => l !== undefined).join('\n');
+      await sendMail({
+        to: String(data.email).trim(),
+        subject: `Your Chinawheely booking ${orderRef}`,
+        html: custHtml,
+        text: custPlain,
+        replyTo: RECIPIENT_EMAIL
+      });
+    }
+  } catch (mailErr) {
+    console.error('Chinawheely customer mail error:', mailErr && mailErr.message);
+  }
 
   try {
     await sendMail({
@@ -234,7 +470,10 @@ module.exports = async (req, res) => {
     });
     await markMail(reference, 'sent');
     setCorsHeaders(res, req);
-    res.writeHead(302, { Location: SUCCESS_URL });
+    const loc = orderRef
+      ? `${SUCCESS_URL}${SUCCESS_URL.includes('?') ? '&' : '?'}ref=${encodeURIComponent(orderRef)}`
+      : SUCCESS_URL;
+    res.writeHead(302, { Location: loc });
     return res.end();
   } catch (err) {
     console.error('Chinawheely booking mail error:', err && err.message);

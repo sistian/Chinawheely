@@ -215,7 +215,7 @@ def build_sitemap():
     # 首页
     urls.append(("/", "1.0", "daily"))
     for f in files:
-        if f in ("index.html", "404.html", "thank-you.html", "admin.html"):
+        if f in ("index.html", "404.html", "thank-you.html", "admin.html", "manage-order.html"):
             continue
         if f in BLOCK_ALL:
             continue

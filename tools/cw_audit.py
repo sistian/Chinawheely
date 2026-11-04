@@ -138,7 +138,7 @@ sm_urls = {u for u in re.findall(r"<loc>([^<]+)</loc>", sm)
            if u.rsplit("/", 1)[-1].endswith(".html")}
 sm_files = {u.rsplit("/", 1)[-1] for u in sm_urls}
 # 以下页面按设计不进 sitemap：首页(用 /)、404、别名/薄页(已 noindex)、工具页
-INTENTIONAL_NO_SITEMAP = {"index.html", "404.html", "thank-you.html"}
+INTENTIONAL_NO_SITEMAP = {"index.html", "404.html", "thank-you.html", "manage-order.html"}
 ALIASES = {"beijing_detailed.html","erdos.html","hulunbeier.html","jdz.html","jl.html",
            "wulumuqi.html","kelamayi.html","jinzhou_ln.html","taizhou_js.html",
            "taizhou_zj.html","yichun_hlj.html","yichun_jx.html","yichun-heilongjiang.html",
@@ -173,6 +173,80 @@ else:
 
 no_price = [f for f in files if f not in CORE and not re.search(r"\$\d", pages[f])]
 warn("转化:无价格信息", f"{len(no_price)} 页无价格  {' '.join(no_price[:6])}")
+
+# ---------- 8. 价格一致性（P3 引入） ----------
+try:
+    pdata = json.load(open("pricing/pricing.json", encoding="utf-8"))
+    PC = pdata["cities"]
+    PRATE = pdata["meta"]["usdCnyRate"]
+    SLUG_ALIAS = {"huhehaote": "hohhot"}
+
+    fake = [f for f, s in pages.items()
+            if re.search(r"From \$\d", s)]
+    if fake:
+        fail("价格:残留假USD起价", f"{len(fake)} 页  {' '.join(fake[:5])}")
+    else:
+        ok("价格:残留假USD起价", "0")
+
+    # 城市页 ¥ 价格必须能在该城报价中找到
+    bad_city, bad_val = [], []
+    for f, s in pages.items():
+        m0 = re.match(r"^([a-z_]+)\.html$", f)
+        if not m0 or m0.group(1) in CORE or is_sub(f):
+            continue
+        slug = SLUG_ALIAS.get(m0.group(1), m0.group(1))
+        if slug not in PC:
+            # 无价城市不允许出现 ¥ 起价声明
+            if re.search(r"From ¥\d", s):
+                bad_city.append(f)
+            continue
+        allowed = set()
+        c = PC[slug]
+        for v in c.get("airport", {}).values():
+            if v.get("pkg") is not None:
+                allowed.add(v["pkg"])
+        for veh in c.get("charter", {}).values():
+            for t in veh.get("tiers", {}).values():
+                allowed.add(t["pkg"])
+        for m in re.finditer(r"From ¥(\d+(?:\.\d+)?)", s):
+            if float(m.group(1)) not in allowed:
+                bad_val.append(f"{f}:{m.group(1)}")
+    if bad_city:
+        fail("价格:无价城有¥起价", f"{len(bad_city)}  {' '.join(bad_city[:5])}")
+    else:
+        ok("价格:无价城有¥起价", "0")
+    if bad_val:
+        fail("价格:¥值不在报价表", f"{len(bad_val)}  {' '.join(bad_val[:5])}")
+    else:
+        ok("价格:¥值不在报价表", "0")
+
+    # USD 换算正确性（From ¥X (≈ $Y)）
+    bad_usd = []
+    for f, s in pages.items():
+        for m in re.finditer(r"From ¥(\d+(?:\.\d+)?) \(≈ \$(\d+(?:\.\d+)?)\)", s):
+            cny, u = float(m.group(1)), float(m.group(2))
+            if abs(u - round(cny / PRATE, 2)) > 0.011:
+                bad_usd.append(f"{f}:{cny}->{u}")
+    if bad_usd:
+        fail("价格:USD汇率换算错", f"{len(bad_usd)}  {' '.join(bad_usd[:5])}")
+    else:
+        ok("价格:USD汇率换算错", "0")
+
+    # prices.html 覆盖 53 城
+    ph = pages.get("prices.html", "")
+    n_city = len(re.findall(r'class="city" data-slug=', ph))
+    if n_city == len(PC):
+        ok("价格:总览页覆盖", f"prices.html {n_city}/{len(PC)} 城")
+    else:
+        fail("价格:总览页覆盖", f"prices.html {n_city}/{len(PC)} 城")
+
+    sm = read("sitemap.xml")
+    if "/prices.html" in sm:
+        ok("价格:总览页入sitemap", "")
+    else:
+        fail("价格:总览页入sitemap", "缺 prices.html")
+except FileNotFoundError:
+    fail("价格:报价数据缺失", "pricing/pricing.json 不存在")
 
 # ---------- 输出 ----------
 print("=" * 78)

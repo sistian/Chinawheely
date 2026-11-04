@@ -280,7 +280,25 @@
       width: 100%;
       margin-top: var(--space-4);
     }
-  </style>
+  
+ /* ===== Live Quote Panel (P2) ===== */
+ .quote-panel { background: var(--color-gray-50, #f8fafc); border: 1px solid var(--color-gray-200, #e2e8f0); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+ .quote-panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+ .quote-panel-title { font-weight: 700; font-size: var(--text-base, 15px); color: var(--color-gray-900, #0f172a); }
+ .quote-panel-rate { font-size: var(--text-xs, 12px); color: var(--color-gray-500, #64748b); }
+ .quote-rows { display: flex; flex-direction: column; gap: 6px; }
+ .quote-row { display: flex; justify-content: space-between; gap: 12px; font-size: var(--text-sm, 14px); color: var(--color-gray-700, #334155); }
+ .quote-amount { font-weight: 600; color: var(--color-gray-900, #0f172a); white-space: nowrap; }
+ .quote-warnings { margin-top: 10px; }
+ .quote-warning { font-size: var(--text-xs, 12px); color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 6px 10px; margin-top: 6px; }
+ .quote-total { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-gray-200, #e2e8f0); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+ .quote-total-item { display: flex; flex-direction: column; }
+ .quote-total-label { font-size: var(--text-xs, 12px); color: var(--color-gray-500, #64748b); }
+ .quote-total-cny { font-size: var(--text-2xl, 22px); font-weight: 800; color: var(--color-primary, #dc2626); }
+ .quote-total-usd { font-size: var(--text-base, 15px); font-weight: 600; color: var(--color-gray-700, #334155); }
+ .quote-note { margin-top: 8px; font-size: var(--text-xs, 12px); color: var(--color-gray-500, #64748b); }
+ .service-option-note { font-size: var(--text-xs, 12px); color: var(--color-gray-500, #64748b); margin-top: 4px; }
+</style>
 <link rel="alternate" hreflang="en" href="https://www.chinawheely.com/booking.html">
   <link rel="alternate" hreflang="x-default" href="https://www.chinawheely.com/booking.html">
 <script type="application/ld+json">
@@ -362,6 +380,7 @@
 <div id="mobileMenu" class="u-10929ef3">
  <a href="index.html">Home</a>
  <a href="services.html">Services</a>
+ <a href="prices.html">Prices</a>
  <a href="index.html#cities">Cities</a>
  <a href="booking.html">Book Now</a>
 </div>
@@ -374,7 +393,16 @@
  <h1 class="u-dec4e14a">Book Your Private Car or Airport Transfer in China</h1>
  <p class="u-ca76d851">Fill in your details below. You'll get a fixed price instantly.</p>
 
- <form id="bookingForm" action="https://api.chinawheely.com/api/booking" method="POST" novalidate> <input type="hidden" name="price" id="formPrice" value="">
+ <form id="bookingForm" action="https://api.chinawheely.com/api/booking" method="POST" novalidate>
+ <!-- 服务端算价所需参数（价格由服务端重算，前端不提交价格） -->
+ <input type="hidden" name="product" id="formProduct" value="airport">
+ <input type="hidden" name="vehicle" id="formVehicleKey" value="">
+ <input type="hidden" name="tier" id="formTierKey" value="">
+ <input type="hidden" name="extraMinutes" id="formExtraMinutes" value="0">
+ <input type="hidden" name="extraKm" id="formExtraKm" value="0">
+ <input type="hidden" name="quoteTotalCny" id="formTotalCny" value="">
+ <input type="hidden" name="quoteTotalUsd" id="formTotalUsd" value="">
+ <input type="hidden" name="quoteBreakdown" id="formBreakdown" value="">
  <input type="hidden" name="routeSummary" id="formRouteSummary" value="">
  <input type="hidden" name="serviceTypeLabel" id="formServiceType" value="">
  <input type="hidden" name="vehicleLabel" id="formVehicleLabel" value="">
@@ -383,89 +411,56 @@
  <label for="website">Website</label>
  <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
  </div>
- <!-- Service Type -->
+
+ <!-- ===== Step 1: 服务类型 ===== -->
  <div class="form-group">
- <label class="form-label">Service Type</label>
- <div class="form-row u-b207d191">
+ <label class="form-label">Step 1 · Choose Your Service</label>
+ <div class="form-row u-b207d191" id="productRow">
  <label class="service-option u-10123434">
- <input type="radio" name="serviceType" value="airport" checked class="u-93b8ea5b">
+ <input type="radio" name="product" value="airport" checked class="u-93b8ea5b">
  <div class="service-option-box u-267a89a6">
  <div class="u-f8782b37">✈</div>
  <div class="u-344f893f">Airport Transfer</div>
+ <div class="service-option-note">接送机 · 含 35 公里</div>
  </div>
  </label>
  <label class="service-option u-10123434">
- <input type="radio" name="serviceType" value="city" class="u-93b8ea5b">
+ <input type="radio" name="product" value="charter" class="u-93b8ea5b">
  <div class="service-option-box u-267a89a6">
  <div class="u-f8782b37">🚗</div>
- <div class="u-344f893f">City / Hourly</div>
+ <div class="u-344f893f">Hourly Charter</div>
+ <div class="service-option-note">包车 · 2–10 小时</div>
  </div>
  </label>
  <label class="service-option u-10123434">
- <input type="radio" name="serviceType" value="intercity" class="u-93b8ea5b">
+ <input type="radio" name="product" value="intercity" class="u-93b8ea5b">
  <div class="service-option-box u-267a89a6">
  <div class="u-f8782b37">🌄</div>
  <div class="u-344f893f">Intercity</div>
+ <div class="service-option-note">城际 · 同接送机价</div>
  </div>
  </label>
  </div>
  </div>
 
- <!-- City -->
+ <!-- ===== Step 2: 城市 + 车型 ===== -->
  <div class="form-group">
- <label class="form-label" for="city">City</label>
+ <label class="form-label" for="city">Step 2 · City</label>
  <select class="form-select" id="city" name="city" required>
- <option value="" disabled selected>Select your city</option>
- <optgroup label="Top Entry Points (Most Popular)">
- <option value="shanghai">Shanghai — #1 International Entry</option>
- <option value="beijing">Beijing — Capital & Booking Attraction</option>
- <option value="xian">Xi'an — Terracotta Warriors</option>
- <option value="chengdu">Chengdu — Pandas & Culture</option>
- <option value="guangzhou">Guangzhou — Canton & Business</option>
- <option value="hangzhou">Hangzhou — West Lake</option>
- <option value="shenzhen">Shenzhen — Tech Hub</option>
- <option value="wuhan">Wuhan — Central China Hub</option>
- </optgroup>
- <optgroup label="Other Major Cities">
- <option value="nanjing">Nanjing</option>
- <option value="chongqing">Chongqing</option>
- <option value="suzhou">Suzhou</option>
- <option value="qingdao">Qingdao</option>
- <option value="xiamen">Xiamen</option>
- <option value="kunming">Kunming</option>
- <option value="tianjin">Tianjin</option>
- <option value="dalian">Dalian</option>
- <option value="changsha">Changsha</option>
- <option value="zhengzhou">Zhengzhou</option>
- <option value="harbin">Harbin</option>
- <option value="jinan">Jinan</option>
- <option value="wenzhou">Wenzhou</option>
- <option value="changchun">Changchun</option>
- <option value="shijiazhuang">Shijiazhuang</option>
- <option value="changzhou">Changzhou</option>
- <option value="quanzhou">Quanzhou</option>
- <option value="nanning">Nanning</option>
- <option value="guiyang">Guiyang</option>
- <option value="nanchang">Nanchang</option>
- <option value="nantong">Nantong</option>
- <option value="jinhua">Jinhua</option>
- <option value="xuzhou">Xuzhou</option>
- <option value="taiyuan">Taiyuan</option>
- <option value="jiaxing">Jiaxing</option>
- <option value="yantai">Yantai</option>
- <option value="baoding">Baoding</option>
- <option value="zhuhai">Zhuhai</option>
- <option value="zhongshan">Zhongshan</option>
- <option value="lanzhou">Lanzhou</option>
- <option value="linyi">Linyi</option>
- <option value="weifang">Weifang</option>
- <option value="shaoxing">Shaoxing</option>
- <option value="huizhou">Huizhou</option>
- </optgroup>
+ <option value="" disabled selected>Loading priced cities…</option>
  </select>
+ <p class="text-small u-fd04e2ad" id="cityPriceHint">Published fixed prices cover 53 major cities. Other destinations are quoted on request.</p>
  </div>
 
- <!-- Airport Fields -->
+ <div class="form-group">
+ <label class="form-label">Vehicle &amp; Package</label>
+ <div class="form-row u-b207d191" id="vehicleRow">
+ <p class="text-small" id="vehiclePlaceholder">Select a city to see available vehicles and packages.</p>
+ </div>
+ </div>
+
+ <!-- ===== Step 3: 行程细节 ===== -->
+ <!-- Airport fields -->
  <div class="form-group" id="airportFields">
  <div class="form-row">
  <div>
@@ -473,7 +468,7 @@
  <select class="form-select" id="airport" name="airport" required>
  <option value="" disabled selected>Select airport</option>
  </select>
- 
+ <p class="text-small u-fd04e2ad" id="airportDistanceInfo"></p>
  </div>
  <div>
  <label class="form-label" for="transferDirection">Transfer Direction *</label>
@@ -492,45 +487,27 @@
  <label class="form-label" for="distanceRange">Approximate Distance (km) *</label>
  <select class="form-select" id="distanceRange" name="distanceRange" required>
  <option value="" disabled selected>Select distance range</option>
- <option value="0-30">0–30 km (≈ $35–$50 Economy)</option>
- <option value="30-50">30–50 km (≈ $45–$65 Economy)</option>
- <option value="50-80">50–80 km (≈ $55–$80 Economy)</option>
- <option value="80+">80+ km (≈ $70–$100 Economy)</option>
+ <option value="0-35">0–35 km (included in package)</option>
+ <option value="35-50">35–50 km</option>
+ <option value="50-80">50–80 km</option>
+ <option value="80+">80+ km</option>
  </select>
- <p class="text-small u-fd04e2ad">Distance is pre-filled based on airport. Adjust if your hotel is far from the city center.</p>
+ <p class="text-small u-fd04e2ad">Distances beyond the included 35 km are charged at the published per-km rate.</p>
  </div>
  </div>
 
- <div class="form-group u-93b8ea5b" id="cityFields">
- <div class="form-row">
- <div>
- <label class="form-label" for="hours">Hours Needed</label>
- <select class="form-select" id="hours" name="hours">
- <option value="4">4 hours</option>
- <option value="8" selected>8 hours</option>
- <option value="12">12 hours</option>
- <option value="custom">Custom</option>
- </select>
- </div>
- <div>
- <label class="form-label" for="cityDistanceRange">Trip Distance (km)</label>
- <select class="form-select" id="cityDistanceRange" name="cityDistanceRange">
- <option value="0-150" selected>Within City (0–150 km)</option>
- <option value="150-300">Suburban (150–300 km)</option>
- <option value="300-500">Outside City (300–500 km)</option>
- </select>
- </div>
- </div>
- <div class="form-row u-bc38d4de">
- <div class="u-d5e8c5f3">
- <label class="form-label" for="cityRoute">Route / Area</label>
- <input type="text" class="form-input" id="cityRoute" name="cityRoute" placeholder="e.g., Downtown sightseeing, Booking Attraction, Zhouzhuang" aria-label="City route or sightseeing plan">
- <p class="text-small u-fd04e2ad">Tell us where you're going and we'll estimate the distance range.</p>
- </div>
+ <!-- Charter fields -->
+ <div class="form-group u-93b8ea5b" id="charterFields" style="display:none">
+ <div class="form-group u-bc38d4de">
+ <label class="form-label" for="charterRoute">Route / Area *</label>
+ <input type="text" class="form-input" id="charterRoute" name="charterRoute" placeholder="e.g., Downtown sightseeing, Terracotta Warriors, Zhouzhuang" aria-label="Charter route or sightseeing plan">
+ <p class="text-small u-fd04e2ad">Tell us where you're going — the package covers the listed hours and distance.</p>
+ <div id="charterTiers"></div>
  </div>
  </div>
 
- <div class="form-group u-93b8ea5b" id="intercityFields">
+ <!-- Intercity fields -->
+ <div class="form-group u-93b8ea5b" id="intercityFields" style="display:none">
  <div class="form-row">
  <div>
  <label class="form-label" for="fromCity">From</label>
@@ -538,59 +515,53 @@
  </div>
  <div>
  <label class="form-label" for="toCity">To</label>
- <input type="text" class="form-input" id="toCity" name="toCity" placeholder="e.g., Booking Attraction" aria-label="Destination city">
+ <input type="text" class="form-input" id="toCity" name="toCity" placeholder="e.g., Shanghai" aria-label="Destination city">
  </div>
  </div>
+ <p class="text-small u-fd04e2ad">Intercity transfers are priced at the same published rate as airport transfers for the departure city.</p>
  </div>
 
- <!-- Custom Address (conditional) -->
- <div class="form-group u-93b8ea5b" id="customAddressGroup">
- <label class="form-label" for="customAddress">Custom Address</label>
- <input type="text" class="form-input" id="customAddress" name="customAddress" placeholder="Hotel name or full address" aria-label="Custom pickup or drop-off address">
+ <!-- 超时 / 超里程 -->
+ <div class="form-group" id="overtimeGroup">
+ <label class="form-label">Estimated Overage (optional)</label>
+ <div class="form-row">
+ <div>
+ <label class="form-label" for="extraMinutes">Extra Time (minutes)</label>
+ <input type="number" class="form-input" id="extraMinutes" name="extraMinutes" min="0" step="15" value="0" placeholder="0" aria-label="Estimated extra driving minutes">
+ </div>
+ <div>
+ <label class="form-label" for="extraKm">Extra Distance (km)</label>
+ <input type="number" class="form-input" id="extraKm" name="extraKm" min="0" step="5" value="0" placeholder="0" aria-label="Estimated extra kilometers">
+ </div>
+ </div>
+ <p class="text-small u-fd04e2ad" id="overtimeHint">Charged at the published rate for your city and vehicle. Final settlement is confirmed by our team.</p>
+ </div>
+
+ <!-- Flight Details (conditional) -->
+ <div class="form-group" id="flightGroup">
+ <div class="form-row">
+ <div>
+ <label class="form-label" for="flightNumber">Flight Number (optional)</label>
+ <input type="text" class="form-input" id="flightNumber" name="flightNumber" placeholder="e.g., CA981" aria-label="Flight number">
+ </div>
+ <div>
+ <label class="form-label" for="airline">Airline (optional)</label>
+ <input type="text" class="form-input" id="airline" name="airline" placeholder="e.g., Air China" aria-label="Airline name">
+ </div>
+ </div>
  </div>
 
  <!-- Date & Time -->
  <div class="form-group">
  <div class="form-row">
  <div>
- <label class="form-label" for="date">Date</label>
+ <label class="form-label" for="date">Pick-up Date *</label>
  <input type="date" class="form-input" id="date" name="date" required>
  </div>
  <div>
- <label class="form-label" for="time">Time</label>
+ <label class="form-label" for="time">Pick-up Time *</label>
  <input type="time" class="form-input" id="time" name="time" required>
  </div>
- </div>
- </div>
-
- <!-- Vehicle Type -->
- <div class="form-group">
- <label class="form-label">Vehicle Type</label>
- <div class="form-row u-b207d191">
- <label class="vehicle-option u-10123434">
- <input type="radio" name="vehicle" value="economy" checked class="u-93b8ea5b">
- <div class="vehicle-option-box u-d57eba37">
- <div class="u-6e844ab5">Economy</div>
- <div class="u-6ee65de0">Sedan · 3 pax · 2 bags</div>
- <div class="vehicle-price u-583db0b0" data-base="50">From $50</div>
- </div>
- </label>
- <label class="vehicle-option u-10123434">
- <input type="radio" name="vehicle" value="business" class="u-93b8ea5b">
- <div class="vehicle-option-box u-d57eba37">
- <div class="u-6e844ab5">Business</div>
- <div class="u-6ee65de0">Premium · 3 pax · 2 bags</div>
- <div class="vehicle-price u-583db0b0" data-base="80">From $80</div>
- </div>
- </label>
- <label class="vehicle-option u-10123434">
- <input type="radio" name="vehicle" value="mpv" class="u-93b8ea5b">
- <div class="vehicle-option-box u-d57eba37">
- <div class="u-6e844ab5">MPV</div>
- <div class="u-6ee65de0">Van · 6 pax · 4 bags</div>
- <div class="vehicle-price u-583db0b0" data-base="105">From $105</div>
- </div>
- </label>
  </div>
  </div>
 
@@ -606,7 +577,20 @@
  <option value="4">4</option>
  <option value="5">5</option>
  <option value="6">6</option>
- <option value="7+">7+</option>
+ <option value="7">7</option>
+ <option value="8">8</option>
+ <option value="9+">9+</option>
+ <option value="10+">10+</option>
+ <option value="11+">11+</option>
+ <option value="12+">12+</option>
+ <option value="13+">13+</option>
+ <option value="14+">14+</option>
+ <option value="15+">15+</option>
+ <option value="16+">16+</option>
+ <option value="17+">17+</option>
+ <option value="18+">18+</option>
+ <option value="19+">19+</option>
+ <option value="20+">20+</option>
  </select>
  </div>
  <div>
@@ -617,24 +601,26 @@
  <option value="2" selected>2</option>
  <option value="3">3</option>
  <option value="4">4</option>
- <option value="5+">5+</option>
+ <option value="5">5</option>
+ <option value="6">6</option>
+ <option value="7">7</option>
+ <option value="8">8</option>
+ <option value="9">9</option>
+ <option value="10">10</option>
+ <option value="11">11</option>
+ <option value="12">12</option>
+ <option value="13+">13+</option>
+ <option value="14+">14+</option>
+ <option value="15+">15+</option>
+ <option value="16+">16+</option>
+ <option value="17+">17+</option>
+ <option value="18+">18+</option>
+ <option value="19+">19+</option>
+ <option value="20+">20+</option>
  </select>
  </div>
  </div>
- </div>
-
- <!-- Flight Details (conditional) -->
- <div class="form-group" id="flightGroup">
- <div class="form-row">
- <div>
- <label class="form-label" for="flightNumber">Flight Number (optional)</label>
- <input type="text" class="form-input" id="flightNumber" name="flightNumber" placeholder="e.g., CA981" aria-label="Flight number">
- </div>
- <div>
- <label class="form-label" for="airline">Airline (optional)</label>
- <input type="text" class="form-input" id="airline" name="airline" placeholder="e.g., Air China" aria-label="Airline name">
- </div>
- </div>
+ <p class="text-small u-fd04e2ad" id="capacityHint"></p>
  </div>
 
  <!-- Contact Details -->
@@ -656,7 +642,7 @@
  <div class="form-row">
  <div>
  <label class="form-label" for="email">Email *</label>
- <input type="email" class="form-input" id="email" name="email" required placeholder="15527771775@qq.com" aria-label="Email address">
+ <input type="email" class="form-input" id="email" name="email" required placeholder="your@email.com" aria-label="Email address">
  </div>
  <div>
  <label class="form-label" for="phone">Phone / WhatsApp *</label>
@@ -681,24 +667,48 @@
  </label>
  <label class="u-aa4a0616">
  <input type="checkbox" name="extras" value="meetgreet" class="u-897b8581">
- <span>Name Board Meet & Greet <span class="u-fdaeaff1">(Included)</span></span>
+ <span>Name Board Meet &amp; Greet <span class="u-fdaeaff1">(Included)</span></span>
  </label>
  <label class="u-aa4a0616">
  <input type="checkbox" name="extras" value="wifi" class="u-897b8581">
- <span>In-Car WiFi <span class="u-fdaeaff1">(Business+ only, Free)</span></span>
+ <span>In-Car WiFi <span class="u-fdaeaff1">(Free)</span></span>
  </label>
  </div>
  </div>
 
  <button type="submit" class="btn btn-primary btn-large u-84ae2b6d">
- Book
+ Continue to Payment
  </button>
  <p class="text-small text-center u-99925db2">
- Pay with PayPal, Alipay, or Alipay. No credit card required. <br>
- CNY pricing available for domestic Chinese payments. </p>
- </form>
+ Pay with PayPal or Alipay. No credit card required. <br>
+ Published prices in CNY; USD shown for reference at 1 USD = 7.10 CNY.
+ </p>
+</form>
  </div>
 
+
+ <!-- Live Quote Panel -->
+ <div class="quote-panel" id="quotePanel">
+ <div class="quote-panel-head">
+ <span class="quote-panel-title">Live Price Breakdown</span>
+ <span class="quote-panel-rate">1 USD = 7.10 CNY</span>
+ </div>
+ <div class="quote-rows" id="quoteRows">
+ <div class="quote-row"><span>Select a city, vehicle and package to see your price</span></div>
+ </div>
+ <div class="quote-warnings" id="quoteWarnings"></div>
+ <div class="quote-total">
+ <div class="quote-total-item">
+ <span class="quote-total-label">Total</span>
+ <span class="quote-total-cny" id="quoteTotalCny">—</span>
+ </div>
+ <div class="quote-total-item">
+ <span class="quote-total-label">USD reference</span>
+ <span class="quote-total-usd" id="quoteTotalUsd">—</span>
+ </div>
+ </div>
+ <p class="quote-note" id="quoteNote"></p>
+ </div>
  <!-- Booking Summary -->
  <div class="booking-summary">
  <h3>Booking Summary</h3>
@@ -734,7 +744,7 @@
  </div>
  <div class="booking-summary-total">
  <span>Estimated Total</span>
- <span id="summaryPrice">$50</span>
+ <span><span id="summaryPrice">—</span> <span id="summaryPriceCny"></span></span>
  </div>
  <p class="u-39e13bea">
  Final quote confirmed after booking. PayPal, Alipay accepted. </p>
@@ -989,6 +999,7 @@
   <div data-footer-col="company">
    <div class="footer-title">Company</div>
    <ul class="footer-links">
+      <li><a href="prices.html">Published Prices</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="cancellation.html">Cancellation Policy</a></li>
@@ -1031,8 +1042,9 @@
 
  <!-- Price Display -->
  <div class="price-display">
- <div class="price-usd" id="modalPriceUsd">$0</div>
- <div class="price-cny">≈ <span class="cny-amount" id="modalPriceCny">¥0</span> CNY</div>
+ <div class="price-usd price-cny-primary"><span class="cny-amount" id="modalPriceCny">¥0</span> CNY</div>
+ <div class="price-cny">≈ <span class="usd-amount" id="modalPriceUsd">$0</span> USD <span class="rate-note">(1 USD = 7.10 CNY)</span></div>
+ <p class="text-small text-center u-fd04e2ad">Final price is recalculated and confirmed by our team before dispatch.</p>
  </div>
 
  <!-- Payment Tabs -->
@@ -1087,7 +1099,9 @@
  </div>
 
  <script src="scripts.js"></script>
+ <script src="js/pricing-core.js"></script>
  <script src="js/distance-db.js"></script>
+ <script src="js/airport-db.js"></script>
 
 <script src="js/security.js"></script>
 <script src="js/booking.js"></script>

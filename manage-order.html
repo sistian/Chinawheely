@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage Your Booking | Chinawheely</title>
+<meta name="description" content="View or reschedule your Chinawheely booking with your order number.">
+<meta property="og:image" content="https://www.chinawheely.com/images/og-image.webp"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.chinawheely.com/manage-order.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.chinawheely.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#1f2937;line-height:1.6;background:#f8fafc;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:32px 20px 60px}
+h1{font-size:26px;margin-bottom:6px;color:#1B4D3E}
+.sub{color:#64748b;margin-bottom:24px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:16px}
+.card h2{font-size:17px;margin-bottom:14px;color:#0f172a}
+.kv{display:grid;grid-template-columns:160px 1fr;gap:8px 12px;font-size:14px}
+.kv dt{color:#64748b}.kv dd{word-break:break-word;font-weight:500}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.st-pending{background:#FFF4E0;color:#B26A00}.st-confirmed{background:#E4F4EC;color:#1B4D3E}
+.st-in_service{background:#E7F0FA;color:#1B4D8F}.st-completed{background:#EDEFEE;color:#64748b}
+.st-cancelled,.st-no_show{background:#FBE9E7;color:#B3261E}
+.pay-unpaid{background:#FBE9E7;color:#B3261E}.pay-payment_submitted{background:#FFF4E0;color:#B26A00}
+.pay-paid{background:#E4F4EC;color:#1B4D3E}.pay-refunded,.pay-failed{background:#F1F3F2;color:#64748b}
+.total{font-size:22px;font-weight:700;color:#dc2626}
+.usdref{font-size:14px;color:#64748b;font-weight:400}
+.breakdown{margin-top:10px;font-size:13px;color:#475569}
+.breakdown .line{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #e2e8f0}
+form .fld{margin-bottom:14px}
+label{display:block;font-size:13px;color:#475569;margin-bottom:4px}
+input{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+button{cursor:pointer;background:#1B4D3E;color:#fff;border:0;padding:11px 22px;border-radius:8px;font-size:15px;font-weight:600}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.ghost{background:#fff;color:#1B4D3E;border:1px solid #1B4D3E}
+.msg{margin-top:10px;font-size:14px;min-height:20px}
+.err{color:#B3261E}.good{color:#1B4D3E}
+.notice{background:#FFF7E6;border:1px solid #F5D8A0;border-radius:10px;padding:12px 16px;font-size:13px;color:#7a5200;margin-bottom:16px}
+.lookup{display:flex;gap:10px;flex-wrap:wrap}
+.lookup input{flex:1;min-width:200px}
+.support{font-size:13px;color:#64748b;margin-top:6px}
+a{color:#1B4D3E}
+.hidden{display:none}
+.rules{font-size:13px;color:#64748b;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <h1>Manage Your Booking</h1>
+ <p class="sub">View your booking details or reschedule your pickup (free up to 48 hours before departure).</p>
+
+ <!-- 查单表单（无 token 时显示） -->
+ <div class="card" id="lookupCard">
+  <h2>Find your booking</h2>
+  <p style="font-size:14px;color:#64748b;margin-bottom:12px">Enter the order number and management token from your confirmation email.</p>
+  <div class="lookup">
+   <input id="inRef" placeholder="CWO-20260101-A1B2C3D4" aria-label="Order number">
+   <input id="inToken" placeholder="Management token" aria-label="Management token">
+   <button id="btnLookup">Look up</button>
+  </div>
+  <div class="msg err" id="lookupMsg"></div>
+ </div>
+
+ <!-- 订单视图 -->
+ <div id="orderView" class="hidden">
+  <div class="card">
+   <h2 style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+     <span id="oRef"></span>
+     <span><span class="tag" id="oStatus"></span> <span class="tag" id="oPay"></span></span>
+   </h2>
+   <dl class="kv" id="oKv"></dl>
+   <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0">
+    <div class="total" id="oTotal"></div>
+    <div class="breakdown" id="oBreakdown"></div>
+   </div>
+  </div>
+
+  <div class="card" id="rescheduleCard">
+   <h2>Reschedule pickup</h2>
+   <div class="notice hidden" id="modBlocked"></div>
+   <form id="modForm">
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+     <div class="fld" style="flex:1;min-width:160px"><label for="modDate">New date</label><input type="date" id="modDate"></div>
+     <div class="fld" style="flex:1;min-width:120px"><label for="modTime">New time</label><input type="time" id="modTime"></div>
+    </div>
+    <div class="row" style="display:flex;gap:10px">
+     <button type="submit" id="btnSave">Save changes</button>
+    </div>
+    <div class="msg" id="modMsg"></div>
+   </form>
+   <p class="rules">Free changes up to <strong>48 hours before pickup</strong> (Beijing time). Within 48 hours, please contact us directly.</p>
+  </div>
+
+  <div class="card">
+   <h2>Need help?</h2>
+   <p class="support">WhatsApp / WeChat: <strong>+86 155 2777 1775</strong> (Beijing time 8:00–24:00) · <a href="mailto:15527771775@qq.com">15527771775@qq.com</a></p>
+   <p class="support"><a href="index.html">&larr; Back to Chinawheely</a></p>
+  </div>
+ </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var API = 'https://api.chinawheely.com/api';
+  var ref = null, token = null, order = null, selfModify = null;
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  var STATUS_LABEL = {
+    pending: 'Pending confirmation', confirmed: 'Confirmed', in_service: 'In service',
+    completed: 'Completed', cancelled: 'Cancelled', no_show: 'No show'
+  };
+  var PAY_LABEL = {
+    unpaid: 'Unpaid', payment_submitted: 'Payment under review', paid: 'Paid',
+    refunded: 'Refunded', failed: 'Payment failed'
+  };
+  var PRODUCT_LABEL = {
+    airport: 'Airport transfer', charter: 'Hourly charter', intercity: 'Intercity transfer'
+  };
+
+  // URL 里带 ref/token 时直接加载
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('ref') && qs.get('token')) {
+    ref = qs.get('ref'); token = qs.get('token');
+    $('lookupCard').classList.add('hidden');
+    load();
+  }
+
+  $('btnLookup').addEventListener('click', function () {
+    ref = $('inRef').value.trim().toUpperCase();
+    token = $('inToken').value.trim();
+    $('lookupMsg').textContent = '';
+    if (!ref || !token) { $('lookupMsg').textContent = 'Please enter both fields.'; return; }
+    load();
+  });
+
+  function load() {
+    fetch(API + '/order?ref=' + encodeURIComponent(ref) + '&token=' + encodeURIComponent(token))
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, data: j }; }); })
+      .then(function (r) {
+        if (!r.ok) {
+          if (!$('lookupCard').classList.contains('hidden')) {
+            $('lookupMsg').textContent = r.data.error || 'Order not found.';
+          } else {
+            $('orderView').classList.remove('hidden');
+            $('oKv').innerHTML = '<dt>Error</dt><dd>' + esc(r.data.error || 'Order not found') + '</dd>';
+          }
+          return;
+        }
+        order = r.data.order;
+        selfModify = r.data.self_modify || {};
+        render();
+      })
+      .catch(function () { $('lookupMsg').textContent = 'Network error, please retry.'; });
+  }
+
+  function render() {
+    $('lookupCard').classList.add('hidden');
+    $('orderView').classList.remove('hidden');
+    $('oRef').textContent = order.ref;
+    var st = $('oStatus');
+    st.textContent = STATUS_LABEL[order.status] || order.status;
+    st.className = 'tag st-' + order.status;
+    var py = $('oPay');
+    py.textContent = PAY_LABEL[order.payment_status] || order.payment_status;
+    py.className = 'tag pay-' + order.payment_status;
+
+    var q = order.quote || {};
+    var route = q.routeSummary || (q.lines && q.lines.length ? q.lines[0].label : '');
+    var items = [
+      ['Service', PRODUCT_LABEL[order.product] || order.product || '-'],
+      ['City', order.city || '-'],
+      ['Vehicle', order.vehicle || (q.vehicleLabel || '-')],
+      ['Route', route || '-'],
+      ['Pickup', (order.pickup_date || '-') + (order.pickup_time ? ' ' + order.pickup_time : '')],
+      ['Passengers', order.pax || '-'],
+      ['Luggage', order.luggage != null ? order.luggage : '-'],
+      ['Booked at', order.created_at ? String(order.created_at).replace('T', ' ').slice(0, 16) : '-']
+    ];
+    if (order.notes) items.push(['Notes', order.notes]);
+    $('oKv').innerHTML = items.map(function (it) {
+      return '<dt>' + esc(it[0]) + '</dt><dd>' + esc(it[1]) + '</dd>';
+    }).join('');
+
+    $('oTotal').innerHTML = order.total_cny != null
+      ? '¥' + order.total_cny + (order.total_usd != null ? ' <span class="usdref">≈ $' + order.total_usd + '</span>' : '')
+      : 'Quote on request';
+
+    if (q.lines && q.lines.length) {
+      $('oBreakdown').innerHTML = q.lines.map(function (l) {
+        return '<div class="line"><span>' + esc(l.label) + '</span><span>¥' + esc(l.amount) + '</span></div>';
+      }).join('');
+    }
+
+    // 改期区
+    if (selfModify.allowed) {
+      $('modDate').value = order.pickup_date || '';
+      $('modTime').value = order.pickup_time || '';
+    } else {
+      var reason = selfModify.reason === 'WITHIN_48H'
+        ? 'Your pickup is within 48 hours — changes need our team. Please contact support below.'
+        : 'This booking cannot be self-modified online. Please contact support below.';
+      $('modBlocked').textContent = reason;
+      $('modBlocked').classList.remove('hidden');
+      $('modDate').disabled = true;
+      $('modTime').disabled = true;
+      $('btnSave').disabled = true;
+    }
+  }
+
+  $('modForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!order) return;
+    $('modMsg').textContent = '';
+    $('modMsg').className = 'msg';
+    $('btnSave').disabled = true;
+    fetch(API + '/order', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: ref, token: token, pickup_date: $('modDate').value, pickup_time: $('modTime').value })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, data: j }; }); })
+      .then(function (r) {
+        $('btnSave').disabled = false;
+        if (!r.ok) { $('modMsg').className = 'msg err'; $('modMsg').textContent = r.data.error || 'Update failed.'; return; }
+        $('modMsg').className = 'msg good';
+        $('modMsg').textContent = 'Pickup time updated ✓';
+        if (r.data.order) { order = r.data.order; render(); }
+      })
+      .catch(function () {
+        $('btnSave').disabled = false;
+        $('modMsg').className = 'msg err';
+        $('modMsg').textContent = 'Network error, please retry.';
+      });
+  });
+})();
+</script>
+</body>
+</html>

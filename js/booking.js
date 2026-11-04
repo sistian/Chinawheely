@@ -1,511 +1,844 @@
-// ========== CITY TIER PRICING ==========
-const TIER1 = ['beijing','shanghai','guangzhou','shenzhen'];     // 1.0
-const TIER2 = ['chengdu','hangzhou','wuhan','chongqing','nanjing','suzhou','tianjin','xian','qingdao','xiamen','dalian','changsha','zhengzhou','harbin','jinan']; // 0.85
-function getCityTierMultiplier(city) {
-  if (!city) return 1.0;
-  if (TIER1.includes(city)) return 1.0;
-  if (TIER2.includes(city)) return 0.85;
-  return 0.70; // Tier 3 — all other cities
+// ========== Chinawheely Booking v2 (P2) ==========
+// 真实报价引擎：数据来自 pricing/pricing.json，算法与后端共用 js/pricing-core.js。
+// 前端只做展示与预估；提交后由服务端重算价格（权威值）。
+
+var PRICE_DATA = null;          // pricing.json
+var CITY_LIST = [];             // 有价城市
+var QUOTE_RESULT = null;        // 最近一次报价
+var QUOTE_TOKEN = 0;            // 防竞态
+var currentPrice = 0;
+var USD_RATE = 7.10;
+
+var el = function (id) { return document.getElementById(id); };
+
+// ============================================================
+//  载入价格数据
+// ============================================================
+function loadPricingData(cb) {
+  if (PRICE_DATA) { cb && cb(); return; }
+  fetch('/pricing/pricing.json', { cache: 'no-cache' })
+    .then(function (r) {
+      if (!r.ok) throw new Error('pricing ' + r.status);
+      return r.json();
+    })
+    .then(function (d) {
+      PRICE_DATA = d;
+      if (d.meta && d.meta.usdCnyRate) USD_RATE = d.meta.usdCnyRate;
+      CITY_LIST = window.CWPricing.listPricedCities(d);
+      cb && cb();
+    })
+    .catch(function () {
+      // 降级：后端报价接口仍可用，但选项列表需要硬编码兜底
+      PRICE_DATA = null;
+      cb && cb();
+    });
 }
 
-// ========== BASE PRICES ==========
-const basePrices = { economy: 50, business: 80, mpv: 105 };
+// ============================================================
+//  城市下拉
+// ============================================================
+function populateCities() {
+  var sel = el('city');
+  if (!sel) return;
+  sel.innerHTML = '<option value="" disabled selected>Select your city</option>';
 
-// Update airport dropdown based on city
-function updateAirportInfo() {
-  const city = document.getElementById('city').value;
-  const airportSelect = document.getElementById('airport');
-  const infoEl = document.getElementById('airportDistanceInfo');
-  const distRange = document.getElementById('distanceRange');
-
-  if (!airportSelect) return;
-  const currentVal = airportSelect.value;
-
-  // Clear existing options
-  while (airportSelect.firstChild) {
-    airportSelect.removeChild(airportSelect.firstChild);
+  if (!CITY_LIST.length) {
+    var opt = document.createElement('option');
+    opt.value = 'other';
+    opt.textContent = 'Other city (quote on request)';
+    sel.appendChild(opt);
+    renderVehicles();
+    return;
   }
 
-  // Add default option
-  const defaultOpt = document.createElement('option');
-  defaultOpt.value = '';
-  defaultOpt.disabled = true;
-  defaultOpt.selected = true;
-  defaultOpt.textContent = 'Select airport';
-  airportSelect.appendChild(defaultOpt);
+  // 分组：热门入境口岸 / 其他有价城市
+  var hot = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'chengdu',
+    'hangzhou', 'xian', 'wuhan'];
+  var g1 = document.createElement('optgroup');
+  g1.label = 'Top Entry Points (Most Popular)';
+  var g2 = document.createElement('optgroup');
+  g2.label = 'Cities with Published Prices';
 
-  // Add airport options from distance-db.js
-  const airports = getAirportsForCity(city); // from distance-db.js
-  airports.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.code;
-    opt.textContent = a.name;
-    airportSelect.appendChild(opt);
+  CITY_LIST.forEach(function (c) {
+    var o = document.createElement('option');
+    o.value = c.slug;
+    o.textContent = c.cn + ' ' + c.en + ' — From ¥' + c.fromCny;
+    if (hot.indexOf(c.slug) >= 0) g1.appendChild(o);
+    else g2.appendChild(o);
   });
 
-  // Restore selection if possible
-  if (currentVal && airports.find(a => a.code === currentVal)) {
-    airportSelect.value = currentVal;
-  }
+  var other = document.createElement('optgroup');
+  other.label = 'Other Destinations';
+  var oo = document.createElement('option');
+  oo.value = 'other';
+  oo.textContent = 'Other city / not listed (quote on request)';
+  other.appendChild(oo);
 
-  // Auto-populate distance range based on selected airport
-  if (airportSelect.value && distRange) {
-    const a = airports.find(x => x.code === airportSelect.value);
-    if (a) {
-      let range = '0-30';
-      if (a.dist > 80) range = '80+';
-      else if (a.dist > 50) range = '50-80';
-      else if (a.dist > 30) range = '30-50';
-      distRange.value = range;
-      if (infoEl) {
-        infoEl.textContent = a.name + ' — ~' + a.dist + ' km to city center';
-      }
-    }
-  } else if (infoEl) {
-    infoEl.textContent = '';
-  }
-  updateForm();
+  sel.appendChild(g1);
+  sel.appendChild(g2);
+  sel.appendChild(other);
 }
 
-// ========== MAIN UPDATE FORM ==========
-function updateForm() {
-  const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
-  const city = document.getElementById('city').value;
-  const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
-  const date = document.getElementById('date').value;
-  const time = document.getElementById('time').value;
-  const passengers = document.getElementById('passengers').value;
-  const hours = document.getElementById('hours').value;
-  const fromCity = document.getElementById('fromCity').value;
-  const toCity = document.getElementById('toCity').value;
-  const airport = document.getElementById('airport').value;
-  const transferDirection = document.getElementById('transferDirection').value;
-  const hotelAddress = document.getElementById('hotelAddress').value;
-  const distanceRange = document.getElementById('distanceRange').value;
-  const cityRoute = document.getElementById('cityRoute').value;
+// ============================================================
+//  车型 / 套餐卡片
+// ============================================================
+function currentProduct() {
+  var r = document.querySelector('input[name="product"]:checked');
+  return r ? r.value : 'airport';
+}
 
-  // Toggle fields
-  const airportFields = document.getElementById('airportFields');
-  const cityFields = document.getElementById('cityFields');
-  const intercityFields = document.getElementById('intercityFields');
-  const flightGroup = document.getElementById('flightGroup');
-  if (airportFields) airportFields.style.display = serviceType === 'airport' ? 'block' : 'none';
-  if (cityFields) cityFields.style.display = serviceType === 'city' ? 'block' : 'none';
-  if (intercityFields) intercityFields.style.display = serviceType === 'intercity' ? 'block' : 'none';
-  if (flightGroup) flightGroup.style.display = serviceType === 'airport' ? 'block' : 'none';
+function citySlug() {
+  var c = el('city');
+  return c ? c.value : '';
+}
 
-  // ====== SMART DISTANCE ESTIMATION (from distance-db.js) ======
-  if (serviceType === 'airport' && city && airport && hotelAddress) {
-    const estimate = smartDistanceEstimate(hotelAddress, city, airport);
-    if (estimate) {
-      const infoEl = document.getElementById('airportDistanceInfo');
-      if (infoEl) {
-        // Build text content safely (no innerHTML)
-        infoEl.textContent = '';
-        const checkSpan = document.createElement('span');
-        checkSpan.style.color = 'var(--color-primary)';
-        checkSpan.textContent = '✓ ';
-        infoEl.appendChild(checkSpan);
-        infoEl.appendChild(document.createTextNode('Detected: ' + estimate.zone + ' — ~' + estimate.totalDist + ' km total'));
-      }
-      // Auto-update distance range if not manually changed by user
-      const distRange = document.getElementById('distanceRange');
-      if (distRange && !distRange.dataset.userChanged) {
-        distRange.value = estimate.range;
-      }
-    }
+function renderVehicles() {
+  var row = el('vehicleRow');
+  if (!row) return;
+  var slug = citySlug();
+
+  row.innerHTML = '';
+
+  if (!slug || slug === 'other' || !PRICE_DATA) {
+    var p = document.createElement('p');
+    p.className = 'text-small';
+    p.id = 'vehiclePlaceholder';
+    p.textContent = slug === 'other'
+      ? 'This destination is quoted on request — submit the form and we will send a fixed quote within 2 hours.'
+      : 'Select a city to see available vehicles and packages.';
+    row.appendChild(p);
+    updateAirportOptions();
+    refreshQuote();
+    return;
   }
 
-  // Update airport info when city changes
-  if (serviceType === 'airport') {
-    const airportSelect = document.getElementById('airport');
-    const infoEl = document.getElementById('airportDistanceInfo');
-    const airports = getAirportsForCity(city); // from distance-db.js
-    if (airport && airportSelect) {
-      const a = airports.find(x => x.code === airport);
-      if (a && infoEl && !hotelAddress) {
-        infoEl.textContent = a.name + ' — ~' + a.dist + ' km to city center';
-      }
-    }
-  }
+  var opts = window.CWPricing.cityOptions(PRICE_DATA, slug);
+  if (!opts) { renderVehiclesFallback(); return; }
 
-  // Update summary text
-  const summaryService = document.getElementById('summaryService');
-  if (summaryService) summaryService.textContent =
-    serviceType === 'airport' ? 'Airport Transfer' :
-    serviceType === 'city' ? 'City Car Service' : 'Intercity Trip';
+  var product = currentProduct();
+  var list, tiered;
 
-  const summaryCity = document.getElementById('summaryCity');
-  if (summaryCity) summaryCity.textContent = city ?
-    city.charAt(0).toUpperCase() + city.slice(1) : '-';
-
-  let routeText = '-';
-  if (serviceType === 'airport' && airport && transferDirection) {
-    const dir = transferDirection === 'airport-to-hotel' ? 'Pickup' : 'Drop-off';
-    routeText = airport + ' ' + dir;
-    if (hotelAddress) routeText += ' → ' + hotelAddress.substring(0, 30) + (hotelAddress.length > 30 ? '...' : '');
-    if (distanceRange) routeText += ' (' + getDistanceRangeLabel(distanceRange) + ')';
-  } else if (serviceType === 'city') {
-    routeText = hours + ' hours';
-    const cityDistRange = document.getElementById('cityDistanceRange').value;
-    const distLabel = { '0-150': 'Within City', '150-300': 'Suburban', '300-500': 'Outside City' };
-    routeText += ' (' + (distLabel[cityDistRange] || 'Within City') + ')';
-    if (cityRoute) routeText += ' — ' + cityRoute;
-  } else if (serviceType === 'intercity' && fromCity && toCity) {
-    routeText = fromCity + ' → ' + toCity;
-  }
-  const summaryRoute = document.getElementById('summaryRoute');
-  if (summaryRoute) summaryRoute.textContent = routeText;
-
-  const summaryDateTime = document.getElementById('summaryDateTime');
-  if (summaryDateTime) summaryDateTime.textContent = (date && time) ? (date + ' ' + time) : '-';
-
-  const summaryVehicle = document.getElementById('summaryVehicle');
-  if (summaryVehicle) summaryVehicle.textContent = vehicle.charAt(0).toUpperCase() + vehicle.slice(1);
-
-  const summaryPassengers = document.getElementById('summaryPassengers');
-  if (summaryPassengers) summaryPassengers.textContent = passengers;
-
-  // ====== PRICE CALCULATION ======
-  let price = basePrices[vehicle] || 51;
-  const cityMult = getCityTierMultiplier(city);
-  price *= cityMult;
-
-  if (serviceType === 'airport') {
-    // Airport: base × city × distance multiplier
-    price *= getDistanceMultiplier(distanceRange);
-  } else if (serviceType === 'city') {
-    // City: base × city × hour multiplier × distance multiplier
-    const hourMult = { '4': 1.0, '8': 1.8, '12': 2.5, 'custom': 2.0 };
-    price *= (hourMult[hours] || 1.8);
-    const cityDistRange = document.getElementById('cityDistanceRange').value;
-    const distMult = { '0-150': 1.0, '150-300': 2.0, '300-500': 4.0 };
-    price *= (distMult[cityDistRange] || 1.0);
-  } else if (serviceType === 'intercity') {
-    // Intercity: base × 1.5 (fixed)
-    price *= 1.5;
-  }
-
-  // Round to nearest 5
-  price = Math.round(price / 5) * 5;
-  const summaryPrice = document.getElementById('summaryPrice');
-  if (summaryPrice) summaryPrice.textContent = '$' + price;
-
-  // Update vehicle price labels (show min price for this city & service)
-  document.querySelectorAll('.vehicle-price').forEach(el => {
-    const base = parseInt(el.dataset.base);
-    let vPrice = base * cityMult;
-    if (serviceType === 'airport') {
-      // Use shortest distance (0-30 = 1.0) for the "From" price label
-      vPrice *= 1.0;
-    } else if (serviceType === 'city') {
-      vPrice *= 1.0; // 4h minimum
-      vPrice *= 1.0; // within city (0-150km) minimum
-    } else if (serviceType === 'intercity') {
-      vPrice *= 1.5;
-    }
-    vPrice = Math.round(vPrice / 5) * 5;
-    el.textContent = 'From $' + vPrice;
-  });
-
-  // Extras
-  const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(el => {
-    const map = { childseat: 'Child Seat', meetgreet: 'Meet & Greet', wifi: 'WiFi' };
-    return map[el.value];
-  });
-  const summaryExtrasRow = document.getElementById('summaryExtrasRow');
-  const summaryExtras = document.getElementById('summaryExtras');
-  if (extras.length > 0) {
-    if (summaryExtrasRow) summaryExtrasRow.style.display = 'flex';
-    if (summaryExtras) summaryExtras.textContent = extras.join(', ');
+  if (product === 'charter') {
+    list = opts.charter;
+    tiered = true;
   } else {
-    if (summaryExtrasRow) summaryExtrasRow.style.display = 'none';
+    list = opts.airport;
+    tiered = false;
   }
+
+  if (!list.length) {
+    var warn = document.createElement('p');
+    warn.className = 'text-small';
+    warn.textContent = 'No published package for this city and service type — please submit the form for a quote.';
+    row.appendChild(warn);
+    refreshQuote();
+    return;
+  }
+
+  list.forEach(function (v) {
+    var label = document.createElement('label');
+    label.className = 'vehicle-option u-10123434';
+
+    var input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'vehicleChoice';
+    input.className = 'u-93b8ea5b';
+    input.value = v.key;
+
+    var box = document.createElement('div');
+    box.className = 'vehicle-option-box u-d57eba37';
+
+    var name = document.createElement('div');
+    name.className = 'u-6e844ab5';
+    name.textContent = v.name;
+
+    var spec = document.createElement('div');
+    spec.className = 'u-6ee65de0';
+    spec.textContent = v.seats + ' pax · ' + v.bags + ' bags';
+
+    var price = document.createElement('div');
+    price.className = 'vehicle-price u-583db0b0';
+    price.setAttribute('data-key', v.key);
+
+    box.appendChild(name);
+    box.appendChild(spec);
+    box.appendChild(price);
+    label.appendChild(input);
+    label.appendChild(box);
+    row.appendChild(label);
+
+    input.addEventListener('change', function () {
+      if (tiered) renderTiers(v);
+      refreshQuote();
+    });
+  });
+
+  // 默认选第一个
+  var first = row.querySelector('input[name="vehicleChoice"]');
+  if (first) {
+    first.checked = true;
+    if (tiered) renderTiers(list[0]);
+  }
+
+  updateAirportOptions();
+  refreshQuote();
 }
 
-// Set default date to tomorrow
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
-const dateEl = document.getElementById('date');
-if (dateEl) dateEl.value = tomorrow.toISOString().split('T')[0];
-const timeEl = document.getElementById('time');
-if (timeEl) timeEl.value = '10:00';
-
-// ========== FORM SUBMISSION ==========
-let currentPrice = 0;
-let exchangeRate = 7.25;
-
-const bookingForm = document.getElementById('bookingForm');
-if (bookingForm) {
-  bookingForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Honeypot
-    const honeypot = document.getElementById('website');
-    if (honeypot && honeypot.value) {
-      showToast('An error occurred. Please try again.', 'error');
+function renderVehiclesFallback() {
+  var row = el('vehicleRow');
+  row.innerHTML = '<p class="text-small">Loading vehicles…</p>';
+  var slug = citySlug();
+  fetchQuoteApi({
+    action: 'options', city: slug
+  }).then(function (r) {
+    if (!r || !r.ok) {
+      row.innerHTML = '<p class="text-small">Unable to load packages. Please submit the form for a quote.</p>';
       return;
     }
-    // Rate limit
-    if (window.ChinawheelySecurity && !window.ChinawheelySecurity.rateLimiter.check('booking')) {
-      showToast('Too many attempts. Please wait a minute.', 'error');
-      return;
-    }
-    // Required fields validation
-    const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
-    if (!document.getElementById('city').value) {
-      showToast('Please select a city', 'error');
-      return;
-    }
-    if (serviceType === 'airport') {
-      if (!document.getElementById('airport').value) {
-        showToast('Please select an airport', 'error');
-        return;
-      }
-      if (!document.getElementById('transferDirection').value) {
-        showToast('Please select transfer direction', 'error');
-        return;
-      }
-      if (!document.getElementById('hotelAddress').value) {
-        showToast('Please enter your hotel address', 'error');
-        return;
-      }
-      if (!document.getElementById('distanceRange').value) {
-        showToast('Please select approximate distance', 'error');
-        return;
-      }
-    }
-    if (serviceType === 'intercity') {
-      if (!document.getElementById('fromCity').value || !document.getElementById('toCity').value) {
-        showToast('Please enter both origin and destination cities', 'error');
-        return;
-      }
-    }
-    if (!document.getElementById('firstName').value || !document.getElementById('lastName').value) {
-      showToast('Please enter your full name', 'error');
-      return;
-    }
-    if (!document.getElementById('email').value || !document.getElementById('phone').value) {
-      showToast('Please enter your contact details', 'error');
-      return;
-    }
+    row.innerHTML = '';
+    var product = currentProduct();
+    var list = product === 'charter' ? r.charter : r.airport;
+    list.forEach(function (v) {
+      var label = document.createElement('label');
+      label.className = 'vehicle-option u-10123434';
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'vehicleChoice';
+      input.className = 'u-93b8ea5b';
+      input.value = v.key;
+      var box = document.createElement('div');
+      box.className = 'vehicle-option-box u-d57eba37';
+      var nm = document.createElement('div');
+      nm.className = 'u-6e844ab5';
+      nm.textContent = v.name;
+      var sp = document.createElement('div');
+      sp.className = 'u-6ee65de0';
+      sp.textContent = v.seats + ' pax · ' + v.bags + ' bags';
+      var pr = document.createElement('div');
+      pr.className = 'vehicle-price u-583db0b0';
+      pr.setAttribute('data-key', v.key);
+      box.appendChild(nm); box.appendChild(sp); box.appendChild(pr);
+      label.appendChild(input); label.appendChild(box);
+      row.appendChild(label);
+      input.addEventListener('change', function () { refreshQuote(); });
+    });
+    var f = row.querySelector('input[name="vehicleChoice"]');
+    if (f) f.checked = true;
+    updateAirportOptions();
+    refreshQuote();
+  });
+}
 
-    // Security checks
-    const formFields = ['firstName','lastName','email','phone','hotelAddress','fromCity','toCity','cityRoute','cityDistanceRange'];
-    for (const fieldId of formFields) {
-      const field = document.getElementById(fieldId);
-      if (field && field.value && window.ChinawheelySecurity && window.ChinawheelySecurity.hasSuspiciousPattern(field.value)) {
-        showToast('Invalid characters detected. Please check your input.', 'error');
-        return;
-      }
-    }
-    const emailField = document.getElementById('email');
-    if (emailField && window.ChinawheelySecurity && !window.ChinawheelySecurity.isValidEmail(emailField.value)) {
-      showToast('Please enter a valid email address', 'error');
-      return;
-    }
+// ---- 包车时长档 ----
+function renderTiers(vehicle) {
+  var holder = el('charterTiers');
+  if (!holder) return;
+  holder.innerHTML = '';
+  if (!vehicle || !vehicle.tiers) return;
 
-    // === Compute price ===
-    const city = document.getElementById('city').value;
-    const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
-    const date = document.getElementById('date').value;
-    const time = document.getElementById('time').value;
-    const passengers = document.getElementById('passengers').value;
-    const hours = document.getElementById('hours').value;
-    const fromCity = document.getElementById('fromCity').value;
-    const toCity = document.getElementById('toCity').value;
-    const airport = document.getElementById('airport').value;
-    const transferDirection = document.getElementById('transferDirection').value;
-    const hotelAddress = document.getElementById('hotelAddress').value;
-    const distanceRange = document.getElementById('distanceRange').value;
-    const cityRoute = document.getElementById('cityRoute').value;
+  var wrap = document.createElement('div');
+  wrap.className = 'form-group u-bc38d4de';
+  var lab = document.createElement('label');
+  lab.className = 'form-label';
+  lab.textContent = 'Package Duration';
+  wrap.appendChild(lab);
 
-    let price = basePrices[vehicle] || 51;
-    const cityMult = getCityTierMultiplier(city);
-    price *= cityMult;
+  var row = document.createElement('div');
+  row.className = 'form-row u-b207d191';
 
-    if (serviceType === 'airport') {
-      price *= getDistanceMultiplier(distanceRange);
-    } else if (serviceType === 'city') {
-      const hourMult = { '4': 1.0, '8': 1.8, '12': 2.5, 'custom': 2.0 };
-      price *= (hourMult[hours] || 1.8);
-      const cityDistRange = document.getElementById('cityDistanceRange').value;
-      const distMult = { '0-150': 1.0, '150-300': 2.0, '300-500': 4.0 };
-      price *= (distMult[cityDistRange] || 1.0);
-    } else if (serviceType === 'intercity') {
-      price *= 1.5;
-    }
-    currentPrice = Math.round(price / 5) * 5;
+  vehicle.tiers.forEach(function (t) {
+    var lb = document.createElement('label');
+    lb.className = 'service-option u-10123434';
+    var inp = document.createElement('input');
+    inp.type = 'radio';
+    inp.name = 'tierChoice';
+    inp.className = 'u-93b8ea5b';
+    inp.value = t.key;
+    var box = document.createElement('div');
+    box.className = 'service-option-box u-267a89a6';
+    var n1 = document.createElement('div');
+    n1.className = 'u-344f893f';
+    n1.textContent = t.name;
+    var n2 = document.createElement('div');
+    n2.className = 'service-option-note';
+    n2.textContent = '¥' + t.pkg + ' · ' + t.hours + 'h / ' + t.includedKm + 'km';
+    box.appendChild(n1); box.appendChild(n2);
+    lb.appendChild(inp); lb.appendChild(box);
+    row.appendChild(lb);
+    inp.addEventListener('change', refreshQuote);
+  });
 
-    // Populate modal
-    const modalService = document.getElementById('modalService');
-    if (modalService) modalService.textContent =
-      serviceType === 'airport' ? 'Airport Transfer' :
-      serviceType === 'city' ? 'City Car Service' : 'Intercity Trip';
+  wrap.appendChild(row);
+  holder.appendChild(wrap);
 
-    const modalCity = document.getElementById('modalCity');
-    if (modalCity) modalCity.textContent = city ? city.charAt(0).toUpperCase() + city.slice(1) : '-';
+  var first = holder.querySelector('input[name="tierChoice"]');
+  if (first) first.checked = true;
+}
 
-    let routeText = '-';
-    if (serviceType === 'airport' && airport && transferDirection) {
-      const dir = transferDirection === 'airport-to-hotel' ? 'Pickup' : 'Drop-off';
-      routeText = airport + ' ' + dir;
-      if (hotelAddress) routeText += ' → ' + hotelAddress.substring(0, 30) + (hotelAddress.length > 30 ? '...' : '');
-      if (distanceRange) routeText += ' (' + getDistanceRangeLabel(distanceRange) + ')';
-    } else if (serviceType === 'city') {
-      routeText = hours + ' hours';
-      const cityDistRange = document.getElementById('cityDistanceRange').value;
-      const distLabel = { '0-150': 'Within City', '150-300': 'Suburban', '300-500': 'Outside City' };
-      routeText += ' (' + (distLabel[cityDistRange] || 'Within City') + ')';
-      if (cityRoute) routeText += ' — ' + cityRoute;
-    } else if (serviceType === 'intercity' && fromCity && toCity) {
-      routeText = fromCity + ' → ' + toCity;
-    }
-    const modalRoute = document.getElementById('modalRoute');
-    if (modalRoute) modalRoute.textContent = routeText;
+// ============================================================
+//  机场下拉（53 城机场库）
+// ============================================================
+function updateAirportOptions() {
+  var sel = el('airport');
+  var info = el('airportDistanceInfo');
+  if (!sel) return;
+  var cur = sel.value;
 
-    const modalDateTime = document.getElementById('modalDateTime');
-    if (modalDateTime) modalDateTime.textContent = (date && time) ? (date + ' ' + time) : '-';
+  while (sel.firstChild) sel.removeChild(sel.firstChild);
+  var def = document.createElement('option');
+  def.value = '';
+  def.disabled = true;
+  def.selected = true;
+  def.textContent = 'Select airport';
+  sel.appendChild(def);
 
-    const modalVehicle = document.getElementById('modalVehicle');
-    if (modalVehicle) modalVehicle.textContent = vehicle.charAt(0).toUpperCase() + vehicle.slice(1);
+  var slug = citySlug();
+  var list = [];
 
-    const modalPassengers = document.getElementById('modalPassengers');
-    if (modalPassengers) modalPassengers.textContent = passengers;
+  if (typeof window.getAirportsForCity === 'function') {
+    try { list = window.getAirportsForCity(slug) || []; } catch (e) { list = []; }
+  }
+  if (!list.length && window.AIRPORT_DB && window.AIRPORT_DB[slug]) {
+    list = window.AIRPORT_DB[slug];
+  }
 
-    const modalPrice = document.getElementById('modalPrice');
-    if (modalPrice) modalPrice.textContent = '$' + currentPrice;
+  list.forEach(function (a) {
+    var o = document.createElement('option');
+    o.value = a.code;
+    var nm = (typeof window.getAirportName === 'function')
+      ? (window.getAirportName(slug, a.code) || a.code) : a.code;
+    o.textContent = nm;
+    sel.appendChild(o);
+  });
 
-    const modalPriceUsd = document.getElementById('modalPriceUsd');
-    if (modalPriceUsd) modalPriceUsd.textContent = '$' + currentPrice;
+  if (cur) sel.value = cur;
+  if (info) {
+    info.textContent = list.length
+      ? (list.length + ' airport(s) serve ' + slug + ' — distance shown is to city centre')
+      : 'No airport data for this city yet — our team will confirm the route.';
+  }
+  updateDistanceDefault();
+}
 
-    const modalPriceCny = document.getElementById('modalPriceCny');
-    if (modalPriceCny) modalPriceCny.textContent = '¥' + Math.round(currentPrice * exchangeRate);
+function updateDistanceDefault() {
+  var sel = el('airport');
+  var dr = el('distanceRange');
+  if (!sel || !dr) return;
+  var code = sel.value;
+  if (!code) return;
+  var slug = citySlug();
+  var dist = null;
+  if (typeof window.getAirportDistance === 'function') {
+    dist = window.getAirportDistance(slug, code);
+  }
+  if (dist == null && window.AIRPORT_DB && window.AIRPORT_DB[slug]) {
+    var hit = window.AIRPORT_DB[slug].filter(function (a) { return a.code === code; })[0];
+    if (hit) dist = hit.dist;
+  }
+  if (dist == null) return;
+  var v = dist <= 35 ? '0-35' : (dist <= 50 ? '35-50' : (dist <= 80 ? '50-80' : '80+'));
+  dr.value = v;
+}
 
-    fetch('https://open.er-api.com/v6/latest/USD')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data && data.rates && data.rates.CNY) {
-          exchangeRate = data.rates.CNY;
-          if (modalPriceCny) modalPriceCny.textContent = '¥' + Math.round(currentPrice * exchangeRate);
+// ============================================================
+//  报价（前端预估：直接用同一套 pricing-core 算法）
+// ============================================================
+function selectedVehicleKey() {
+  var r = document.querySelector('input[name="vehicleChoice"]:checked');
+  return r ? r.value : '';
+}
+
+function selectedTierKey() {
+  var r = document.querySelector('input[name="tierChoice"]:checked');
+  return r ? r.value : '';
+}
+
+function refreshQuote() {
+  var slug = citySlug();
+  var product = currentProduct();
+  var vkey = selectedVehicleKey();
+  var tkey = selectedTierKey();
+  var extraMin = parseInt(el('extraMinutes') ? el('extraMinutes').value : 0, 10) || 0;
+  var extraKm = parseInt(el('extraKm') ? el('extraKm').value : 0, 10) || 0;
+  var pax = parseInt(el('passengers') ? el('passengers').value : 1, 10) || 1;
+
+  // 隐藏字段同步
+  if (el('formProduct')) el('formProduct').value = product;
+  if (el('formVehicleKey')) el('formVehicleKey').value = vkey;
+  if (el('formTierKey')) el('formTierKey').value = tkey;
+  if (el('formExtraMinutes')) el('formExtraMinutes').value = extraMin;
+  if (el('formExtraKm')) el('formExtraKm').value = extraKm;
+
+  // 切换到非包车产品时，清理残留的时长档选择（避免提交脏数据）
+  if (product !== 'charter') {
+    var staleTiers = document.querySelectorAll('input[name="tierChoice"]');
+    staleTiers.forEach(function (t) { t.checked = false; });
+    var tierHolder = el('charterTiers');
+    if (tierHolder) tierHolder.innerHTML = '';
+    tkey = '';
+    if (el('formTierKey')) el('formTierKey').value = '';
+  }
+
+  // 显示/隐藏分组
+  var af = el('airportFields');
+  var cf = el('charterFields');
+  var ic = el('intercityFields');
+  var og = el('overtimeGroup');
+  if (af) af.style.display = product === 'airport' ? 'block' : 'none';
+  if (cf) cf.style.display = product === 'charter' ? 'block' : 'none';
+  if (ic) ic.style.display = product === 'intercity' ? 'block' : 'none';
+
+  // 隐藏无价组合的超时项
+  var hasSurcharge = false;
+  if (PRICE_DATA) {
+    var opts = window.CWPricing.cityOptions(PRICE_DATA, slug);
+    if (opts) {
+      var v = product === 'charter'
+        ? opts.charter.filter(function (x) { return x.key === vkey; })[0]
+        : opts.airport.filter(function (x) { return x.key === vkey; })[0];
+      if (v) {
+        if (product === 'charter') {
+          var t = v.tiers.filter(function (x) { return x.key === tkey; })[0];
+          hasSurcharge = !!(t && t.perMin != null && t.perKm != null);
+        } else {
+          hasSurcharge = (v.perMin != null && v.perKm != null);
         }
-      })
-      .catch(function() {});
+      }
+    }
+  }
+  if (og) og.style.display = hasSurcharge ? 'block' : 'none';
+  if (!hasSurcharge) {
+    var hint = el('overtimeHint');
+    if (hint && slug && slug !== 'other' && vkey) {
+      hint.textContent = 'Overage rates are not published for this city and vehicle — our team will confirm the final amount.';
+    }
+  } else {
+    var hint2 = el('overtimeHint');
+    if (hint2) hint2.textContent = 'Charged at the published rate for your city and vehicle. Final settlement is confirmed by our team.';
+  }
 
-    const paymentModal = document.getElementById('paymentModal');
-    if (paymentModal) {
-      paymentModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+  // 容量提示
+  var capHint = el('capacityHint');
+  if (capHint && PRICE_DATA && vkey) {
+    var o2 = window.CWPricing.cityOptions(PRICE_DATA, slug);
+    if (o2) {
+      var all = o2.airport.concat(o2.charter);
+      var vv = all.filter(function (x) { return x.key === vkey; })[0];
+      if (vv) {
+        capHint.textContent = pax > vv.seats
+          ? '⚠️ ' + vv.name + ' takes up to ' + vv.seats + ' passengers — you selected ' + pax + '.'
+          : vv.name + ': up to ' + vv.seats + ' passengers, ' + vv.bags + ' large bags.';
+      }
+    }
+  }
+
+  // 报价
+  if (!slug || slug === 'other' || !vkey || !PRICE_DATA) {
+    QUOTE_RESULT = null;
+    currentPrice = 0;
+    renderQuotePanel(null);
+    updateVehicleLabels(null);
+    return;
+  }
+
+  var q = window.CWPricing.quote(PRICE_DATA, {
+    city: slug,
+    product: product,
+    vehicle: vkey,
+    tier: tkey,
+    extraMinutes: extraMin,
+    extraKm: extraKm,
+    pax: pax
+  });
+
+  if (!q.ok) {
+    QUOTE_RESULT = null;
+    currentPrice = 0;
+    renderQuotePanel(null);
+    updateVehicleLabels(null);
+    return;
+  }
+
+  QUOTE_RESULT = q;
+  currentPrice = q.total;
+  renderQuotePanel(q);
+  updateVehicleLabels(q);
+}
+
+function updateVehicleLabels(q) {
+  var els = document.querySelectorAll('.vehicle-price');
+  els.forEach(function (elx) {
+    var key = elx.getAttribute('data-key');
+    if (!PRICE_DATA) { elx.textContent = ''; return; }
+    var opts = window.CWPricing.cityOptions(PRICE_DATA, citySlug());
+    if (!opts) { elx.textContent = ''; return; }
+    var product = currentProduct();
+    var list = product === 'charter' ? opts.charter : opts.airport;
+    var v = list.filter(function (x) { return x.key === key; })[0];
+    if (!v) { elx.textContent = ''; return; }
+    if (product === 'charter') {
+      var min = null;
+      v.tiers.forEach(function (t) { if (min === null || t.pkg < min) min = t.pkg; });
+      elx.textContent = 'From ¥' + min;
+    } else {
+      elx.textContent = '¥' + v.pkg;
     }
   });
 }
 
-function closePaymentModal() {
-  const paymentModal = document.getElementById('paymentModal');
-  if (paymentModal) {
-    paymentModal.classList.remove('active');
-    document.body.style.overflow = '';
+// ============================================================
+//  报价面板
+// ============================================================
+function renderQuotePanel(q) {
+  var panel = el('quotePanel');
+  var rows = el('quoteRows');
+  var totalCny = el('quoteTotalCny');
+  var totalUsd = el('quoteTotalUsd');
+  var note = el('quoteNote');
+  var warnBox = el('quoteWarnings');
+
+  if (!panel) return;
+
+  if (!q) {
+    if (rows) rows.innerHTML = '<div class="quote-row"><span>Select a city, vehicle and package to see your price</span></div>';
+    if (totalCny) totalCny.textContent = '—';
+    if (totalUsd) totalUsd.textContent = '—';
+    if (note) note.textContent = '';
+    if (warnBox) warnBox.innerHTML = '';
+    return;
+  }
+
+  if (rows) {
+    rows.innerHTML = '';
+    q.lines.forEach(function (l) {
+      var r = document.createElement('div');
+      r.className = 'quote-row';
+      var a = document.createElement('span');
+      a.textContent = l.label;
+      var b = document.createElement('span');
+      b.className = 'quote-amount';
+      b.textContent = '¥' + l.amount;
+      r.appendChild(a); r.appendChild(b);
+      rows.appendChild(r);
+    });
+  }
+
+  if (totalCny) totalCny.textContent = '¥' + q.total;
+  if (totalUsd) totalUsd.textContent = '≈ $' + q.usd;
+  if (note) {
+    note.textContent = q.city + ' · ' + q.vehicleName +
+      (product_tier_name(q));
+  }
+  if (warnBox) {
+    warnBox.innerHTML = '';
+    (q.warnings || []).forEach(function (w) {
+      var d = document.createElement('div');
+      d.className = 'quote-warning';
+      d.textContent = '⚠️ ' + w;
+      warnBox.appendChild(d);
+    });
+  }
+
+  // 同步隐藏字段
+  if (el('formTotalCny')) el('formTotalCny').value = q.total;
+  if (el('formTotalUsd')) el('formTotalUsd').value = q.usd;
+  if (el('formBreakdown')) {
+    el('formBreakdown').value = JSON.stringify({
+      lines: q.lines, total: q.total, usd: q.usd,
+      vehicle: q.vehicle, tier: q.tier, includedKm: q.includedKm
+    });
   }
 }
 
-function switchPaymentTab(tab) {
-  document.querySelectorAll('.payment-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.payment-tab-content').forEach(function(c) { c.classList.remove('active'); });
-  const activeTab = document.querySelector('.payment-tab[data-action="switch-payment"][data-tab="' + tab + '"]');
-  if (activeTab) activeTab.classList.add('active');
-  const tabContent = document.getElementById('tab-' + tab);
-  if (tabContent) tabContent.classList.add('active');
+function product_tier_name(q) {
+  return q.tier && q.tier !== 'standard' ? ' · ' + q.tierName : '';
 }
 
-function openWhatsappModal() {
-  const modal = document.getElementById('whatsappModal');
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+// ============================================================
+//  后端报价 API（降级路径 / 最终校验）
+// ============================================================
+function fetchQuoteApi(payload) {
+  return fetch('https://api.chinawheely.com/api/quote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function (r) { return r.json(); })
+    .catch(function () { return { ok: false, error: 'NETWORK' }; });
+}
+
+// ============================================================
+//  摘要 + 支付弹窗
+// ============================================================
+function updateSummary() {
+  var sService = el('summaryService');
+  var sRoute = el('summaryRoute');
+  var sDateTime = el('summaryDateTime');
+  var sVehicle = el('summaryVehicle');
+  var sPassengers = el('summaryPassengers');
+  var sPrice = el('summaryPrice');
+  var sPriceCny = el('summaryPriceCny');
+
+  var product = currentProduct();
+  var labels = {
+    airport: 'Airport Transfer',
+    charter: 'Hourly Charter',
+    intercity: 'Intercity Transfer'
+  };
+  if (sService) sService.textContent = labels[product] || product;
+
+  var slug = citySlug();
+  var cityName = '-';
+  if (slug && slug !== 'other' && PRICE_DATA) {
+    var o = window.CWPricing.cityOptions(PRICE_DATA, slug);
+    if (o) cityName = o.city;
+  } else if (slug === 'other') {
+    cityName = 'Other city';
   }
-}
-
-function closeWhatsappModal() {
-  const modal = document.getElementById('whatsappModal');
-  if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
+  if (sRoute) {
+    var route = '';
+    if (product === 'airport') {
+      var ap = el('airport') ? el('airport').value : '';
+      var dir = el('transferDirection') ? el('transferDirection').value : '';
+      var ha = el('hotelAddress') ? el('hotelAddress').value : '';
+      route = [ap, dir === 'airport-to-hotel' ? '→ Hotel' : (dir === 'hotel-to-airport' ? 'Hotel →' : ''), ha].filter(Boolean).join(' ');
+    } else if (product === 'charter') {
+      var cr = el('charterRoute') ? el('charterRoute').value : '';
+      route = cr || 'Charter';
+    } else {
+      var fc = el('fromCity') ? el('fromCity').value : '';
+      var tc = el('toCity') ? el('toCity').value : '';
+      route = (fc || '—') + ' → ' + (tc || '—');
+    }
+    sRoute.textContent = cityName + (route ? ' — ' + route : '');
   }
+
+  var d = el('date') ? el('date').value : '';
+  var t = el('time') ? el('time').value : '';
+  if (sDateTime) sDateTime.textContent = (d && t) ? (d + ' ' + t) : '-';
+
+  var vname = '';
+  if (QUOTE_RESULT) vname = QUOTE_RESULT.vehicleName;
+  if (sVehicle) sVehicle.textContent = vname || '-';
+
+  var pax = el('passengers') ? el('passengers').value : '-';
+  if (sPassengers) sPassengers.textContent = pax;
+
+  if (sPrice) sPrice.textContent = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total) : '-';
+  if (sPriceCny) sPriceCny.textContent = QUOTE_RESULT ? ('≈ $' + QUOTE_RESULT.usd) : '';
 }
 
+// ============================================================
+//  提交：先走支付弹窗，再由弹窗按钮真正提交
+// ============================================================
 function submitBooking() {
-  // Populate hidden fields with computed data so the backend email includes full details
-  const formPrice = document.getElementById('formPrice');
-  if (formPrice) formPrice.value = '$' + currentPrice + ' USD';
+  var formPrice = el('formPrice');
+  if (formPrice) formPrice.value = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total + ' CNY') : '';
 
-  const formRouteSummary = document.getElementById('formRouteSummary');
+  var formRouteSummary = el('formRouteSummary');
   if (formRouteSummary) {
-    const modalRoute = document.getElementById('modalRoute');
+    var modalRoute = el('modalRoute');
     formRouteSummary.value = modalRoute ? modalRoute.textContent : '';
   }
 
-  const formServiceType = document.getElementById('formServiceType');
+  var formServiceType = el('formServiceType');
   if (formServiceType) {
-    const modalService = document.getElementById('modalService');
+    var modalService = el('modalService');
     formServiceType.value = modalService ? modalService.textContent : '';
   }
 
-  const formVehicleLabel = document.getElementById('formVehicleLabel');
+  var formVehicleLabel = el('formVehicleLabel');
   if (formVehicleLabel) {
-    const modalVehicle = document.getElementById('modalVehicle');
-    const modalPassengers = document.getElementById('modalPassengers');
-    formVehicleLabel.value = (modalVehicle ? modalVehicle.textContent : '') + ' (' + (modalPassengers ? modalPassengers.textContent : '') + ' pax)';
+    var modalVehicle = el('modalVehicle');
+    var modalPassengers = el('modalPassengers');
+    formVehicleLabel.value = (modalVehicle ? modalVehicle.textContent : '') +
+      (modalPassengers ? ' (' + modalPassengers.textContent + ' pax)' : '');
   }
 
-  if (bookingForm) bookingForm.submit();
+  var form = el('bookingForm');
+  if (form) form.submit();
 }
 
-// Close modals on overlay click
-const paymentModal = document.getElementById('paymentModal');
-if (paymentModal) {
-  paymentModal.addEventListener('click', function(e) {
-    if (e.target === this) closePaymentModal();
-  });
-}
+// ---- 表单提交 → 校验 → 打开支付弹窗 ----
+function handleFormSubmit(e) {
+  e.preventDefault();
+  var form = el('bookingForm');
+  if (!form) return;
 
-const whatsappModal = document.getElementById('whatsappModal');
-if (whatsappModal) {
-  whatsappModal.addEventListener('click', function(e) {
-    if (e.target === this) closeWhatsappModal();
-  });
-}
+  var product = currentProduct();
 
-// Close modals on Escape key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closePaymentModal();
-    closeWhatsappModal();
+  // 基本必填
+  var requiredIds = ['city', 'firstName', 'lastName', 'email', 'phone', 'date', 'time'];
+  if (product === 'airport') {
+    requiredIds.push('airport', 'transferDirection', 'hotelAddress', 'distanceRange');
+  } else if (product === 'charter') {
+    requiredIds.push('charterRoute');
   }
-});
-
-// Initialize
-if (typeof updateForm === 'function') updateForm();
-
-
-// Replace inline event handlers with event delegation (CSP/security improvement)
-if (bookingForm) {
-  bookingForm.addEventListener('change', function(e) {
-    const target = e.target;
-    if (!target) return;
-    if (target.name === 'city') {
-      updateAirportInfo();
-    } else {
-      if (target.id === 'distanceRange') {
-        target.dataset.userChanged = 'true';
+  for (var i = 0; i < requiredIds.length; i++) {
+    var f = el(requiredIds[i]);
+    if (f && !f.value) {
+      if (typeof showToast === 'function') {
+        showToast('Please complete: ' + (f.getAttribute('aria-label') || requiredIds[i]), 'error');
       }
-      updateForm();
+      f.focus();
+      return;
+    }
+  }
+
+  // 邮箱格式
+  var email = el('email');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    if (typeof showToast === 'function') showToast('Please enter a valid email address', 'error');
+    email.focus();
+    return;
+  }
+
+  // 有价组合必须有报价
+  if (slugIsPriced() && !QUOTE_RESULT) {
+    if (typeof showToast === 'function') {
+      showToast('Please select a vehicle and package to see your price', 'error');
+    }
+    return;
+  }
+
+  // 填支付弹窗
+  var slug = citySlug();
+  var cityName = '-';
+  if (PRICE_DATA && slug && slug !== 'other') {
+    var o = window.CWPricing.cityOptions(PRICE_DATA, slug);
+    if (o) cityName = o.city;
+  } else if (slug === 'other') {
+    cityName = 'Other city (quoted on request)';
+  }
+  setModalText('modalService', productLabel(product));
+  setModalText('modalCity', cityName);
+  setModalText('modalRoute', buildRouteSummary());
+  setModalText('modalDateTime', (el('date').value || '') + ' ' + (el('time').value || ''));
+  setModalText('modalVehicle', QUOTE_RESULT ? QUOTE_RESULT.vehicleName : 'To be confirmed');
+  setModalText('modalPassengers', el('passengers').value);
+
+  var mPrice = el('modalPrice');
+  if (mPrice) mPrice.textContent = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total) : 'On request';
+  var mUsd = el('modalPriceUsd');
+  if (mUsd) mUsd.textContent = QUOTE_RESULT ? ('≈ $' + QUOTE_RESULT.usd) : '—';
+  var mCny = el('modalPriceCny');
+  if (mCny) mCny.textContent = QUOTE_RESULT ? QUOTE_RESULT.total : '—';
+
+  var modal = el('paymentModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+  }
+}
+
+function slugIsPriced() {
+  var slug = citySlug();
+  return !!(slug && slug !== 'other' && PRICE_DATA);
+}
+
+function productLabel(p) {
+  return { airport: 'Airport Transfer', charter: 'Hourly Charter', intercity: 'Intercity Transfer' }[p] || p;
+}
+
+function buildRouteSummary() {
+  var product = currentProduct();
+  var parts = [];
+  if (product === 'airport') {
+    var ap = el('airport') ? el('airport').value : '';
+    if (ap) {
+      var apEl = el('airport');
+      parts.push(apEl.options[apEl.selectedIndex] ? apEl.options[apEl.selectedIndex].text : ap);
+    }
+    var dir = el('transferDirection') ? el('transferDirection').value : '';
+    if (dir === 'airport-to-hotel') parts.push('→ Hotel');
+    if (dir === 'hotel-to-airport') parts.push('Hotel →');
+    var ha = el('hotelAddress') ? el('hotelAddress').value : '';
+    if (ha) parts.push(ha);
+  } else if (product === 'charter') {
+    var cr = el('charterRoute') ? el('charterRoute').value : '';
+    if (cr) parts.push(cr);
+    if (QUOTE_RESULT && QUOTE_RESULT.tierName) parts.push(QUOTE_RESULT.tierName);
+  } else {
+    var fc = el('fromCity') ? el('fromCity').value : '';
+    var tc = el('toCity') ? el('toCity').value : '';
+    if (fc) parts.push(fc);
+    if (tc) parts.push('→ ' + tc);
+  }
+  return parts.join(' ');
+}
+
+function setModalText(id, text) {
+  var e = el(id);
+  if (e) e.textContent = text || '-';
+}
+
+// ============================================================
+//  初始化
+// ============================================================
+function initBooking() {
+  loadPricingData(function () {
+    populateCities();
+    var params = new URLSearchParams(window.location.search);
+    var pre = params.get('city');
+    if (pre) {
+      var sel = el('city');
+      if (sel) {
+        var match = CITY_LIST.filter(function (c) { return c.slug === pre; })[0];
+        if (match) sel.value = pre;
+      }
+    }
+    renderVehicles();
+    updateSummary();
+  });
+
+  var citySel = el('city');
+  if (citySel) citySel.addEventListener('change', function () {
+    renderVehicles();
+    updateSummary();
+  });
+
+  document.querySelectorAll('input[name="product"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      renderVehicles();
+      updateSummary();
+    });
+  });
+
+  ['extraMinutes', 'extraKm', 'passengers', 'date', 'time', 'airport',
+    'transferDirection', 'hotelAddress', 'charterRoute', 'fromCity', 'toCity'
+  ].forEach(function (id) {
+    var e = el(id);
+    if (!e) return;
+    e.addEventListener('change', function () { refreshQuote(); updateSummary(); });
+    if (e.tagName === 'INPUT' && e.type === 'text') {
+      e.addEventListener('input', function () { updateSummary(); });
     }
   });
-  bookingForm.addEventListener('input', function(e) {
-    const target = e.target;
-    if (!target) return;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-      updateForm();
-    }
+
+  // 默认日期 = 明天
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var dateEl = el('date');
+  if (dateEl && !dateEl.value) dateEl.value = tomorrow.toISOString().split('T')[0];
+
+  // 表单提交 → 支付弹窗
+  var bf = el('bookingForm');
+  if (bf) bf.addEventListener('submit', handleFormSubmit);
+
+  // 支付弹窗里的确认按钮 → 真正提交
+  document.querySelectorAll('[data-action="submit-booking"]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (typeof window.ChinawheelySecurity !== 'undefined' &&
+        window.ChinawheelySecurity && window.ChinawheelySecurity.honeypotCheck) {
+        // 安全模块负责 honeypot / 时长校验
+      }
+      submitBooking();
+    });
   });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBooking);
+} else {
+  initBooking();
 }

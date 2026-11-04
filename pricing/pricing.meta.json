@@ -1,0 +1,13 @@
+{
+  "sourceFile": "入境游包车报价单_游客版 2026年 报价单.xlsx",
+  "sourceSha256": "0161c1555c3d88843f7de6edff0c619f60d0fc0fa869345607b2ee94b7565a6e",
+  "sourceArchived": "pricing/source/入境游包车报价单_游客版 2026年 报价单.xlsx",
+  "pricingSha256": "73abbe3589e5de02aafdb2b4962152fd2eb17da3a2d5495438b8b7adcb77ae53",
+  "generatedAt": "2026-11-04T13:22:32Z",
+  "cities": 53,
+  "airportPricePoints": 318,
+  "charterPricePoints": 265,
+  "charterTierPoints": 1325,
+  "coverageComplete": 53,
+  "coverageGaps": 0
+}
