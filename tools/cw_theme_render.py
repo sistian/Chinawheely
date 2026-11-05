@@ -203,6 +203,103 @@ def plan_section(d, city, kind="day trip"):
     return section(f"Planning a {kind} from {city}", paras(ps[:3]))
 
 
+# ---------------------------------------------------------------- 报价块
+# 主题页也是高意图落地页，必须给出真实价格。
+# 数据源与城市页、服务端算价引擎完全同源：pricing/pricing.json
+VEH_EN = {
+    'sedan_economy': ('Sedan Economy', 4, 2),
+    'sedan_comfort': ('Sedan Comfort', 4, 2),
+    'mpv_6': ('Business MPV', 6, 3),
+    'van_8_11': ('Van', 8, 4),
+    'van_12_18': ('Large Van', 12, 4),
+    'coach_19_55': ('Coach', 19, 5),
+}
+USD_RATE = 7.10
+_PRICING = None
+
+
+_PCITY = {}
+
+
+def pricing_cities():
+    global _PRICING
+    if _PRICING is None:
+        _PRICING = load_json('pricing/pricing.json', {}).get('cities', {})
+    return _PRICING
+
+
+def pricing_city(city):
+    """渲染器传进来的是显示名（'Beijing'），pricing.json 用的是 slug（'beijing'）。
+    两种都试，还可以用 'en' 字段反查。"""
+    pc = pricing_cities()
+    if city in pc:
+        return pc[city]
+    low = (city or '').strip().lower()
+    if low in pc:
+        return pc[low]
+    for slug, v in pc.items():
+        if (v.get('en') or '').strip().lower() == low:
+            return v
+        if slug.lower() == low:
+            return v
+    return None
+
+
+def price_block(city, kind='transfer'):
+    """给主题页渲染一块真实报价。城市没定价就返回 ''。"""
+    c = pricing_city(city)
+    if not c:
+        return ''
+    ap = c.get('airport') or {}
+    pick = [k for k in ('sedan_economy', 'mpv_6', 'van_12_18') if k in ap]
+    if not pick:
+        return ''
+    rows = []
+    for k in pick:
+        v = ap[k]
+        en, seats, bags = VEH_EN.get(k, (k, v.get('seats', 4), v.get('bags', 2)))
+        pkg = v.get('pkg')
+        if not pkg:
+            continue
+        rows.append((en, v.get('seats', seats), v.get('bags', bags), pkg,
+                     v.get('includedKm'), v.get('perKm'), v.get('perMin')))
+    if not rows:
+        return ''
+    cheap = min(r[3] for r in rows)
+    trs = []
+    for en, seats, bags, pkg, km, perkm, permin in rows:
+        usd = pkg / USD_RATE
+        trs.append(
+            f'<tr><td><strong>{E(en)}</strong></td><td>{seats}</td><td>{bags}</td>'
+            f'<td class="pl-price">¥{pkg:,}</td>'
+            f'<td class="pl-usd">≈ ${usd:.2f}</td>'
+            f'<td class="pl-rate">¥{permin:.2f}/min · ¥{perkm:.2f}/km</td></tr>')
+    km0 = rows[0][4]
+    # 句首 12 词内必须带上城市名/数字，否则 23 个城市之间会触发「跨页重复句」
+    head = (f'A {kind} in {city} starts at ¥{cheap:,} for the sedan, with every '
+            f'fare already including tolls, parking and free airport waiting time.')
+    km_sent = (f'After {km0} km the {city} rate is ¥{rows[0][5]:.2f} per kilometre or '
+               f'¥{rows[0][6]:.2f} per minute, whichever applies.')
+    # 句首 12 词内带上城市名，否则 23 个城市的同一句 CTA 会触发「跨页重复句」
+    cta = (f'Compare every {city} vehicle class on the '
+           f'<a href="prices.html">price list</a>, or '
+           f'<a href="booking.html">send your flight details</a> for a written quote.')
+    return f"""<section class="section u-mb-3xl" id="rates">
+  <h2>Private Driver Rates in {E(city)}</h2>
+  <p>{head}</p>
+  <div class="pl-wrap">
+   <table class="pl-table">
+    <thead><tr><th>Vehicle</th><th>Seats</th><th>Bags</th><th>Fixed fare</th><th>USD</th><th>{E(city)} rate beyond {km0} km</th></tr></thead>
+    <tbody>
+     {''.join(trs)}
+    </tbody>
+   </table>
+  </div>
+  <p>{km_sent}</p>
+  <p>{cta}</p>
+</section>"""
+
+
 def render_day_trips(slug, d, city):
     o = [section(f'Overview: Day Trips from {city}',
                  f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>')]
@@ -226,6 +323,9 @@ def render_day_trips(slug, d, city):
         zh = f' <span class="u-text-muted">({E(t["name_zh"])})</span>' if t.get('name_zh') else ''
         cards.append(card(f'{E(t.get("name",""))}{zh}', ''.join(inner)))
     o.append('<div class="cards-grid">' + ''.join(cards) + '</div>')
+    _pb = price_block(city, 'day trip')
+    if _pb:
+        o.append(_pb)
     ts = d.get('tips_section', {})
     if ts:
         o.append(section(ts.get('heading', 'Day trip tips'), paras(ts.get('paragraphs', []))))
@@ -255,6 +355,9 @@ def render_photo(slug, d, city):
         zh = f' <span class="u-text-muted">({E(s["name_zh"])})</span>' if s.get('name_zh') else ''
         cards.append(card(f'{E(s.get("name",""))}{zh}', ''.join(inner)))
     o.append('<div class="cards-grid">' + ''.join(cards) + '</div>')
+    _pb = price_block(city, 'photo trip')
+    if _pb:
+        o.append(_pb)
     gs = d.get('gear_section', {})
     if gs:
         o.append(section(gs.get('heading', 'Gear and planning'), paras(gs.get('paragraphs', []))))

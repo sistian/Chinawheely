@@ -187,6 +187,17 @@ else:
     add('PASS', '主题页:canonical/og:url', '全部一致')
 
 # 8 重复句（≥12 词连续相同，跨页）
+# 同一座城市的多个主题页共享一段「城市导航 CTA」是有意设计（sibling 导航），
+# 不算内容重复；只有跨到不同城市才算。
+def city_of_slug(slug):
+    for fam in ('day-trips', 'photo-spots', 'food-shopping', 'tea-culture', 'best-time'):
+        if slug.endswith('-' + fam):
+            return slug[:-len(fam) - 1]
+    if '-airport-transfer-to-' in slug:
+        return slug.split('-airport-transfer-to-')[0]
+    return slug
+
+
 sent = collections.defaultdict(set)
 for f in data:
     t = data[f][1]
@@ -194,7 +205,10 @@ for f in data:
         w = s.split()
         if len(w) >= DUP_SENTENCE_WORDS:
             sent[' '.join(w[:DUP_SENTENCE_WORDS])].add(f)
-dup = {k: v for k, v in sent.items() if len(v) > 1}
+dup = {}
+for k, v in sent.items():
+    if len(v) > 1 and len({city_of_slug(x[:-5]) for x in v}) > 1:
+        dup[k] = v
 if dup:
     add('FAIL', '主题页:跨页重复句', f'{len(dup)} 句在多页重复  {list(dup)[:2]}')
 else:
