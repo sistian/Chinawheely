@@ -58,7 +58,7 @@
     },
     {
       "source": "/chongqing-tea-culture.html",
-      "destination": "/chongqing.html#tea",
+      "destination": "/chongqing.html#teaculture",
       "statusCode": 301
     },
     {
@@ -68,7 +68,7 @@
     },
     {
       "source": "/dalian-tea-culture.html",
-      "destination": "/dalian.html#tea",
+      "destination": "/dalian.html#teaculture",
       "statusCode": 301
     },
     {
@@ -98,7 +98,7 @@
     },
     {
       "source": "/harbin-tea-culture.html",
-      "destination": "/harbin.html#tea",
+      "destination": "/harbin.html#teaculture",
       "statusCode": 301
     },
     {
@@ -123,7 +123,7 @@
     },
     {
       "source": "/jinan-tea-culture.html",
-      "destination": "/jinan.html#tea",
+      "destination": "/jinan.html#teaculture",
       "statusCode": 301
     },
     {
@@ -168,7 +168,7 @@
     },
     {
       "source": "/qingdao-tea-culture.html",
-      "destination": "/qingdao.html#tea",
+      "destination": "/qingdao.html#teaculture",
       "statusCode": 301
     },
     {
@@ -178,7 +178,7 @@
     },
     {
       "source": "/shanghai-tea-culture.html",
-      "destination": "/shanghai.html#tea",
+      "destination": "/shanghai.html#teaculture",
       "statusCode": 301
     },
     {
@@ -188,7 +188,7 @@
     },
     {
       "source": "/shenzhen-tea-culture.html",
-      "destination": "/shenzhen.html#tea",
+      "destination": "/shenzhen.html#teaculture",
       "statusCode": 301
     },
     {
@@ -213,7 +213,7 @@
     },
     {
       "source": "/tianjin-tea-culture.html",
-      "destination": "/tianjin.html#tea",
+      "destination": "/tianjin.html#teaculture",
       "statusCode": 301
     },
     {
@@ -223,7 +223,7 @@
     },
     {
       "source": "/wuhan-tea-culture.html",
-      "destination": "/wuhan.html#tea",
+      "destination": "/wuhan.html#teaculture",
       "statusCode": 301
     },
     {
@@ -243,7 +243,7 @@
     },
     {
       "source": "/xian-tea-culture.html",
-      "destination": "/xian.html#tea",
+      "destination": "/xian.html#teaculture",
       "statusCode": 301
     },
     {

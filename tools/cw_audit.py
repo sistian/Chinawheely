@@ -153,6 +153,18 @@ ALIASES = {"beijing_detailed.html","erdos.html","hulunbeier.html","jdz.html","jl
 REAL_SAME_NAME_CITIES = {"taizhou_js.html", "yichun_hlj.html", "suzhou_ah.html",
                           "fuzhou_jx.html", "yulin_sx.html"}
 html_files = set(files) - set(TOOLS_PAGES) - {"admin.html"} - INTENTIONAL_NO_SITEMAP - ALIASES
+# 主题页合并后的 33 个 URL：已在 vercel.json 配 301 → 城市页锚点，按设计不进 sitemap
+import json as _json
+MERGED_REDIRECT_SOURCES = set()
+try:
+    _vc0 = _json.load(open("vercel.json", encoding="utf-8"))
+    for _r0 in _vc0.get("redirects", []):
+        _s0 = _r0.get("source", "")
+        if "#" in _r0.get("destination", ""):
+            MERGED_REDIRECT_SOURCES.add(_s0.lstrip("/"))
+except Exception:
+    pass
+html_files -= MERGED_REDIRECT_SOURCES
 missing_sm = sorted(html_files - sm_files)
 if missing_sm:
     warn("sitemap:未收录页", f"{len(missing_sm)}  {' '.join(missing_sm[:8])}")
@@ -207,15 +219,23 @@ try:
             _bad_rd.append(f"{_s}:状态码={_r0.get('statusCode')}")
         if _s == _d:
             _bad_rd.append(f"{_s}:自我重定向")
-        _tgt = _d.lstrip("/")
+        _tgt = _d.lstrip("/").split("#")[0]     # 目标可能带 #锚点
         if not os.path.exists(_tgt):
             _bad_rd.append(f"{_s}:目标不存在({_tgt})")
         if _tgt in ALIASES:
             _bad_rd.append(f"{_s}:目标是桩页")
+        # 带锚点的目标：锚点必须在目标页里真实存在
+        if "#" in _d:
+            _anch = _d.split("#", 1)[1]
+            if not os.path.exists(_tgt):
+                continue
+            _th = read(_tgt)
+            if f'id="{_anch}"' not in _th:
+                _bad_rd.append(f"{_s}:目标锚点不存在(#{_anch})")
     if _bad_rd:
         fail("301重定向表", f"{len(_bad_rd)}  {' '.join(_bad_rd[:6])}")
     else:
-        ok("301重定向表", f"{len(_rds)} 条，状态码/目标/桩页均正确")
+        ok("301重定向表", f"{len(_rds)} 条，状态码/目标/锚点/桩页均正确")
 except Exception as _e:
     fail("301重定向表", f"vercel.json 读取失败 {_e}")
 

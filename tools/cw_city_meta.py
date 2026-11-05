@@ -1,86 +1,57 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""从城市页抽取主题页需要复用的城市元数据（幂等，输出 tools/city_meta.json）
-抽取项：显示名、hero 图、hero 副标题、机场代码、sibling 链接、价格块
+"""抽取所有城市页的元数据（幂等，输出 tools/city_meta.json）
+抽取项：显示名、机场短名+代码、机场全名+代码、hero 副标题
 """
 import json, os, re
 
 SITE = '/Users/w/Desktop/Chinawheely 10.27'
 os.chdir(SITE)
 
-CITIES = ['beijing', 'shanghai', 'guangzhou', 'shenzhen', 'xian', 'wuhan', 'nanjing',
-          'tianjin', 'suzhou', 'qingdao', 'jinan', 'harbin', 'xiamen', 'kunming',
-          'nanchang', 'zhengzhou', 'chengdu', 'chongqing', 'dalian', 'fuzhou',
-          'changsha', 'hefei', 'hangzhou']
-
 meta = {}
-for c in CITIES:
-    p = f'{c}.html'
-    if not os.path.exists(p):
+for f in sorted(os.listdir('.')):
+    if not f.endswith('.html'):
         continue
-    h = open(p, encoding='utf-8').read()
+    slug = f[:-5]
+    h = open(f, encoding='utf-8', errors='ignore').read()
 
-    # 显示名：h1 中 <span> 之前的部分（span 是副标题）
-    name = c.capitalize()
-    if c == 'xian':
-        name = "Xi'an"
+    # 城市页特征：h1 = 城市名 + <span>Airport Transfer & Private Car</span>
     m = re.search(r'<h1[^>]*>(.*?)</h1>', h, re.S)
-    if m:
-        t = m.group(1).split('<span')[0]
-        t = re.sub(r'<[^>]+>', '', t)
-        t = re.sub(r'\s+', ' ', t).strip()
-        if t and len(t) <= 24:
-            name = t
+    if not m or 'Airport Transfer' not in m.group(1):
+        continue
+    name = re.sub(r'<[^>]+>', '', m.group(1).split('<span')[0])
+    name = re.sub(r'\s+', ' ', name).strip()
+    if not name or len(name) > 24:
+        continue
 
-    # hero 图
-    img = ''
-    m = re.search(r"url\('(images/[^']+)'\)", h)
-    if m:
-        img = m.group(1)
+    # 机场：meta description 里的 "Fixed price <A> (XXX) & <B> (YYY) airport transfers"
+    short = []
+    md = re.search(r'<meta name="description" content="(.*?)"', h, re.S)
+    if md:
+        short = re.findall(r'([A-Z][A-Za-z\' ]*?)\s*\(([A-Z]{3})\)', md.group(1))
 
-    # hero 副标题
-    lead = ''
-    m = re.search(r'<p class="hero-lead[^"]*"[^>]*>(.*?)</p>', h, re.S)
-    if m:
-        lead = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', m.group(1))).strip()
+    # 机场全名：正文里的 "X International Airport (CODE)"
+    full = []
+    for nm, cd in re.findall(r'((?:[A-Z][A-Za-z\'-]*\s*){0,4}(?:International Airport|Airport|Field))\s*\(([A-Z]{3})\)', h):
+        nm = re.sub(r'\s+', ' ', nm).strip()
+        if nm and (nm, cd) not in full and len(nm) < 50:
+            full.append((nm, cd))
 
-    # hero h1 副标题（span）
-    sub = ''
-    m = re.search(r'<h1[^>]*>.*?<span>(.*?)</span>', h, re.S)
-    if m:
-        sub = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', m.group(1))).strip()
+    hero_lead = ''
+    mh = re.search(r'<p class="hero-lead[^"]*"[^>]*>(.*?)</p>', h, re.S)
+    if mh:
+        hero_lead = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', mh.group(1))).strip()
 
-    # 机场代码
-    codes = []
-    m = re.search(r'<p class="hero-lead[^"]*"[^>]*>(.*?)</p>', h, re.S)
-    if m:
-        codes = re.findall(r'\(([A-Z]{3})\)', m.group(1))
-
-    # 机场名（中文机场名 → 英文）
-    airports_en = []
-    m = re.search(r'(<h2[^>]*>.*?Airport.*?</h2>)', h, re.S)
-    if m:
-        airports_en = re.findall(r'([A-Z][A-Za-z ]+?)\s*\(([A-Z]{3})\)', m.group(1))
-
-    # 兄弟链接（More X Guides 区块里的卡片）
-    sibs = []
-    for m in re.finditer(r'<a class="card" href="([^"]+\.html)"[^>]*>.*?<h3[^>]*>(.*?)</h3>',
-                         h, re.S):
-        sibs.append({'href': m.group(1), 'title': re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', m.group(2))).strip()})
-
-    meta[c] = {
-        'name': name, 'image': img, 'hero_lead': lead, 'hero_sub': sub,
-        'airport_codes': codes,
-        'airports_en': [{'name': n.strip(), 'code': cd} for n, cd in airports_en],
-        'siblings': sibs,
+    meta[slug] = {
+        'name': name,
+        'airports_short': [{'name': a.strip(), 'code': c} for a, c in short],
+        'airports_en': [{'name': a.strip(), 'code': c} for a, c in full][:4],
+        'hero_lead': hero_lead,
     }
 
 json.dump(meta, open('tools/city_meta.json', 'w'), ensure_ascii=False, indent=1)
-print(f'抽取 {len(meta)} 城 → tools/city_meta.json')
-for c in CITIES[:4]:
-    m = meta.get(c, {})
-    print(f"  {c:10s} name={m.get('name'):12s} img={m.get('image'):26s} codes={m.get('airport_codes')} sibs={len(m.get('siblings', []))}")
-print('  ...')
-print(f"  beijing hero_lead: {meta['beijing']['hero_lead'][:90]}")
-print(f"  beijing hero_sub : {meta['beijing']['hero_sub']}")
-print(f"  beijing airports  : {meta['beijing']['airports_en']}")
+print(f'抽取 {len(meta)} 个城市页 → tools/city_meta.json')
+for s in ['beijing', 'changsha', 'xian', 'shanghai', 'harbin', 'lhasa']:
+    if s in meta:
+        m = meta[s]
+        print(f"  {s:10s} {m['name']:14s} short={[x['code'] for x in m['airports_short']]} full={[x['name'] for x in m['airports_en']][:2]}")

@@ -31,7 +31,30 @@ NAME = {c: DISPLAY.get(c, c.capitalize()) for c in CITIES}
 
 log = []
 
-# ---------- 1. 城市页锚点 ----------
+BT_H2 = r'<h2[^>]*>[^<]*(?:Best Time|Seasons Overview|When to Visit|Climate)[^<]*</h2>'
+TEA_H2 = r'<h2[^>]*>[^<]*Tea\s*h?ouse Guide in[^<]*</h2>'
+
+
+def ensure_anchor(h, h2_pat, want):
+    """找到含 h2_pat 的最近 <section>；若无 id 则加 id=want。
+    返回 (html, 实际使用的锚点名)；找不到返回 (html, None)"""
+    m = re.search(h2_pat, h, re.I)
+    if not m:
+        return h, None
+    secs = list(re.finditer(r'<section\b[^>]*>', h[:m.start()]))
+    if not secs:
+        return h, None
+    sec = secs[-1]
+    tag = sec.group(0)
+    mi = re.search(r'id="([^"]+)"', tag)
+    if mi:
+        return h, mi.group(1)
+    h = h[:sec.start()] + tag[:-1] + f' id="{want}">' + h[sec.end():]
+    return h, want
+
+
+# ---------- 1. 城市页锚点（动态发现） ----------
+anchors = {}
 for c in CITIES:
     p = f'{c}.html'
     if not os.path.exists(p):
@@ -39,44 +62,35 @@ for c in CITIES:
     h = open(p, encoding='utf-8').read()
     orig = h
 
-    # 1a. Best Time 段：确保 <section ... id="best-time">
-    if 'id="best-time"' not in h:
-        m = re.search(r'(<section\b[^>]*>)(?=(?:(?!</?section\b).)*?Best Time to Visit)',
-                      h, re.S | re.I)
-        if m:
-            tag = m.group(1)
-            if 'id=' not in tag:
-                h = h[:m.start(1)] + tag[:-1] + ' id="best-time">' + h[m.end(1):]
-                log.append(f'{p}: Best Time 段加 id="best-time"')
+    h, a_bt = ensure_anchor(h, BT_H2, 'best-time')
+    if a_bt and 'id="best-time"' not in orig:
+        log.append(f'{p}: Best Time 段加 id="best-time"')
+    h, a_tea = ensure_anchor(h, TEA_H2, 'tea')
+    if a_tea and 'id="tea"' not in orig:
+        log.append(f'{p}: Tea 段加 id="tea"')
 
-    # 1b. Tea 段：确保有 id="tea"
-    if 'id="tea"' not in h:
-        m = re.search(r'(<section\b[^>]*>)(?=(?:(?!</?section\b).)*?Tea House Guide in)',
-                      h, re.S | re.I)
-        if m:
-            tag = m.group(1)
-            if 'id=' not in tag:
-                h = h[:m.start(1)] + tag[:-1] + ' id="tea">' + h[m.end(1):]
-                log.append(f'{p}: Tea 段加 id="tea"')
-
-    # 1c. 排版 bug： "Guide inWuhan" → "Guide in Wuhan"
-    h2 = re.sub(r'(Tea (?:Culture &amp; )?Tea House Guide in)(?=[A-Z])', r'\1 ', h)
+    h2 = re.sub(r'(Tea\s*h?ouse Guide in)(?=[A-Z])', r'\1 ', h)
     if h2 != h:
         log.append(f'{p}: 修复 "Guide inXXX" 缺空格')
         h = h2
 
     if h != orig:
         open(p, 'w', encoding='utf-8').write(h)
+    anchors[c] = {'best-time': a_bt, 'tea': a_tea}
 
 # ---------- 2. 301 映射 ----------
 plan = {}
 for slug in sorted(MERGED):
     if slug.endswith('-best-time'):
         c = slug[:-len('-best-time')]
-        plan[slug] = f'/{c}.html#best-time'
+        a = anchors.get(c, {}).get('best-time')
+        if a:
+            plan[slug] = f'/{c}.html#{a}'
     else:
         c = slug[:-len('-tea-culture')]
-        plan[slug] = f'/{c}.html#tea'
+        a = anchors.get(c, {}).get('tea')
+        if a:
+            plan[slug] = f'/{c}.html#{a}'
 json.dump(plan, open('tools/theme_merge_plan.json', 'w'), ensure_ascii=False, indent=1)
 
 # ---------- 3. sitemap 移除 ----------
@@ -112,7 +126,7 @@ for c in CITIES:
     for slug in MERGED:
         if slug.startswith(c + '-'):
             anchor = 'best-time' if slug.endswith('-best-time') else 'tea'
-            target = f'{c}.html#{anchor}'
+            target = f'{c}.html#{anchors.get(c, {}).get(anchor, anchor)}'
             # 兄弟列表项（"Other X Guides"）—— 去掉已合并的
             h = re.sub(r'\s*<li><a href="' + re.escape(slug) + r'\.html">.*?</a></li>', '', h, flags=re.S)
             # 卡片 / 普通链接 —— 改为指向城市页对应锚点，保留内链
