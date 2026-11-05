@@ -166,7 +166,11 @@ def sz(p):
     except Exception: return 0
 heavy = []
 for f, s in pages.items():
-    srcs = set(re.findall(r"images/[A-Za-z0-9_.\-]+\.(?:webp|jpg|png)", s))
+    # 只算浏览器真会下载的图：<img src> / <source srcset> / CSS url()
+    # JSON-LD 里的 logo/image 字段是给爬虫看的，浏览器不下载，不该计入页面重量
+    browser = re.sub(r'<script\b[^>]*application/ld\+json[^>]*>.*?</script>', ' ', s,
+                     flags=re.S | re.I)
+    srcs = set(re.findall(r"images/[A-Za-z0-9_.\-]+\.(?:webp|jpg|png)", browser))
     b = sum(sz(x) for x in srcs)
     if b > 400 * 1024: heavy.append((f, b // 1024))
 heavy.sort(key=lambda x: -x[1])
@@ -307,13 +311,18 @@ if os.path.exists(".htaccess"):
     warn("遗留:.htaccess", "GitHub Pages 不生效 → 误导性安全文件，建议删除或迁站后启用")
 
 # ---------- 7. 转化元素 ----------
-no_cta = [f for f in files if f not in CORE and "booking.html" not in pages[f]]
+# noindex 页（别名桩 / 工具页 / 后台）不进索引，不需要转化入口和价格信息
+NOINDEX = {f for f in files
+           if re.search(r'<meta\s+name="robots"[^>]*noindex', pages[f], re.I)}
+no_cta = [f for f in files if f not in CORE and f not in NOINDEX
+          and "booking.html" not in pages[f]]
 if no_cta:
     warn("转化:无预订入口", f"{len(no_cta)}  {' '.join(no_cta[:6])}")
 else:
     ok("转化:无预订入口", "0")
 
-no_price = [f for f in files if f not in CORE and not re.search(r"(?:¥|\$)\d", pages[f])
+no_price = [f for f in files if f not in CORE and f not in NOINDEX
+            and not re.search(r"(?:¥|\$)\d", pages[f])
             and not re.search(r"Quote on request", pages[f])]
 warn("转化:无价格信息", f"{len(no_price)} 页无价格  {' '.join(no_price[:6])}")
 
