@@ -17,6 +17,18 @@ SUB_TYPES = ["airport-transfer-to", "day-trips", "best-time", "food-shopping",
 TOOLS_PAGES = ["batch_download.html", "image_downloader.html", "seo-swot-analysis.html"]
 THIN_LIMIT = 800
 
+# 已配 301 的合并页（vercel.json 里 destination 带 # 锚点的那些）：
+# 它们按设计不进入站内链接图，也不在 sitemap 里
+import json as _json
+MERGED_REDIRECT_SOURCES = set()
+try:
+    _vc0 = _json.load(open("vercel.json", encoding="utf-8"))
+    for _r0 in _vc0.get("redirects", []):
+        if "#" in _r0.get("destination", ""):
+            MERGED_REDIRECT_SOURCES.add(_r0.get("source", "").lstrip("/"))
+except Exception:
+    pass
+
 def read(p):
     try:
         return open(p, encoding="utf-8", errors="ignore").read()
@@ -65,7 +77,8 @@ for k, v in miss.items():
     lvl(f"SEO:{k} 覆盖", f"{len(v)}/{len(files)} 缺失" + (f"  例: {' '.join(v[:5])}" if v else ""))
 
 # ---------- 2. 孤岛页 ----------
-orphans = [f for f in files if is_sub(f) and inbound.get(f, 0) == 0]
+orphans = [f for f in files if is_sub(f) and inbound.get(f, 0) == 0
+           and f not in MERGED_REDIRECT_SOURCES]
 if orphans:
     fail("内链:孤岛子页", f"{len(orphans)} 个零内链  {' '.join(orphans[:6])}")
 else:
@@ -153,8 +166,7 @@ ALIASES = {"beijing_detailed.html","erdos.html","hulunbeier.html","jdz.html","jl
 REAL_SAME_NAME_CITIES = {"taizhou_js.html", "yichun_hlj.html", "suzhou_ah.html",
                           "fuzhou_jx.html", "yulin_sx.html"}
 html_files = set(files) - set(TOOLS_PAGES) - {"admin.html"} - INTENTIONAL_NO_SITEMAP - ALIASES
-# 主题页合并后的 33 个 URL：已在 vercel.json 配 301 → 城市页锚点，按设计不进 sitemap
-import json as _json
+# 主题页合并后的 URL：已在 vercel.json 配 301 → 城市页锚点，按设计不进 sitemap
 MERGED_REDIRECT_SOURCES = set()
 try:
     _vc0 = _json.load(open("vercel.json", encoding="utf-8"))

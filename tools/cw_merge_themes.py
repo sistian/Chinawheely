@@ -30,6 +30,7 @@ MERGED = set(MERGE_BEST_TIME) | set(MERGE_TEA)
 NAME = {c: DISPLAY.get(c, c.capitalize()) for c in CITIES}
 
 log = []
+BASE_URL = 'https://www.chinawheely.com'
 
 BT_H2 = r'<h2[^>]*>[^<]*(?:Best Time|Seasons Overview|When to Visit|Climate)[^<]*</h2>'
 TEA_H2 = r'<h2[^>]*>[^<]*Tea\s*h?ouse Guide in[^<]*</h2>'
@@ -134,6 +135,45 @@ for c in CITIES:
     if h != o:
         open(p, 'w', encoding='utf-8').write(h)
         log.append(f'{p}: 清理指向已合并页的链接')
+
+# ---------- 4. 站内链接全站清扫 ----------
+# 任何页面（含主题页彼此的 sibling 列表）指向已合并页的链接 → 改指城市页锚点
+anchor_of = {}
+for slug, target in plan.items():
+    c = slug.rsplit('-best-time', 1)[0] if slug.endswith('-best-time') else slug[:-len('-tea-culture')]
+    anchor_of[slug] = target.split('#', 1)[1] if '#' in target else ''
+
+swept = 0
+for f in sorted(os.listdir('.')):
+    if not f.endswith('.html'):
+        continue
+    h = open(f, encoding='utf-8').read()
+    o = h
+    for slug, target in plan.items():
+        c = slug.rsplit('-best-time', 1)[0] if slug.endswith('-best-time') else slug[:-len('-tea-culture')]
+        h = h.replace(f'href="{slug}.html"', f'href="{c}.html#{anchor_of[slug]}"')
+        h = h.replace(f"href='{slug}.html'", f'href="{c}.html#{anchor_of[slug]}"')
+    if h != o:
+        open(f, 'w', encoding='utf-8').write(h)
+        swept += 1
+log.append(f'全站链接清扫：{swept} 页')
+
+# ---------- 5. 已合并页自身：noindex + canonical 指向目标 ----------
+for slug, target in plan.items():
+    p = slug + '.html'
+    if not os.path.exists(p):
+        continue
+    h = open(p, encoding='utf-8').read()
+    o = h
+    if 'name="robots"' in h:
+        h = re.sub(r'(<meta name="robots" content=")[^"]*(")', r'\1noindex, follow\2', h)
+    else:
+        h = h.replace('<link rel="canonical"', '<meta name="robots" content="noindex, follow">\n  <link rel="canonical"', 1)
+    h = re.sub(r'(<link rel="canonical" href=")[^"]*(")',
+               lambda m: m.group(1) + f'{BASE_URL}{target}' + m.group(2), h, count=1)
+    if h != o:
+        open(p, 'w', encoding='utf-8').write(h)
+log.append(f'已合并页 {len(plan)} 个设为 noindex + canonical 指向目标')
 
 print('\n'.join(f'  · {x}' for x in log) if log else '  (无变化)')
 print(f'\n合并计划 {len(plan)} 条 → tools/theme_merge_plan.json')
