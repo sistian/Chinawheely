@@ -166,7 +166,46 @@ for t, n in tok.most_common(25):
     print(f"   🔴 「{t}」 ×{n}  涉及 {len(tok_files[t])} 页  例: {tok_files[t][:3]}")
 
 print("\n" + "=" * 72)
-print("【5】JSON-LD 中的占位/空值")
+print("【6】独占地标误用门禁（冰雪大世界等只能出现在归属城市）")
+print("=" * 72)
+# 地标 → 唯一归属城市 slug（只登记“独占型”地标）
+EXCLUSIVE = {
+    "冰雪大世界": {"harbin"},
+    "Ice and Snow World": {"harbin"},
+    "Harbin Ice and Snow World": {"harbin"},
+    "净月潭": {"changchun"},
+    "Jingyuetan": {"changchun"},
+    "瓦萨滑雪节": {"changchun"},
+    "Vasaloppet": {"changchun"},
+    "长春冰雪旅游节": {"changchun"},
+    "冰雪新天地": {"changchun"},
+    "天定山": {"changchun"},
+    "莲花山滑雪场": {"changchun"},
+}
+owner_viol = []
+THEME_SUFFIX = re.compile(
+    r"-(best-time|day-trips|photo-spots|food-shopping|tea-culture|airport-transfer-to-[a-z-]+|detailed)$")
+for fn in CITYPAGE:
+    slug = fn[:-5]
+    base = THEME_SUFFIX.sub("", slug)   # 主题页归属到母城
+    txt = plain(open(os.path.join(ROOT, fn), encoding="utf-8", errors="ignore").read())
+    for term, owners in EXCLUSIVE.items():
+        if base in owners:
+            continue
+        for m in word_re(term).finditer(txt):
+            ctx = txt[max(0, m.start() - 130): m.end() + 130]
+            # 消歧句里会提到别城地标（“not to be confused with Harbin's Ice and Snow World”）
+            if re.search(r"not to be confused|do not confuse|separate and much larger", ctx, re.I):
+                continue
+            owner_viol.append((fn, term, ctx.strip()))
+if not owner_viol:
+    print("   ✅ 独占地标未出现在非归属城市页")
+for fn, term, ctx in owner_viol[:20]:
+    print(f"   🔴 {fn:24s} 含独占地标「{term}」")
+    print(f"        …{ctx[:170]}…")
+
+print("\n" + "=" * 72)
+print("【7】JSON-LD 中的占位/空值")
 print("=" * 72)
 bad_ld = collections.defaultdict(list)
 for fn in CITYPAGE:
@@ -182,6 +221,7 @@ for k, v in sorted(bad_ld.items(), key=lambda x: -len(x[1]))[:20]:
 json.dump({"cross": {f"{a}|{b}": c for (a, b, c) in cross},
            "bad_prov": bad_prov, "iata_bad": iata_bad,
            "tokens": {k: v for k, v in tok.items()},
-           "jsonld": {k: v for k, v in bad_ld.items()}},
+           "jsonld": {k: v for k, v in bad_ld.items()},
+           "exclusive_violation": [(f, t, c[:200]) for f, t, c in owner_viol]},
           open("/tmp/accuracy.json", "w"), ensure_ascii=False)
 print("\n→ /tmp/accuracy.json")
