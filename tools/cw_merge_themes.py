@@ -171,6 +171,8 @@ for slug, target in plan.items():
         h = h.replace('<link rel="canonical"', '<meta name="robots" content="noindex, follow">\n  <link rel="canonical"', 1)
     h = re.sub(r'(<link rel="canonical" href=")[^"]*(")',
                lambda m: m.group(1) + f'{BASE_URL}{target}' + m.group(2), h, count=1)
+    h = re.sub(r'(<meta property="og:url" content=")[^"]*(")',
+               lambda m: m.group(1) + f'{BASE_URL}{target}' + m.group(2), h, count=1)
     if h != o:
         open(p, 'w', encoding='utf-8').write(h)
 log.append(f'已合并页 {len(plan)} 个设为 noindex + canonical 指向目标')
