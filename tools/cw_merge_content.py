@@ -53,26 +53,7 @@ def put(slug, val, origin):
     src[slug] = origin
 
 
-# 1) 聚合文件
-for p in sorted(glob.glob(os.path.join(WS, '*.json'))):
-    b = os.path.basename(p)
-    if b in ('wiki_cache.json',) or b in [f'{x}.json' for x in FAMS]:
-        continue
-    d = safe_load(p)
-    if not d:
-        continue
-    for k, v in d.items():
-        put(k, v, b)
-
-# 2) 分片
-for p in sorted(glob.glob(os.path.join(WS, 'parts', '*.json'))):
-    d = safe_load(p)
-    if not d:
-        continue
-    for k, v in d.items():
-        put(k, v, 'parts/' + os.path.basename(p))
-
-# 3) 单页文件
+# 1) 单页文件（优先级最高：pages/ 是每个 agent 的最新单页交付）
 for p in sorted(glob.glob(os.path.join(WS, 'pages', '*.json'))):
     d = safe_load(p)
     if not d:
@@ -93,6 +74,25 @@ for p in sorted(glob.glob(os.path.join(WS, 'pages', '*.json'))):
             slug = base
     put(slug, d, 'pages/' + os.path.basename(p))
     n_pages += 1
+
+# 2) 分片
+for p in sorted(glob.glob(os.path.join(WS, 'parts', '*.json'))):
+    d = safe_load(p)
+    if not d:
+        continue
+    for k, v in d.items():
+        put(k, v, 'parts/' + os.path.basename(p))
+
+# 3) 旧聚合文件（theme_content/*.json：airport_a/b, sights_a/b/c, food_a/b/c, tea_pages）
+for p in sorted(glob.glob(os.path.join(WS, '*.json'))):
+    b = os.path.basename(p)
+    if b in ('wiki_cache.json',) or b in [f'{x}.json' for x in FAMS]:
+        continue
+    d = safe_load(p)
+    if not d:
+        continue
+    for k, v in d.items():
+        put(k, v, b)
 
 # 4) 写盘
 for f in FAMS:
