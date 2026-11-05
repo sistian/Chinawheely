@@ -17,15 +17,20 @@ SUB_TYPES = ["airport-transfer-to", "day-trips", "best-time", "food-shopping",
 TOOLS_PAGES = ["batch_download.html", "image_downloader.html", "seo-swot-analysis.html"]
 THIN_LIMIT = 800
 
-# 已配 301 的合并页（vercel.json 里 destination 带 # 锚点的那些）：
+# 已配 301 的页（vercel.json redirects 里所有 source）：
 # 它们按设计不进入站内链接图，也不在 sitemap 里
 import json as _json
+REDIRECT_SOURCES = set()
 MERGED_REDIRECT_SOURCES = set()
 try:
     _vc0 = _json.load(open("vercel.json", encoding="utf-8"))
     for _r0 in _vc0.get("redirects", []):
+        _s0 = _r0.get("source", "").lstrip("/")
+        if not _s0:
+            continue
+        REDIRECT_SOURCES.add(_s0)
         if "#" in _r0.get("destination", ""):
-            MERGED_REDIRECT_SOURCES.add(_r0.get("source", "").lstrip("/"))
+            MERGED_REDIRECT_SOURCES.add(_s0)
 except Exception:
     pass
 
@@ -60,21 +65,38 @@ def is_sub(f):
     return any(t in f for t in SUB_TYPES)
 
 # ---------- 1. 基础 SEO ----------
+# noindex 页不进搜索索引，OG/Twitter/ld+json/viewport 对它们无 SEO 意义，
+# 因此这些门禁只对可索引页生效（否则会被 noindex 的后台/工具页刷屏）。
+def is_noindex(f):
+    s = pages.get(f, "")
+    return bool(re.search(r'name="robots"[^>]*content="[^"]*noindex', s, re.I)) \
+        or bool(re.search(r'content="[^"]*noindex[^"]*"[^>]*name="robots"', s, re.I))
+
+INDEXABLE = [f for f in files if not is_noindex(f)]
+NOINDEX_PAGES = [f for f in files if is_noindex(f)]
+
 miss = {"og:image": [], "twitter:card": [], "canonical": [], "h1": [],
         "ld+json": [], "viewport": [], "csp": [], "lazy": []}
 for f, s in pages.items():
-    if "og:image" not in s: miss["og:image"].append(f)
-    if "twitter:card" not in s: miss["twitter:card"].append(f)
+    idx = f in INDEXABLE
+    if idx and "og:image" not in s: miss["og:image"].append(f)
+    if idx and "twitter:card" not in s: miss["twitter:card"].append(f)
     if 'rel="canonical"' not in s: miss["canonical"].append(f)
     if "<h1" not in s: miss["h1"].append(f)
-    if "application/ld+json" not in s: miss["ld+json"].append(f)
-    if 'name="viewport"' not in s: miss["viewport"].append(f)
-    if "Content-Security-Policy" not in s: miss["csp"].append(f)
+    if idx and "application/ld+json" not in s: miss["ld+json"].append(f)
+    if idx and 'name="viewport"' not in s: miss["viewport"].append(f)
+    if idx and "Content-Security-Policy" not in s: miss["csp"].append(f)
     if "<img" in s and 'loading="lazy"' not in s: miss["lazy"].append(f)
 
 for k, v in miss.items():
+    if not v:
+        ok(f"SEO:{k} 覆盖", f"0/{len(INDEXABLE)} 可索引页缺失")
+        continue
     lvl = fail if k in ("h1", "canonical", "og:image") and len(v) > 5 else warn
-    lvl(f"SEO:{k} 覆盖", f"{len(v)}/{len(files)} 缺失" + (f"  例: {' '.join(v[:5])}" if v else ""))
+    lvl(f"SEO:{k} 覆盖", f"{len(v)}/{len(INDEXABLE)} 可索引页缺失"
+        + (f"  例: {' '.join(v[:5])}"))
+if NOINDEX_PAGES:
+    ok("SEO:noindex 页排除", f"{len(NOINDEX_PAGES)} 页不进索引，已从 OG/ld+json 门禁排除")
 
 # ---------- 2. 孤岛页 ----------
 orphans = [f for f in files if is_sub(f) and inbound.get(f, 0) == 0
@@ -84,7 +106,29 @@ if orphans:
 else:
     ok("内链:孤岛子页", "0")
 
-weak = [f for f in files if f not in CORE and inbound.get(f, 0) < 3]
+# 孤岛城市页：可索引 + 进 sitemap，但站内除自己外无人链接
+_city_orphans = []
+for f in files:
+    if f in NOINDEX_PAGES or f in REDIRECT_SOURCES:
+        continue
+    t = re.search(r"<title>(.*?)</title>", pages[f], re.S)
+    title = re.sub(r"\s+", " ", t.group(1)) if t else ""
+    if not re.search(r"Airport Transfer|Car Service|Private Car", title, re.I):
+        continue
+    if any(s in f for s in SUB_TYPES):
+        continue
+    # 除自己外还有谁链到它
+    srcs = {g for g, gs in pages.items() if g != f and f in
+            re.findall(r'href="([a-zA-Z0-9_\-]+\.html)(?:#[^"]*)?"', gs)}
+    if not srcs:
+        _city_orphans.append(f)
+if _city_orphans:
+    fail("内链:孤岛城市页", f"{len(_city_orphans)} 个零内链  {' '.join(_city_orphans[:8])}")
+else:
+    ok("内链:孤岛城市页", "0")
+
+weak = [f for f in files if f not in CORE and inbound.get(f, 0) < 3
+        and f not in REDIRECT_SOURCES and f not in NOINDEX_PAGES]
 if weak:
     warn("内链:弱内链页(<3入链)", f"{len(weak)} 个  {' '.join(weak[:8])}")
 else:
@@ -93,7 +137,10 @@ else:
 # ---------- 3. 薄页 / 别名页 ----------
 thin = []
 for f, s in pages.items():
-    if f in ("admin.html",): continue
+    if f in ("admin.html",):
+        continue
+    if f in REDIRECT_SOURCES or f in TOOLS_PAGES or f in NOINDEX_PAGES:
+        continue          # 301 桩页 / 工具页 / noindex 页按设计就是短的
     n = len(text_of(s))
     if n < THIN_LIMIT: thin.append((f, n))
 if thin:
