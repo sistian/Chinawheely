@@ -29,5 +29,77 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/beijing_detailed.html",
+      "destination": "/beijing.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/erdos.html",
+      "destination": "/eerduosi.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/hulunbeier.html",
+      "destination": "/eerduosi.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jdz.html",
+      "destination": "/jingdezhen.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jinzhou_ln.html",
+      "destination": "/jinzhou.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jl.html",
+      "destination": "/jilin.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/juncheng.html",
+      "destination": "/yuncheng.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/kelamayi.html",
+      "destination": "/karamay.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/suzhou-jiangsu.html",
+      "destination": "/suzhou.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/taizhou_zj.html",
+      "destination": "/taizhou.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/wulumuqi.html",
+      "destination": "/urumqi.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/yan_an.html",
+      "destination": "/yanan.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/yichun-heilongjiang.html",
+      "destination": "/yichun_hlj.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/yichun_jx.html",
+      "destination": "/yichun.html",
+      "statusCode": 301
+    }
   ]
 }

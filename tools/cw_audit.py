@@ -90,8 +90,13 @@ else:
 
 alias = [f for f in files if re.search(r"(detailed|_ln|_zj|_js|_ah|_sx|_gx|_nm|_sc|_xj|_jx|_hlj)\.html$", f)
          or f in TOOLS_PAGES + ["zhong卫.html"]]
+# 别名桩页 = 命中命名模式 **且** 正文很短（<1000 字符）。
+# 「同名不同省」的真实城市页（taizhou_js / yichun_hlj / suzhou_ah / fuzhou_jx / yulin_sx）
+# 正文有 1.5–2.3 万字符，是独立城市内容，必须可索引，不能当成桩页强制 noindex。
 for f in alias:
     s = pages[f]
+    if len(text_of(s)) >= 1000:
+        continue          # 内容充实 → 是真实页面，跳过 noindex 强制检查
     if 'name="robots"' not in s or "noindex" not in s:
         warn("薄页:未 noindex", f)
 
@@ -139,11 +144,14 @@ sm_urls = {u for u in re.findall(r"<loc>([^<]+)</loc>", sm)
 sm_files = {u.rsplit("/", 1)[-1] for u in sm_urls}
 # 以下页面按设计不进 sitemap：首页(用 /)、404、别名/薄页(已 noindex)、工具页
 INTENTIONAL_NO_SITEMAP = {"index.html", "404.html", "thank-you.html", "manage-order.html"}
+# 14 个别名桩页：内容 42–45 词的「This page has moved」，已在 vercel.json 配 301 → 正牌页
 ALIASES = {"beijing_detailed.html","erdos.html","hulunbeier.html","jdz.html","jl.html",
-           "wulumuqi.html","kelamayi.html","jinzhou_ln.html","taizhou_js.html",
-           "taizhou_zj.html","yichun_hlj.html","yichun_jx.html","yichun-heilongjiang.html",
-           "suzhou-jiangsu.html","suzhou_ah.html","fuzhou_jx.html","juncheng.html",
-           "yan_an.html","yulin_sx.html"}
+           "wulumuqi.html","kelamayi.html","jinzhou_ln.html",
+           "taizhou_zj.html","yichun_jx.html","yichun-heilongjiang.html",
+           "suzhou-jiangsu.html","juncheng.html","yan_an.html"}
+# 5 个「同名不同省」的真实城市页：各有 2600–3800 词独立内容，必须可索引 + 进 sitemap
+REAL_SAME_NAME_CITIES = {"taizhou_js.html", "yichun_hlj.html", "suzhou_ah.html",
+                          "fuzhou_jx.html", "yulin_sx.html"}
 html_files = set(files) - set(TOOLS_PAGES) - {"admin.html"} - INTENTIONAL_NO_SITEMAP - ALIASES
 missing_sm = sorted(html_files - sm_files)
 if missing_sm:
@@ -155,6 +163,61 @@ if dead_sm:
     fail("sitemap:死链", f"{len(dead_sm)}  {' '.join(dead_sm[:8])}")
 else:
     ok("sitemap:死链", "0")
+
+# ---------- 5b. 同名不同省城市页：必须可索引 + 自指 canonical + 进 sitemap ----------
+_bad_real = []
+for _f in sorted(REAL_SAME_NAME_CITIES):
+    if not os.path.exists(_f):
+        _bad_real.append(f"{_f}:文件缺失"); continue
+    _h = read(_f)
+    _hd = _h.split("</head>")[0] if "</head>" in _h else _h[:20000]
+    _mr = re.search(r'<meta[^>]+name=["\']robots["\'][^>]*content=["\']([^"\']+)', _hd, re.I)
+    _mc = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]*href=["\']([^"\']+)', _hd, re.I)
+    _mo = re.search(r'<meta[^>]+property=["\']og:url["\'][^>]*content=["\']([^"\']+)', _hd, re.I)
+    _r = (_mr.group(1) if _mr else "").lower()
+    _c = (_mc.group(1).replace("https://www.chinawheely.com", "") if _mc else "")
+    _o = (_mo.group(1).replace("https://www.chinawheely.com", "") if _mo else "")
+    if "noindex" in _r:
+        _bad_real.append(f"{_f}:noindex")
+    if _c.rstrip("/") != "/" + _f:
+        _bad_real.append(f"{_f}:canonical={_c}")
+    if _o.rstrip("/") != "/" + _f:
+        _bad_real.append(f"{_f}:og:url={_o}")
+    if _f not in sm_files:
+        _bad_real.append(f"{_f}:不在sitemap")
+if _bad_real:
+    fail("同名不同省城市页", f"{len(_bad_real)}  {' '.join(_bad_real[:6])}")
+else:
+    ok("同名不同省城市页", "5 页均可索引且自指 canonical")
+
+# ---------- 5c. 301 重定向表：vercel.json 里的每条都要有合法且存在的目标 ----------
+import json as _json
+try:
+    _vc = _json.load(open("vercel.json", encoding="utf-8"))
+    _rds = _vc.get("redirects", [])
+    _bad_rd = []
+    _seen_src = set()
+    for _r0 in _rds:
+        _s = _r0.get("source", "")
+        _d = _r0.get("destination", "")
+        if _s in _seen_src:
+            _bad_rd.append(f"重复:{_s}")
+        _seen_src.add(_s)
+        if _r0.get("statusCode") != 301:
+            _bad_rd.append(f"{_s}:状态码={_r0.get('statusCode')}")
+        if _s == _d:
+            _bad_rd.append(f"{_s}:自我重定向")
+        _tgt = _d.lstrip("/")
+        if not os.path.exists(_tgt):
+            _bad_rd.append(f"{_s}:目标不存在({_tgt})")
+        if _tgt in ALIASES:
+            _bad_rd.append(f"{_s}:目标是桩页")
+    if _bad_rd:
+        fail("301重定向表", f"{len(_bad_rd)}  {' '.join(_bad_rd[:6])}")
+    else:
+        ok("301重定向表", f"{len(_rds)} 条，状态码/目标/桩页均正确")
+except Exception as _e:
+    fail("301重定向表", f"vercel.json 读取失败 {_e}")
 
 # ---------- 6. 安全 ----------
 robots = read("robots.txt")
