@@ -582,9 +582,16 @@ def patch_page(slug, family, city, d, title, desc, dry=False):
         start = m.start()
         end = h.find('</main>', start)
         head_links = ''
-        hl = re.search(r'<div class="page-head-links">.*?</div>\s*</div>', h[start:end], re.S)
+        # ⚠ 只取 page-head-links 这个 div 本身。旧写法 r'.*?</div>\s*</div>' 的非贪婪匹配
+        # 会跨过整个旧正文（section/h2/h4/卡片），把旧模板内容原样塞回新 <main> 前面，
+        # 导致每个页面变成「旧正文 + 新正文」双份（跨页重复句、词数虚高都源于此）。
+        hl = re.search(r'<div class="page-head-links">.*?</div>', h[start:end], re.S)
         if hl:
-            head_links = hl.group(0)
+            cand = hl.group(0)
+            if '<section' in cand or '<h2' in cand or '<h4' in cand or '<div class="card"' in cand:
+                cut = cand.find('</div>')
+                cand = cand[:cut + len('</div>')] if cut > 0 else ''
+            head_links = cand
         new_main = (m.group(0) + head_links + '\n' + body_html + '\n</main>')
         h = h[:start] + new_main + h[end + len('</main>'):]
         # 清掉 </main> 与 page-siblings 之间旧模板遗留的 Tips/Gear 固定段
