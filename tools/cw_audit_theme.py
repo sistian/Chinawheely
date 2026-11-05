@@ -70,6 +70,19 @@ for f in sorted(os.listdir('.')):
         theme.append((f, fam))
 print(f'主题页 {len(theme)} 个')
 
+# 已配 301 的页（33 个合并桩页 + 14 个别名桩页）：
+# 按设计就是 noindex 的跳转桩，内容门禁（词数/h2/JSON-LD/main）不适用
+import json as _json
+REDIRECT_SOURCES = set()
+try:
+    for _r in _json.load(open("vercel.json", encoding="utf-8")).get("redirects", []):
+        _s = _r.get("source", "").lstrip("/")
+        if _s:
+            REDIRECT_SOURCES.add(_s)
+except Exception:
+    pass
+print(f'其中 301 跳转桩 {len(REDIRECT_SOURCES)} 个（排除在内容门禁外）')
+
 # 1 词数
 thin = []
 data = {}
@@ -79,7 +92,8 @@ for f, fam in theme:
     t = text_of(b)
     data[f] = (fam, t, h)
     if len(t.split()) < MIN_WORDS.get(fam, 500):
-        thin.append(f'{f}({len(t.split())})')
+        if f not in REDIRECT_SOURCES:
+            thin.append(f'{f}({len(t.split())})')
 if thin:
     add('FAIL', '主题页:正文词数', f'{len(thin)} 页低于阈值 {thin[:6]}')
 else:
@@ -114,21 +128,24 @@ else:
     add('PASS', '主题页:同族重复度', f'各族中位相似度均 ≤ {SIM_MAX}')
 
 # 3 h2 数量
-few_h2 = [f for f, fam in theme if len(re.findall(r'<h2\b', data[f][2], re.I)) < 4]
+few_h2 = [f for f, fam in theme if f not in REDIRECT_SOURCES
+          and len(re.findall(r'<h2\b', data[f][2], re.I)) < 4]
 if few_h2:
     add('FAIL', '主题页:内容层次', f'{len(few_h2)} 页 h2 < 4  {few_h2[:6]}')
 else:
     add('PASS', '主题页:内容层次', '每页 h2 ≥ 4')
 
 # 4 seo-keywords 堆砌块
-sk = [f for f in data if 'seo-keywords' in data[f][2]]
+sk = [f for f in data if 'seo-keywords' in data[f][2]
+      and f not in REDIRECT_SOURCES]
 if sk:
     add('FAIL', '主题页:关键词堆砌块', f'{len(sk)} 页仍含 seo-keywords  {sk[:6]}')
 else:
     add('PASS', '主题页:关键词堆砌块', '0 页含 seo-keywords 块')
 
 # 5 <main>
-nm = [f for f in data if '<main' not in data[f][2]]
+nm = [f for f in data if '<main' not in data[f][2]
+      and f not in REDIRECT_SOURCES]
 if nm:
     add('FAIL', '主题页:main 地标', f'{len(nm)} 页缺 <main>  {nm[:6]}')
 else:
