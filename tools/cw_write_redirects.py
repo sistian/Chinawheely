@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """把 301 重定向表写进 vercel.json（幂等）：
-- 14 个别名桩页 → 权威目标页，statusCode 301
-- 同时保留 headers 段
+- 14 个别名桩页 → 权威正牌页，statusCode 301
+- 主题页合并（best-time 23 + tea-culture 10）→ 城市页锚点
+- 同时保留 headers 段（CSP / X-Frame-Options / HSTS …）
 """
-import json, os, re
+import json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VP = os.path.join(ROOT, "vercel.json")
+MERGE_PLAN = os.path.join(ROOT, "tools", "theme_merge_plan.json")
 
-REDIRECTS = [
+# 14 个别名桩页（正文 <1000 字符的 H1="This page has moved" 页）
+ALIAS_REDIRECTS = [
     ("/beijing_detailed.html", "/beijing.html"),
     ("/erdos.html", "/eerduosi.html"),
     ("/hulunbeier.html", "/eerduosi.html"),
     ("/jdz.html", "/jingdezhen.html"),
-    ("/jincheng.html", "/jincheng.html"),          # 占位，稍后剔除
     ("/jinzhou_ln.html", "/jinzhou.html"),
     ("/jl.html", "/jilin.html"),
     ("/juncheng.html", "/yuncheng.html"),
@@ -26,20 +28,34 @@ REDIRECTS = [
     ("/yichun-heilongjiang.html", "/yichun_hlj.html"),
     ("/yichun_jx.html", "/yichun.html"),
 ]
-REDIRECTS = [(s, d) for s, d in REDIRECTS if s != d]   # 剔除自我重定向
 
-cfg = json.load(open(VP, encoding="utf-8"))
-existing = cfg.get("redirects", [])
-seen = {(r.get("source"), r.get("destination")) for r in existing}
-added = 0
-for src, dst in REDIRECTS:
-    if (src, dst) in seen:
-        continue
-    existing.append({"source": src, "destination": dst, "statusCode": 301})
-    added += 1
-cfg["redirects"] = existing
-json.dump(cfg, open(VP, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
-print(f"vercel.json 重定向：新增 {added} 条，共 {len(existing)} 条")
-for r in existing:
-    print(f"   301  {r['source']:30s} → {r['destination']}")
+def build_plan():
+    plan = dict(ALIAS_REDIRECTS)
+    if os.path.exists(MERGE_PLAN):
+        for slug, target in json.load(open(MERGE_PLAN, encoding="utf-8")).items():
+            plan[f"/{slug}.html"] = target
+    return plan
+
+
+def main():
+    plan = build_plan()
+    cfg = json.load(open(VP, encoding="utf-8"))
+    cfg["redirects"] = [
+        {"source": s, "destination": d, "statusCode": 301}
+        for s, d in sorted(plan.items())
+    ]
+    json.dump(cfg, open(VP, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print(f"vercel.json redirects = {len(cfg['redirects'])} 条（别名 {len(ALIAS_REDIRECTS)} + 主题合并 {len(plan) - len(ALIAS_REDIRECTS)}）")
+    for r in cfg["redirects"]:
+        print(f"   301  {r['source']:36s} → {r['destination']}")
+    # 自检
+    srcs = [r["source"] for r in cfg["redirects"]]
+    assert len(srcs) == len(set(srcs)), "source 有重复"
+    for r in cfg["redirects"]:
+        assert r["source"] != r["destination"], f"自我重定向: {r}"
+    print("   自检通过：无重复 source、无自我重定向")
+
+
+if __name__ == "__main__":
+    main()

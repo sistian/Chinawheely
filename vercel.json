@@ -32,13 +32,78 @@
   ],
   "redirects": [
     {
+      "source": "/beijing-best-time.html",
+      "destination": "/beijing.html#best-time",
+      "statusCode": 301
+    },
+    {
       "source": "/beijing_detailed.html",
       "destination": "/beijing.html",
       "statusCode": 301
     },
     {
+      "source": "/changsha-best-time.html",
+      "destination": "/changsha.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/chengdu-best-time.html",
+      "destination": "/chengdu.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/chongqing-best-time.html",
+      "destination": "/chongqing.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/chongqing-tea-culture.html",
+      "destination": "/chongqing.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/dalian-best-time.html",
+      "destination": "/dalian.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/dalian-tea-culture.html",
+      "destination": "/dalian.html#tea",
+      "statusCode": 301
+    },
+    {
       "source": "/erdos.html",
       "destination": "/eerduosi.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/fuzhou-best-time.html",
+      "destination": "/fuzhou.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/guangzhou-best-time.html",
+      "destination": "/guangzhou.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/hangzhou-best-time.html",
+      "destination": "/hangzhou.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/harbin-best-time.html",
+      "destination": "/harbin.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/harbin-tea-culture.html",
+      "destination": "/harbin.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/hefei-best-time.html",
+      "destination": "/hefei.html#best-time",
       "statusCode": 301
     },
     {
@@ -49,6 +114,16 @@
     {
       "source": "/jdz.html",
       "destination": "/jingdezhen.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jinan-best-time.html",
+      "destination": "/jinan.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/jinan-tea-culture.html",
+      "destination": "/jinan.html#tea",
       "statusCode": 301
     },
     {
@@ -72,6 +147,56 @@
       "statusCode": 301
     },
     {
+      "source": "/kunming-best-time.html",
+      "destination": "/kunming.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/nanchang-best-time.html",
+      "destination": "/nanchang.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/nanjing-best-time.html",
+      "destination": "/nanjing.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/qingdao-best-time.html",
+      "destination": "/qingdao.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/qingdao-tea-culture.html",
+      "destination": "/qingdao.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/shanghai-best-time.html",
+      "destination": "/shanghai.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/shanghai-tea-culture.html",
+      "destination": "/shanghai.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/shenzhen-best-time.html",
+      "destination": "/shenzhen.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/shenzhen-tea-culture.html",
+      "destination": "/shenzhen.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/suzhou-best-time.html",
+      "destination": "/suzhou.html#best-time",
+      "statusCode": 301
+    },
+    {
       "source": "/suzhou-jiangsu.html",
       "destination": "/suzhou.html",
       "statusCode": 301
@@ -82,8 +207,43 @@
       "statusCode": 301
     },
     {
+      "source": "/tianjin-best-time.html",
+      "destination": "/tianjin.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/tianjin-tea-culture.html",
+      "destination": "/tianjin.html#tea",
+      "statusCode": 301
+    },
+    {
+      "source": "/wuhan-best-time.html",
+      "destination": "/wuhan.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/wuhan-tea-culture.html",
+      "destination": "/wuhan.html#tea",
+      "statusCode": 301
+    },
+    {
       "source": "/wulumuqi.html",
       "destination": "/urumqi.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/xiamen-best-time.html",
+      "destination": "/xiamen.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/xian-best-time.html",
+      "destination": "/xian.html#best-time",
+      "statusCode": 301
+    },
+    {
+      "source": "/xian-tea-culture.html",
+      "destination": "/xian.html#tea",
       "statusCode": 301
     },
     {
@@ -99,6 +259,11 @@
     {
       "source": "/yichun_jx.html",
       "destination": "/yichun.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/zhengzhou-best-time.html",
+      "destination": "/zhengzhou.html#best-time",
       "statusCode": 301
     }
   ]
