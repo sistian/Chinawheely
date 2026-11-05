@@ -171,7 +171,8 @@ if no_cta:
 else:
     ok("转化:无预订入口", "0")
 
-no_price = [f for f in files if f not in CORE and not re.search(r"\$\d", pages[f])]
+no_price = [f for f in files if f not in CORE and not re.search(r"(?:¥|\$)\d", pages[f])
+            and not re.search(r"Quote on request", pages[f])]
 warn("转化:无价格信息", f"{len(no_price)} 页无价格  {' '.join(no_price[:6])}")
 
 # ---------- 8. 价格一致性（P3 引入） ----------
