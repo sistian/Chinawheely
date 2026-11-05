@@ -60,7 +60,10 @@ async function createOrder(record) {
     product: record.product || null,
     vehicle: record.vehicle || null,
     tier: record.tier || null,
-    quote_json: record.quote ? JSON.stringify(record.quote) : null,
+    // jsonb 列：直接存对象，不要 JSON.stringify
+    // （stringify 后再存进 jsonb 会变成「jsonb 字符串标量」，
+    //   PostgREST 读回来是字符串而不是对象，SQL 里也没法用 quote->>'total' 取值）
+    quote_json: record.quote ?? null,
     total_cny: record.quote ? record.quote.total : null,
     total_usd: record.quote ? record.quote.usd : null,
     currency: record.quote ? 'CNY' : null,
@@ -68,7 +71,7 @@ async function createOrder(record) {
     pickup_time: record.trip && record.trip.time ? record.trip.time : null,
     pax: record.trip && record.trip.pax ? Number(String(record.trip.pax).replace(/\D/g, '')) || null : null,
     luggage: record.trip && record.trip.luggage ? Number(String(record.trip.luggage).replace(/\D/g, '')) || null : null,
-    contact_json: record.contact ? JSON.stringify(record.contact) : null,
+    contact_json: record.contact ?? null,
     notes: record.notes || null,
     manage_token_hash: token.hash,
     manage_token_expires_at: manageTokenExpiry(),
