@@ -564,6 +564,22 @@ def patch_page(slug, family, city, d, title, desc, dry=False):
         # 旧模板：<main class="container content"> ... </main>
         m = re.search(r'<main[^>]*>', h)
         start = m.start()
+        # 清掉 <main> 之前旧模板遗留的预览区块（「Popular *」卡栅 / 「Overview:*」固定段）。
+        # 它们是全族同一句式，是跨页重复句审的主要来源；只清 main 前，
+        # main 内新正文里合法的「Overview: Tea Culture in X」不受影响。
+        def _drop_legacy(mm):
+            blk = mm.group(0)
+            t = re.search(r'<h2[^>]*>([^<]{0,60})', blk)
+            if ('<div class="section-header">' in blk and t
+                    and (t.group(1).startswith('Popular ')
+                         or t.group(1).startswith('Overview:'))):
+                return ''
+            return blk
+        pre = re.sub(r'<section\b[^>]*class="section"[^>]*>.*?</section>',
+                     _drop_legacy, h[:start], flags=re.S)
+        h = pre + h[start:]
+        m = re.search(r'<main[^>]*>', h)
+        start = m.start()
         end = h.find('</main>', start)
         head_links = ''
         hl = re.search(r'<div class="page-head-links">.*?</div>\s*</div>', h[start:end], re.S)
@@ -571,6 +587,19 @@ def patch_page(slug, family, city, d, title, desc, dry=False):
             head_links = hl.group(0)
         new_main = (m.group(0) + head_links + '\n' + body_html + '\n</main>')
         h = h[:start] + new_main + h[end + len('</main>'):]
+        # 清掉 </main> 与 page-siblings 之间旧模板遗留的 Tips/Gear 固定段
+        # （Day Trip Tips / Iconic Landmarks / More Places… / Photography Tips for X；
+        # 　新正文已把 tips_section/gear_section 放进 <main>，外面这份是重复模板）
+        sib2 = h.find('<div class="page-siblings"')
+        mend2 = h.find('</main>', start)
+        if sib2 > mend2 > 0:
+            mend2 += len('</main>')
+            def _drop_post(mm):
+                return '' if '<div class="section-header">' in mm.group(0) else mm.group(0)
+            h = (h[:mend2]
+                 + re.sub(r'<section\b[^>]*class="section"[^>]*>.*?</section>',
+                          _drop_post, h[mend2:sib2], flags=re.S)
+                 + h[sib2:])
     else:
         # 新模板：hero </section> 之后的 <div class="container ..."> 才是正文容器
         start = None
