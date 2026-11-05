@@ -99,8 +99,9 @@ def render_airport(slug, d, city):
         for a in airports:
             rows.append(
                 f'<div class="card"><h4>{a.get("name","")} ({a.get("code","")})</h4>'
-                f'<p><strong>{a.get("distance_km","?")} km</strong> from the terminal, about '
-                f'<strong>{a.get("drive_time_min","?")} minutes</strong> by car.</p>'
+                f'<p><strong>{a.get("distance_km","?")} km</strong> from the '
+                f'{city} terminal, about <strong>{a.get("drive_time_min","?")} '
+                f'minutes</strong> by car.</p>'
                 f'<p>{a.get("route_note","")}</p></div>')
         o.append('<div class="cards-grid">' + ''.join(rows) + '</div>')
     why = d.get('why', {})
