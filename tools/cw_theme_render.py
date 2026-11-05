@@ -204,7 +204,8 @@ def plan_section(d, city, kind="day trip"):
 
 
 def render_day_trips(slug, d, city):
-    o = [f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>']
+    o = [section(f'Overview: Day Trips from {city}',
+                 f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>')]
     cards = []
     for t in d.get('trips', []):
         inner = [f'<p>{t.get("why","")}</p>']
@@ -236,7 +237,8 @@ def render_day_trips(slug, d, city):
 
 
 def render_photo(slug, d, city):
-    o = [f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>']
+    o = [section(f'Overview: Photography in {city}',
+                 f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>')]
     cards = []
     for s in d.get('spots', []):
         inner = [f'<p>{s.get("why","")}</p>']
@@ -264,7 +266,8 @@ def render_photo(slug, d, city):
 
 
 def render_food(slug, d, city):
-    o = [f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>']
+    o = [section(f'Overview: Eating and Shopping in {city}',
+                 f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>')]
     foods = d.get('foods', [])
     if foods:
         cards = []
@@ -298,7 +301,8 @@ def render_food(slug, d, city):
 
 
 def render_tea(slug, d, city):
-    o = [f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>']
+    o = [section(f'Overview: Tea Culture in {city}',
+                 f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>')]
     teas = d.get('teas', [])
     if teas:
         cards = []
@@ -491,9 +495,15 @@ def main():
     args = ap.parse_args()
 
     contents = {}
+    # 合并产物（tools/cw_merge_content.py 生成）：airport/sights/food/tea 四个聚合文件
+    for fn in ['airport', 'sights', 'food', 'tea']:
+        contents.update(load_json(os.path.join(WS, fn + '.json'), {}))
+    # 兼容旧的单批文件
     for fn in ['airport_a', 'airport_b', 'sights_a', 'sights_b', 'sights_c',
                'food_a', 'food_b', 'food_c', 'tea_pages']:
-        contents.update(load_json(os.path.join(WS, fn + '.json'), {}))
+        d = load_json(os.path.join(WS, fn + '.json'), {})
+        for k, v in d.items():
+            contents.setdefault(k, v)
     print(f'载入内容 JSON：{len(contents)} 页')
 
     meta = load_json('tools/city_meta.json', {})
