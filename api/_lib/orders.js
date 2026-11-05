@@ -82,20 +82,22 @@ async function createOrder(record) {
   return { ok: true, ref, row: res.row, manageToken: token.raw };
 }
 
-/** 按订单号查询（公开查单用；可选校验 manage_token） */
+/** 按订单号查询（公开查单用；可选校验 manage_token）
+ *  返回 code 字段供上层映射 HTTP 状态：
+ *    OK / NOT_FOUND / TOKEN_MISMATCH / DB_NOT_CONFIGURED / DB_ERROR */
 async function getOrderByRef(ref, tokenHash) {
-  if (!dbConfigured()) return { ok: false, error: 'DB_NOT_CONFIGURED', order: null };
+  if (!dbConfigured()) return { ok: false, code: 'DB_NOT_CONFIGURED', error: 'DB_NOT_CONFIGURED', order: null };
   const q = `ref=eq.${encodeURIComponent(ref)}&select=*`;
   const res = await select(TABLE, q, 1);
-  if (!res.ok) return { ok: false, error: res.error, order: null };
+  if (!res.ok) return { ok: false, code: 'DB_ERROR', error: res.error, order: null };
   const order = res.rows[0] || null;
-  if (!order) return { ok: true, order: null };
+  if (!order) return { ok: true, code: 'NOT_FOUND', order: null };
   if (tokenHash) {
     if (order.manage_token_hash !== tokenHash) {
-      return { ok: false, error: 'TOKEN_MISMATCH', order: null };
+      return { ok: false, code: 'TOKEN_MISMATCH', error: 'TOKEN_MISMATCH', order: null };
     }
   }
-  return { ok: true, order };
+  return { ok: true, code: 'OK', order };
 }
 
 /** 状态流转 */

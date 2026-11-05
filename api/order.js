@@ -60,31 +60,69 @@ function publicView(order) {
   };
 }
 
-function safeParse(s) {
-  if (!s) return null;
-  try { return JSON.parse(s); } catch (e) { return null; }
+/**
+ * 解析可能来自 jsonb 列的值。
+ * Supabase/PostgREST 把 jsonb 列直接反序列化成 JS 对象返回（不是 JSON 字符串），
+ * 而写入时我们用 JSON.stringify 存过字符串 —— 所以两种形态都要兼容。
+ */
+function safeParse(v) {
+  if (v === null || v === undefined || v === '') return null;
+  if (typeof v === 'object') return v;            // jsonb → 已是对象
+  if (typeof v !== 'string') return null;
+  try { return JSON.parse(v); } catch (e) { return null; }
 }
+
+/** 查单失败的错误 → HTTP 状态映射 */
+const LOOKUP_ERROR_MAP = {
+  // 订单存在但 manage_token 不匹配 → 403（而非 500）
+  TOKEN_MISMATCH: {
+    status: 403,
+    error: 'invalid manage token',
+    hint: 'The order number looks right but the access link is not. Please use the full link from your booking confirmation email, or contact support.',
+    support: 'WhatsApp +86-155-2777-1775'
+  },
+  // 数据库未配置 / 暂时不可用 → 503（可重试），而不是 500
+  DB_NOT_CONFIGURED: {
+    status: 503,
+    error: 'order lookup is temporarily unavailable'
+  },
+  DB_ERROR: {
+    status: 503,
+    error: 'order lookup failed, please retry'
+  }
+};
 
 /** 校验 ref + token 并取单 */
 async function authOrder(ref, token) {
   ref = String(ref || '').trim().toUpperCase();
   token = String(token || '').trim();
   if (!/^CWO-\d{8}-[A-F0-9]{8}$/.test(ref)) {
-    return { error: { status: 400, body: { error: 'invalid ref format' } } };
+    return { error: { status: 400, body: { error: 'invalid ref format', code: 'BAD_REF_FORMAT' } } };
   }
   if (!/^[a-f0-9]{48}$/.test(token)) {
-    return { error: { status: 400, body: { error: 'invalid token format' } } };
+    return { error: { status: 400, body: { error: 'invalid token format', code: 'BAD_TOKEN_FORMAT' } } };
   }
   const res = await getOrderByRef(ref, sha256(token));
   if (!res.ok) {
-    return { error: { status: 500, body: { error: 'lookup failed', detail: res.error } } };
+    const m = LOOKUP_ERROR_MAP[res.code] || { status: 500, error: 'lookup failed' };
+    const body = { error: m.error, code: res.code };
+    if (m.hint) body.hint = m.hint;
+    if (m.support) body.support = m.support;
+    // 只在服务端故障时回传内部细节（DB 报错文案），避免泄露内部信息
+    if (m.status >= 500) body.detail = res.error;
+    return { error: { status: m.status, body } };
   }
   if (!res.order) {
-    return { error: { status: 404, body: { error: 'order not found' } } };
+    return { error: { status: 404, body: { error: 'order not found', code: 'NOT_FOUND' } } };
   }
   // token 过期检查
   if (res.order.manage_token_expires_at && new Date(res.order.manage_token_expires_at).getTime() < Date.now()) {
-    return { error: { status: 403, body: { error: 'token expired, please contact support' } } };
+    return { error: { status: 403, body: {
+      error: 'this access link has expired',
+      code: 'TOKEN_EXPIRED',
+      hint: 'Please contact support and we will re-send a fresh link for your booking.',
+      support: 'WhatsApp +86-155-2777-1775'
+    } } };
   }
   return { order: res.order };
 }
