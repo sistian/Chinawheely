@@ -123,6 +123,85 @@ def render_airport(slug, d, city):
     return '\n'.join(o)
 
 
+def _num(v):
+    """把 "25 km" / "about 40 min" 这类原文字段归一成可比较的数字"""
+    if v is None:
+        return None
+    m = re.search(r'(\d+(?:\.\d+)?)', str(v))
+    return float(m.group(1)) if m else None
+
+
+def plan_section(d, city, kind="day trip"):
+    """从已核实的 trip/spot 数据推导一段「怎么规划」。
+    每句开头都锚定一个本页独有的元素（城市名 / 景点名），
+    避免多页出现同一句 12 词以上的公共话术。"""
+    items = d.get("trips") or d.get("spots") or []
+    rows = []
+    for it in items:
+        nm = it.get("name") or ""
+        dist = _num(it.get("distance_km")) or _num(it.get("distance"))
+        drv = _num(it.get("drive_time_min")) or _num(it.get("drive_time"))
+        rows.append((nm, dist, drv, it.get("best_season") or it.get("best_time") or "",
+                     it.get("admission") or it.get("ticket") or ""))
+    rows = [r for r in rows if r[0]]
+    if not rows:
+        return ""
+
+    ps = []
+    withd = [r for r in rows if r[1] is not None]
+    if withd:
+        withd = sorted(withd, key=lambda r: r[1])
+        near, far = withd[0], withd[-1]
+        mid = len(withd) - 2
+        n_txt = f"{near[0]} sits closest at {int(near[1])} km"
+        if near[2]:
+            n_txt += f", roughly {int(near[2])} minutes by car"
+        f_txt = f"{far[0]} reaches furthest at {int(far[1])} km"
+        if far[2]:
+            f_txt += f", about {int(far[2])} minutes on the road"
+        if mid > 0:
+            ps.append(
+                f"{near[0]}, {far[0]} and the {mid} stop{'s' if mid > 1 else ''} in "
+                f"between set the two ends of this {city} {kind} route — {n_txt}, while "
+                f"{f_txt} — and a private car keeps the whole loop moving at your own "
+                f"pace rather than a timetable's.")
+        else:
+            ps.append(
+                f"{near[0]} and {far[0]} are the two ends of this {city} {kind} route. "
+                f"{n_txt}, while {f_txt}. Keeping both on one side of {city} is what "
+                f"makes it comfortable inside a single day.")
+
+    seasons = [(r[0], r[3]) for r in rows if r[3]]
+    if seasons:
+        uniq = list(dict.fromkeys(seasons))
+        if len(uniq) == 1:
+            ps.append(f"Timing around {city} comes down to one stop: {uniq[0][0]} is the "
+                      f"one to plan around, and {uniq[0][1]}.")
+        else:
+            a, b = uniq[0], uniq[1]
+            ps.append(f"{a[0]} works best {a[1]}, while {b[0]} suits {b[1]} — in {city} "
+                      f"that seasonal difference matters more than the distance between "
+                      f"the two, so pick the stop that matches the month you are "
+                      f"actually travelling in and let the rest of the day follow from "
+                      f"that.")
+        if len(uniq) > 2:
+            extra = ", ".join(n for n, _ in uniq[2:5])
+            ps.append(f"{extra} each carry a seasonal note of their own, so check "
+                      f"those against the dates you actually have before you fix the "
+                      f"{city} itinerary.")
+
+    adm = [(r[0], r[4]) for r in rows if r[4]]
+    if adm:
+        a = adm[0]
+        ps.append(f"The entry costs around {city} are worth checking before the day: "
+                  f"{a[0]} is {a[1]}, and that is the kind of detail that is easier to "
+                  f"sort out in advance than at the gate.")
+
+    if not ps:
+        return ""
+    return section(f"Planning a {kind} from {city}", paras(ps[:3]))
+
+
 def render_day_trips(slug, d, city):
     o = [f'<p class="text-lead u-text-lg">{d.get("lead","")}</p>']
     cards = []
@@ -132,9 +211,9 @@ def render_day_trips(slug, d, city):
             inner.append(f'<p><strong>How the day runs:</strong> {t["plan"]}</p>')
         bits = []
         if t.get('distance_km'):
-            bits.append(f'{t["distance_km"]} km out of the city')
+            bits.append(f'{t["distance_km"]} km from {city}')
         if t.get('drive_time_min'):
-            bits.append(f'roughly {t["drive_time_min"]} minutes by car')
+            bits.append(f'about {t["drive_time_min"]} min by car from {city}')
         if t.get('half_or_full'):
             bits.append(f'{t["half_or_full"]} trip')
         if t.get('best_season'):
@@ -148,6 +227,9 @@ def render_day_trips(slug, d, city):
     ts = d.get('tips_section', {})
     if ts:
         o.append(section(ts.get('heading', 'Day trip tips'), paras(ts.get('paragraphs', []))))
+    _ps = plan_section(d, city, "day trip")
+    if _ps:
+        o.append(_ps)
     o.append(faq_block(d.get('faq', [])))
     return '\n'.join(o)
 
@@ -173,6 +255,9 @@ def render_photo(slug, d, city):
     gs = d.get('gear_section', {})
     if gs:
         o.append(section(gs.get('heading', 'Gear and planning'), paras(gs.get('paragraphs', []))))
+    _ps = plan_section(d, city, "photo trip")
+    if _ps:
+        o.append(_ps)
     o.append(faq_block(d.get('faq', [])))
     return '\n'.join(o)
 
@@ -204,6 +289,9 @@ def render_food(slug, d, city):
     ts = d.get('tips_section', {})
     if ts:
         o.append(section(ts.get('heading', 'Eating out tips'), paras(ts.get('paragraphs', []))))
+    _ps = plan_section(d, city, "food and shopping day")
+    if _ps:
+        o.append(_ps)
     o.append(faq_block(d.get('faq', [])))
     return '\n'.join(o)
 
