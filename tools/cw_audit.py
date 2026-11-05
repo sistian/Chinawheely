@@ -188,6 +188,31 @@ try:
     else:
         ok("价格:残留假USD起价", "0")
 
+    # 裸假价（无货币单位的纯数字价格位）——2026-10-29 a6c532b 去掉 "From $" 时遗留
+    bare_re = re.compile(
+        r'font-size:var\(--text-2xl\);color:var\(--color-primary\);font-weight:700;">\d+</span>')
+    bare = [f for f, s in pages.items() if bare_re.search(s)]
+    if bare:
+        fail("价格:裸假价(无货币单位)", f"{len(bare)} 页  {' '.join(bare[:5])}")
+    else:
+        ok("价格:裸假价(无货币单位)", "0")
+
+    # 无价城市必须显示 "Quote on request"，不能显示任何数字价格位
+    no_quote = []
+    for f, s in pages.items():
+        m0 = re.match(r"^([a-z_]+)\.html$", f)
+        if not m0 or m0.group(1) in CORE or is_sub(f):
+            continue
+        slug = SLUG_ALIAS.get(m0.group(1), m0.group(1))
+        if slug in PC:
+            continue
+        if bare_re.search(s) or re.search(r"From ¥\d", s):
+            no_quote.append(f)
+    if no_quote:
+        fail("价格:无价城缺Quote on request", f"{len(no_quote)} 页  {' '.join(no_quote[:5])}")
+    else:
+        ok("价格:无价城缺Quote on request", "0")
+
     # 城市页 ¥ 价格必须能在该城报价中找到
     bad_city, bad_val = [], []
     for f, s in pages.items():
