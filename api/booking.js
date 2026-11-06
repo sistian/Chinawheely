@@ -8,11 +8,36 @@ const { createOrder, getOrderByRef, updateOrder, generateManageToken, sha256, ca
 
 const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || '15527771775@qq.com';
 const SUCCESS_URL = process.env.SUCCESS_URL || 'https://www.chinawheely.com/thank-you.html';
+const BOOKING_URL = process.env.BOOKING_URL || 'https://www.chinawheely.com/booking.html';
 const REPLY_TO_FIELD = process.env.REPLY_TO_FIELD || 'email';
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim()).filter(Boolean);
 
+/**
+ * 表单里同名字段重复提交时（hidden + radio 共用 name），querystring.parse 会返回数组。
+ * 这里统一压成第一个非空标量，避免 pricing 收到 ['airport','airport'] 而报 UNKNOWN_PRODUCT。
+ */
+function first(v) {
+  if (Array.isArray(v)) {
+    for (const x of v) {
+      if (x !== undefined && x !== null && String(x).trim() !== '') return String(x).trim();
+    }
+    return '';
+  }
+  if (v === undefined || v === null) return '';
+  return String(v).trim();
+}
+
+// 距离档 → 超出免费里程的估算公里数（闭区间取中位；'80+' 取下限 80，最保守）
+const DISTANCE_BAND_KM = { '0-35': 17.5, '35-50': 42.5, '50-80': 65, '80+': 80 };
+function extraKmFromBand(band, includedKm) {
+  const mid = DISTANCE_BAND_KM[String(band || '').trim()];
+  if (mid == null) return 0;
+  const inc = Number(includedKm) || 0;
+  return Math.max(0, Math.round(mid - inc));
+}
+
 const serviceLabels = {
-  'airport': 'Airport Pickup',
+  'airport': 'Airport Transfer',
   'city': 'Hourly Charter',
   'intercity': 'Intercity Transfer',
   'charter': 'Hourly Charter',
@@ -45,7 +70,7 @@ const vehicleLabels = {
  */
 function computePrice(data) {
   try {
-    const q = pricing.quote({
+    const opts = {
       city: data.city,
       product: data.product || data.serviceType || 'airport',
       vehicle: data.vehicle,
@@ -54,7 +79,17 @@ function computePrice(data) {
       extraKm: data.extraKm,
       pax: data.passengers,
       bags: data.luggage
-    });
+    };
+    let q = pricing.quote(opts);
+    // 用户没填额外里程、但选了距离档时，按该车型的免费里程自动折算超里程费
+    // （否则「距离」是必填项却完全不影响价格，80km 接送会和 20km 同价）
+    if (q.ok && !Number(opts.extraKm) && data.distanceRange) {
+      const derived = extraKmFromBand(data.distanceRange, q.includedKm);
+      if (derived > 0) {
+        const q2 = pricing.quote(Object.assign({}, opts, { extraKm: derived }));
+        if (q2.ok) q = q2;
+      }
+    }
     if (q.ok) return { ok: true, quote: q, priced: true };
     return { ok: false, quote: q, priced: false, reason: q.error };
   } catch (e) {
@@ -74,6 +109,15 @@ function setCorsHeaders(res, req) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Vary', 'Origin');
+}
+
+/** 出错时把用户送回预定页并带上可读原因，而不是丢一个纯文本 400 页面 */
+function redirectToBooking(res, req, code, message) {
+  setCorsHeaders(res, req);
+  let url = BOOKING_URL + (BOOKING_URL.includes('?') ? '&' : '?') + 'error=' + encodeURIComponent(code);
+  if (message) url += '&msg=' + encodeURIComponent(message);
+  res.writeHead(302, { Location: url });
+  return res.end();
 }
 
 function getBody(req) {
@@ -124,7 +168,7 @@ function getSubmitterName(data) {
 /** 用服务端算出的结果重建行程摘要 */
 function buildRouteSummary(data, quoted) {
   const parts = [];
-  const city = quoted ? quoted.city : (data.city || '');
+  const city = quoted ? quoted.city : (data.cityLabel || data.city || '');
   if (city) parts.push(city);
 
   const product = quoted ? quoted.product : (data.product || data.serviceType || 'airport');
@@ -260,7 +304,22 @@ module.exports = async (req, res) => {
     return res.end('Payload too large');
   }
 
-  const data = querystring.parse(body);
+  const raw = querystring.parse(body);
+  // 同名字段重复提交（hidden + radio 共用 name）会让 querystring 返回数组 —— 统一压成单值
+  const data = {};
+  for (const key of Object.keys(raw)) {
+    if (key === 'extras') {
+      data.extras = Array.isArray(raw[key]) ? raw[key].filter(Boolean) : (raw[key] ? [raw[key]] : []);
+      continue;
+    }
+    data[key] = first(raw[key]);
+  }
+  if (!data.product) data.product = data.serviceType || 'airport';
+  if (!data.serviceType) data.serviceType = data.product;
+  // 「其他城市」模式下机场是自由文本填写
+  if (!data.airport && data.airportFreeText) data.airport = data.airportFreeText;
+  // 没有公开价的城市：CTA 参数带来的城市名落到询价单里
+  if (data.city === 'other' && data.requestedCity) data.cityLabel = data.requestedCity;
 
   // Honeypot: silently succeed if filled
   if ((data.website && String(data.website).trim()) || (data._honey && String(data._honey).trim())) {
@@ -288,16 +347,24 @@ module.exports = async (req, res) => {
   const required = ['firstName', 'lastName', 'email', 'phone'];
   for (const field of required) {
     if (!data[field] || String(data[field]).trim() === '') {
-      setCorsHeaders(res, req);
-      res.statusCode = 400;
-      return res.end('Missing required field: ' + field);
+      return redirectToBooking(res, req, 'missing_' + field, 'Please complete the ' + field + ' field.');
     }
   }
 
   if (!isValidEmail(data.email)) {
-    setCorsHeaders(res, req);
-    res.statusCode = 400;
-    return res.end('Invalid email address');
+    return redirectToBooking(res, req, 'invalid_email', 'Please enter a valid email address.');
+  }
+
+  // 出发日期必须是今天或之后
+  if (data.date) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.date)) {
+      return redirectToBooking(res, req, 'invalid_date', 'Please pick a valid pick-up date.');
+    }
+    const now = new Date();
+    const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    if (data.date < todayStr) {
+      return redirectToBooking(res, req, 'past_date', 'The pick-up date cannot be in the past.');
+    }
   }
 
   // ===== 服务端算价（权威值）：不采信前端传来的 price =====
@@ -319,6 +386,10 @@ module.exports = async (req, res) => {
     if (!data.vehicleLabel && data.vehicle) {
       data.vehicleLabel = vehicleLabels[data.vehicle] || data.vehicle;
     }
+    if (!data.serviceTypeLabel) {
+      data.serviceTypeLabel = serviceLabels[data.serviceType] || formatLabel(data.serviceType) || '';
+    }
+    data.routeSummary = buildRouteSummary(data, null);
   }
   data.pricingStatus = quoted ? 'priced' : 'quote_requested';
   data.quoteJson = quoted ? JSON.stringify({
@@ -335,10 +406,9 @@ module.exports = async (req, res) => {
   }) : '';
 
   if (!mailerConfigured()) {
-    await markMail(reference, 'failed', 'mailer not configured');
-    setCorsHeaders(res, req);
-    res.statusCode = 503;
-    return res.end('Mail service is not configured. Set SMTP_USER/SMTP_PASS in the Vercel dashboard.');
+    // 注意：此时 lead / order 都还没创建，不能引用后面才声明的 reference（TDZ ReferenceError）
+    return redirectToBooking(res, req, 'mail_unavailable',
+      'Booking service is temporarily unavailable. Please try again shortly, or message us on WhatsApp +86 155 2777 1775.');
   }
 
   const submitterIP = req.headers['x-forwarded-for'] || (req.socket && req.socket.remoteAddress) || '';
@@ -359,7 +429,7 @@ module.exports = async (req, res) => {
       email: data.email,
       phone: data.phone,
       customerName: [data.firstName, data.lastName].filter(Boolean).join(' '),
-      city: quoted ? quoted.city : (data.city || null),
+      city: quoted ? quoted.city : (data.cityLabel || data.city || null),
       product: quoted ? quoted.product : (data.product || data.serviceType || null),
       vehicle: quoted ? quoted.vehicle : (data.vehicle || null),
       tier: quoted ? quoted.tier : (data.tier || null),

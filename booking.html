@@ -395,11 +395,19 @@
 
  <form id="bookingForm" action="https://api.chinawheely.com/api/booking" method="POST" novalidate>
  <!-- 服务端算价所需参数（价格由服务端重算，前端不提交价格） -->
- <input type="hidden" name="product" id="formProduct" value="airport">
+ <input type="hidden" name="formProduct" id="formProduct" value="airport">
+ <!-- requestedCity: 没有公开价的城市，CTA 传来的城市名 -->
+ <input type="hidden" name="requestedCity" id="requestedCity" value="">
+ <!-- paymentMethod: paypal / alipay -->
+ <input type="hidden" name="paymentMethod" id="paymentMethod" value="paypal">
+ <!-- _t: 表单填写时间戳（防机器人；必须在 form 内才会提交） -->
+ <input type="hidden" name="_t" id="cwgFormTimestamp" value="">
+ <!-- 服务端校验失败时的错误横幅（?error=xxx） -->
+ <div id="bookingError" role="alert" style="display:none;margin-bottom:var(--space-5);padding:var(--space-3) var(--space-4);border:1px solid var(--color-error);border-left-width:4px;border-radius:var(--radius-md);background:rgba(196,75,75,0.06);color:var(--color-error);font-size:var(--text-sm);"></div>
  <input type="hidden" name="vehicle" id="formVehicleKey" value="">
  <input type="hidden" name="tier" id="formTierKey" value="">
- <input type="hidden" name="extraMinutes" id="formExtraMinutes" value="0">
- <input type="hidden" name="extraKm" id="formExtraKm" value="0">
+ <input type="hidden" name="formExtraMinutes" id="formExtraMinutes" value="0">
+ <input type="hidden" name="formExtraKm" id="formExtraKm" value="0">
  <input type="hidden" name="quoteTotalCny" id="formTotalCny" value="">
  <input type="hidden" name="quoteTotalUsd" id="formTotalUsd" value="">
  <input type="hidden" name="quoteBreakdown" id="formBreakdown" value="">
@@ -446,7 +454,7 @@
  <!-- ===== Step 2: 城市 + 车型 ===== -->
  <div class="form-group">
  <label class="form-label" for="city">Step 2 · City</label>
- <select class="form-select" id="city" name="city" required>
+ <select class="form-select" id="city" name="city" required aria-label="City">
  <option value="" disabled selected>Loading priced cities…</option>
  </select>
  <p class="text-small u-fd04e2ad" id="cityPriceHint">Published fixed prices cover 53 major cities. Other destinations are quoted on request.</p>
@@ -465,14 +473,17 @@
  <div class="form-row">
  <div>
  <label class="form-label" for="airport">Airport *</label>
- <select class="form-select" id="airport" name="airport" required>
+ <select class="form-select" id="airport" name="airport" aria-label="Arrival airport">
  <option value="" disabled selected>Select airport</option>
  </select>
+ <!-- 「其他城市 / 询价」没有机场库，改用自由文本填写 -->
+ <input type="text" class="form-input" id="airportFreeText" name="airportFreeText"
+ placeholder="Which airport are you arriving at?" aria-label="Arrival airport" style="display:none;">
  <p class="text-small u-fd04e2ad" id="airportDistanceInfo"></p>
  </div>
  <div>
  <label class="form-label" for="transferDirection">Transfer Direction *</label>
- <select class="form-select" id="transferDirection" name="transferDirection" required>
+ <select class="form-select" id="transferDirection" name="transferDirection" required aria-label="Transfer direction">
  <option value="" disabled selected>Select direction</option>
  <option value="airport-to-hotel">Airport → Hotel (Pickup)</option>
  <option value="hotel-to-airport">Hotel → Airport (Drop-off)</option>
@@ -485,7 +496,7 @@
  </div>
  <div class="form-group u-bc38d4de">
  <label class="form-label" for="distanceRange">Approximate Distance (km) *</label>
- <select class="form-select" id="distanceRange" name="distanceRange" required>
+ <select class="form-select" id="distanceRange" name="distanceRange" required aria-label="Approximate distance from airport to destination">
  <option value="" disabled selected>Select distance range</option>
  <option value="0-35">0–35 km (included in package)</option>
  <option value="35-50">35–50 km</option>
@@ -556,11 +567,11 @@
  <div class="form-row">
  <div>
  <label class="form-label" for="date">Pick-up Date *</label>
- <input type="date" class="form-input" id="date" name="date" required>
+ <input type="date" class="form-input" id="date" name="date" required aria-label="Pick-up date">
  </div>
  <div>
  <label class="form-label" for="time">Pick-up Time *</label>
- <input type="time" class="form-input" id="time" name="time" required>
+ <input type="time" class="form-input" id="time" name="time" required aria-label="Pick-up time">
  </div>
  </div>
  </div>
@@ -1110,8 +1121,6 @@
 </button>
 
  
-<!-- P1: 表单渲染时间戳（后端用于识别脚本机器人） -->
-<input type="hidden" name="_t" id="cwgFormTimestamp" value="">
 <script>
 (function () {
   var el = document.getElementById('cwgFormTimestamp');
@@ -1120,41 +1129,22 @@
 </script>
 
  <script>
- // 落地页预填：从 ?city=&service=&vehicle= 自动选择（由内链 CTA 传入）
+ // 表单填写时间戳（写入 form 内的 #cwgFormTimestamp），供服务端做反机器人校验。
+ // 原来这里有一段城市预填脚本，但它在下拉框渲染之前执行（sel.options 只有占位项），
+ // 1988 个 ?city=xxx 的站内 CTA 全部落空；预填现由 js/booking.js 的 applyCityParam() 统一处理。
  (function () {
-   var q = new URLSearchParams(window.location.search);
-   var city = (q.get('city') || '').toLowerCase().trim();
-   var sel = document.getElementById('city');
-   if (city && sel) {
-     var slug = city.replace(/\s+/g, '-');
-     var hit = Array.prototype.some.call(sel.options, function (o) { return o.value === slug; });
-     if (!hit) {
-       // 名称匹配兜底
-       Array.prototype.some.call(sel.options, function (o) {
-         if (o.value && o.textContent.toLowerCase().indexOf(city) === 0) { slug = o.value; hit = true; return true; }
-         return false;
-       });
-     }
-     if (hit) {
-       sel.value = slug;
-       sel.dispatchEvent(new Event('change', { bubbles: true }));
-     }
-   }
-   var v = q.get('vehicle');
-   if (v) {
-     var vs = document.querySelector('input[name="vehicle"][value="' + v + '"]');
-     if (vs) { vs.checked = true; vs.dispatchEvent(new Event('change', { bubbles: true })); }
-   }
-   var st = q.get('service');
-   if (st) {
-     var ss = document.querySelector('select[name="service_type"], select[id*="service"]');
-     if (ss) {
-       Array.prototype.some.call(ss.options, function (o) {
-         if (o.value.toLowerCase() === st.toLowerCase()) { ss.value = o.value; ss.dispatchEvent(new Event('change', { bubbles: true })); return true; }
-         return false;
-       });
-     }
-   }
+  var t = document.getElementById('cwgFormTimestamp');
+  var f = document.getElementById('bookingForm');
+  if (!t || !f) return;
+  var started = false;
+  function mark() {
+   if (started) return;
+   started = true;
+   t.value = String(Date.now());
+  }
+  f.addEventListener('focusin', mark, { once: true });
+  f.addEventListener('input', mark, { once: true });
+  f.addEventListener('change', mark, { once: true });
  })();
  </script>
 </body>

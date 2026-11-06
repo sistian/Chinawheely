@@ -35,6 +35,19 @@ function manageTokenExpiry(hours) {
   return new Date(Date.now() + h * 3600 * 1000).toISOString();
 }
 
+/** 表单同名字段重复提交时可能是数组，落库前压成标量字符串 */
+function scalar(v) {
+  if (Array.isArray(v)) {
+    for (const x of v) {
+      if (x !== undefined && x !== null && String(x).trim() !== '') return String(x).trim();
+    }
+    return null;
+  }
+  if (v === undefined || v === null) return null;
+  const s = String(v).trim();
+  return s === '' ? null : s;
+}
+
 /**
  * 创建订单
  * record: { email, phone, city, product, vehicle, tier, quote, contact, trip, payment }
@@ -57,9 +70,9 @@ async function createOrder(record) {
     phone: record.phone || null,
     customer_name: record.customerName || null,
     city: record.city || null,
-    product: record.product || null,
-    vehicle: record.vehicle || null,
-    tier: record.tier || null,
+    product: scalar(record.product),
+    vehicle: scalar(record.vehicle),
+    tier: scalar(record.tier),
     // jsonb 列：直接存对象，不要 JSON.stringify
     // （stringify 后再存进 jsonb 会变成「jsonb 字符串标量」，
     //   PostgREST 读回来是字符串而不是对象，SQL 里也没法用 quote->>'total' 取值）

@@ -40,8 +40,13 @@ async function isRateLimited(ip) {
  */
 function filledTooFast(data) {
   const t = Number(data && data._t);
-  if (!t || Number.isNaN(t)) return false;
-  const elapsed = Date.now() - t;
+  // 老前端 / 没带时间戳 → 不拦（宁可漏放机器人，也不能误杀真实订单）
+  if (!t || Number.isNaN(t) || t <= 0) return false;
+  const now = Date.now();
+  // 客户端时钟偏差过大（时区错、机器时间不准）→ 不判断
+  if (Math.abs(now - t) > 6 * 60 * 60 * 1000) return false;
+  const elapsed = now - t;
+  if (elapsed < 0) return false;   // 客户端时间超前 → 不拦
   return elapsed < MIN_FILL_SECONDS * 1000;
 }
 

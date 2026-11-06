@@ -35,6 +35,87 @@ function loadPricingData(cb) {
 }
 
 // ============================================================
+//  城市参数解析
+//  站内 CTA 传的是英文名（?city=Beijing / ?city=Guangzhou），不是 slug，
+//  所以必须大小写不敏感地同时匹配 slug / 英文名 / 中文名。
+// ============================================================
+function normalizeCityKey(s) {
+  return String(s || '').toLowerCase().replace(/[\s\-_'’.]+/g, '');
+}
+
+function resolveCityParam(raw) {
+  if (!raw) return null;
+  var needle = normalizeCityKey(raw);
+  if (!needle) return null;
+  var found = null;
+  CITY_LIST.forEach(function (c) {
+    if (found) return;
+    var candidates = [c.slug, c.en, c.cn];
+    for (var i = 0; i < candidates.length; i++) {
+      if (!candidates[i]) continue;
+      if (normalizeCityKey(candidates[i]) === needle) { found = c; return; }
+    }
+  });
+  return found;
+}
+
+/** 把 CTA 的城市参数落到下拉框；无公开价的城市走「询价」通道并记住城市名 */
+function applyCityParam(raw) {
+  var sel = el('city');
+  if (!sel || !raw) return;
+  var decoded = String(raw);
+  try { decoded = decodeURIComponent(raw); } catch (e) { /* 保留原值 */ }
+
+  var match = resolveCityParam(decoded);
+  if (match) {
+    sel.value = match.slug;
+    setRequestedCity('');
+    return;
+  }
+  // 没有公开价的城市（286 个 CTA 指向这类城市）：选中「询价」并把城市名带走
+  if (sel.querySelector('option[value="other"]')) {
+    sel.value = 'other';
+    setRequestedCity(decoded);
+  }
+}
+
+function setRequestedCity(name) {
+  var f = el('requestedCity');
+  if (f) f.value = name || '';
+}
+
+// ============================================================
+//  距离档 → 超出免费里程的估算公里数
+//  与后端 api/booking.js 的 DISTANCE_BAND_KM 保持一致
+// ============================================================
+var DISTANCE_BAND_KM = { '0-35': 17.5, '35-50': 42.5, '50-80': 65, '80+': 80 };
+
+function derivedExtraKm(band, includedKm) {
+  var mid = DISTANCE_BAND_KM[String(band || '').trim()];
+  if (mid == null) return 0;
+  var inc = Number(includedKm) || 0;
+  return Math.max(0, Math.round(mid - inc));
+}
+
+/** 距离档变了就把超里程数写进 extraKm 输入框（否则「距离」只是个摆设，不影响报价） */
+function syncExtraKmFromDistance() {
+  var dr = el('distanceRange');
+  var ek = el('extraKm');
+  if (!dr || !ek) return;
+  if (currentProduct() !== 'airport') return;
+  var slug = citySlug();
+  if (!slug || slug === 'other' || !PRICE_DATA) return;
+  var vkey = selectedVehicleKey();
+  if (!vkey) return;
+  var o = window.CWPricing.cityOptions(PRICE_DATA, slug);
+  if (!o) return;
+  var v = o.airport.filter(function (x) { return x.key === vkey; })[0];
+  if (!v) return;
+  var derived = derivedExtraKm(dr.value, v.includedKm);
+  if (derived > 0) ek.value = derived;
+}
+
+// ============================================================
 //  城市下拉
 // ============================================================
 function populateCities() {
@@ -169,6 +250,7 @@ function renderVehicles() {
 
     input.addEventListener('change', function () {
       if (tiered) renderTiers(v);
+      syncExtraKmFromDistance();
       refreshQuote();
     });
   });
@@ -181,6 +263,7 @@ function renderVehicles() {
   }
 
   updateAirportOptions();
+  syncExtraKmFromDistance();
   refreshQuote();
 }
 
@@ -281,8 +364,22 @@ function renderTiers(vehicle) {
 function updateAirportOptions() {
   var sel = el('airport');
   var info = el('airportDistanceInfo');
+  var freeText = el('airportFreeText');
   if (!sel) return;
   var cur = sel.value;
+
+  var slug = citySlug();
+  var isOther = (slug === 'other');
+
+  // 「其他城市 / 询价」没有机场库，改成自由文本填写，否则下拉永远为空、表单永远提交不了
+  if (isOther) {
+    sel.style.display = 'none';
+    if (freeText) freeText.style.display = 'block';
+    if (info) info.textContent = 'Tell us which airport you are arriving at — we will confirm the route and price.';
+    return;
+  }
+  sel.style.display = '';
+  if (freeText) { freeText.style.display = 'none'; freeText.value = ''; }
 
   while (sel.firstChild) sel.removeChild(sel.firstChild);
   var def = document.createElement('option');
@@ -292,7 +389,6 @@ function updateAirportOptions() {
   def.textContent = 'Select airport';
   sel.appendChild(def);
 
-  var slug = citySlug();
   var list = [];
 
   if (typeof window.getAirportsForCity === 'function') {
@@ -338,6 +434,7 @@ function updateDistanceDefault() {
   if (dist == null) return;
   var v = dist <= 35 ? '0-35' : (dist <= 50 ? '35-50' : (dist <= 80 ? '50-80' : '80+'));
   dr.value = v;
+  syncExtraKmFromDistance();
 }
 
 // ============================================================
@@ -577,6 +674,8 @@ function updateSummary() {
   var sPassengers = el('summaryPassengers');
   var sPrice = el('summaryPrice');
   var sPriceCny = el('summaryPriceCny');
+  var sCity = el('summaryCity');
+  var sExtras = el('summaryExtras');
 
   var product = currentProduct();
   var labels = {
@@ -592,8 +691,10 @@ function updateSummary() {
     var o = window.CWPricing.cityOptions(PRICE_DATA, slug);
     if (o) cityName = o.city;
   } else if (slug === 'other') {
-    cityName = 'Other city';
+    var req = el('requestedCity');
+    cityName = (req && req.value) ? req.value : 'Other city';
   }
+  if (sCity) sCity.textContent = cityName;
   if (sRoute) {
     var route = '';
     if (product === 'airport') {
@@ -623,6 +724,14 @@ function updateSummary() {
   var pax = el('passengers') ? el('passengers').value : '-';
   if (sPassengers) sPassengers.textContent = pax;
 
+  var extras = [];
+  document.querySelectorAll('input[name="extras"]').forEach(function (cb) {
+    if (!cb.checked) return;
+    var labels = { childseat: 'Child seat', meetgreet: 'Meet & greet', wifi: 'Free Wi-Fi' };
+    extras.push(labels[cb.value] || cb.value);
+  });
+  if (sExtras) sExtras.textContent = extras.length ? extras.join(', ') : '-';
+
   if (sPrice) sPrice.textContent = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total) : '-';
   if (sPriceCny) sPriceCny.textContent = QUOTE_RESULT ? ('≈ $' + QUOTE_RESULT.usd) : '';
 }
@@ -630,9 +739,38 @@ function updateSummary() {
 // ============================================================
 //  提交：先走支付弹窗，再由弹窗按钮真正提交
 // ============================================================
+var SUBMITTING = false;
+
 function submitBooking() {
+  // 防重复提交：按钮可能同时被 scripts.js 的全局委托和本模块监听器触发
+  if (SUBMITTING) return;
+
+  var form = el('bookingForm');
+  if (!form) return;
+
+  SUBMITTING = true;
+  var buttons = document.querySelectorAll('[data-action="submit-booking"]');
+  buttons.forEach(function (b) {
+    b.disabled = true;
+    b.textContent = 'Submitting…';
+  });
+  // 万一提交没跳转出去，8 秒后恢复按钮，避免客户被卡死
+  setTimeout(function () {
+    SUBMITTING = false;
+    buttons.forEach(function (b) {
+      b.disabled = false;
+      b.textContent = 'I\'ve Completed Payment — Confirm Booking';
+    });
+  }, 8000);
+
   var formPrice = el('formPrice');
   if (formPrice) formPrice.value = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total + ' CNY') : '';
+
+  var formPaymentMethod = el('paymentMethod');
+  if (formPaymentMethod) {
+    var alipayTab = el('tab-alipay');
+    formPaymentMethod.value = (alipayTab && alipayTab.classList.contains('active')) ? 'alipay' : 'paypal';
+  }
 
   var formRouteSummary = el('formRouteSummary');
   if (formRouteSummary) {
@@ -654,8 +792,35 @@ function submitBooking() {
       (modalPassengers ? ' (' + modalPassengers.textContent + ' pax)' : '');
   }
 
-  var form = el('bookingForm');
   if (form) form.submit();
+}
+
+// ---- 支付弹窗：PayPal / 支付宝 切换 + 关闭 ----
+// scripts.js 的全局委托会调用这两个函数，之前全站未定义，导致：
+// × 关闭按钮无反应（客户被卡在弹窗里）、支付宝标签页根本点不开。
+function switchPaymentTab(tab) {
+  var target = (tab === 'alipay') ? 'alipay' : 'paypal';
+  document.querySelectorAll('.payment-tab').forEach(function (t) {
+    var on = (t.getAttribute('data-tab') === target);
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.payment-tab-content').forEach(function (c) {
+    var on = (c.id === 'tab-' + target);
+    c.classList.toggle('active', on);
+    c.style.display = on ? 'block' : 'none';
+  });
+  var pm = el('paymentMethod');
+  if (pm) pm.value = target;
+}
+
+function closePaymentModal() {
+  var modal = el('paymentModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+  document.body.classList.remove('modal-open');
 }
 
 // ---- 表单提交 → 校验 → 打开支付弹窗 ----
@@ -668,8 +833,13 @@ function handleFormSubmit(e) {
 
   // 基本必填
   var requiredIds = ['city', 'firstName', 'lastName', 'email', 'phone', 'date', 'time'];
+  var slugNow = citySlug();
+  var isOtherCity = (slugNow === 'other');
   if (product === 'airport') {
-    requiredIds.push('airport', 'transferDirection', 'hotelAddress', 'distanceRange');
+    requiredIds.push('transferDirection', 'hotelAddress', 'distanceRange');
+    // 「其他城市」没有机场库，用自由文本填机场；否则下拉永远为空、客户永远提交不了
+    if (isOtherCity) requiredIds.push('airportFreeText');
+    else requiredIds.push('airport');
   } else if (product === 'charter') {
     requiredIds.push('charterRoute');
   }
@@ -779,14 +949,7 @@ function initBooking() {
   loadPricingData(function () {
     populateCities();
     var params = new URLSearchParams(window.location.search);
-    var pre = params.get('city');
-    if (pre) {
-      var sel = el('city');
-      if (sel) {
-        var match = CITY_LIST.filter(function (c) { return c.slug === pre; })[0];
-        if (match) sel.value = pre;
-      }
-    }
+    applyCityParam(params.get('city'));
     renderVehicles();
     updateSummary();
   });
@@ -804,7 +967,7 @@ function initBooking() {
     });
   });
 
-  ['extraMinutes', 'extraKm', 'passengers', 'date', 'time', 'airport',
+  ['extraMinutes', 'extraKm', 'passengers', 'date', 'time',
     'transferDirection', 'hotelAddress', 'charterRoute', 'fromCity', 'toCity'
   ].forEach(function (id) {
     var e = el(id);
@@ -815,26 +978,86 @@ function initBooking() {
     }
   });
 
-  // 默认日期 = 明天
+  // 机场变化 → 先重算默认距离档，再刷报价。
+  // 之前 airport 的 change 只调 refreshQuote/updateSummary，updateDistanceDefault()
+  // 只在重建下拉时调用一次，导致距离档永远是空的（客户只能手填，且填小了会少算钱）。
+  var airportSel = el('airport');
+  if (airportSel) {
+    airportSel.addEventListener('change', function () {
+      updateDistanceDefault();
+      refreshQuote();
+      updateSummary();
+    });
+  }
+
+  // 距离档变了 → 重算超里程并刷新报价
+  var dr = el('distanceRange');
+  if (dr) {
+    dr.addEventListener('change', function () {
+      syncExtraKmFromDistance();
+      refreshQuote();
+      updateSummary();
+    });
+  }
+  var freeText = el('airportFreeText');
+  if (freeText) {
+    freeText.addEventListener('input', function () { updateSummary(); });
+  }
+  document.querySelectorAll('input[name="extras"]').forEach(function (cb) {
+    cb.addEventListener('change', updateSummary);
+  });
+
+  // 默认日期 = 明天（用本地日期，不要用 toISOString 的 UTC 日期，否则凌晨会选到昨天）
   var tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   var dateEl = el('date');
-  if (dateEl && !dateEl.value) dateEl.value = tomorrow.toISOString().split('T')[0];
+  if (dateEl && !dateEl.value) dateEl.value = localDateString(tomorrow);
 
   // 表单提交 → 支付弹窗
   var bf = el('bookingForm');
   if (bf) bf.addEventListener('submit', handleFormSubmit);
 
-  // 支付弹窗里的确认按钮 → 真正提交
-  document.querySelectorAll('[data-action="submit-booking"]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (typeof window.ChinawheelySecurity !== 'undefined' &&
-        window.ChinawheelySecurity && window.ChinawheelySecurity.honeypotCheck) {
-        // 安全模块负责 honeypot / 时长校验
-      }
-      submitBooking();
-    });
+  // 注意：不再在这里给 [data-action="submit-booking"] 绑 click。
+  // scripts.js 已有全局委托（handleAction → submitBooking），
+  // 两边都绑会导致一次点击提交两次（重复下单 / 重复邮件）。
+
+  // 支付弹窗里的标签页切换
+  document.querySelectorAll('.payment-tab').forEach(function (t) {
+    t.addEventListener('click', function () { switchPaymentTab(t.getAttribute('data-tab')); });
   });
+
+  // 从后端带回来的错误（?error=...）
+  showBookingError();
+}
+
+function localDateString(d) {
+  var m = d.getMonth() + 1;
+  var day = d.getDate();
+  return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+}
+
+/** 服务端校验失败 / 邮件服务不可用时，把原因告诉客户 */
+function showBookingError() {
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('error');
+  if (!code) return;
+  var known = {
+    missing_firstName: 'Please enter your first name.',
+    missing_lastName: 'Please enter your last name.',
+    missing_email: 'Please enter your email address.',
+    missing_phone: 'Please enter your phone number.',
+    invalid_email: 'Please enter a valid email address.',
+    invalid_date: 'Please pick a valid pick-up date.',
+    past_date: 'The pick-up date cannot be in the past.',
+    mail_unavailable: 'Booking service is temporarily unavailable. Please try again shortly, or message us on WhatsApp +86 155 2777 1775.'
+  };
+  var msg = params.get('msg') || known[code] || 'Something went wrong. Please try again.';
+  if (typeof showToast === 'function') showToast(msg, 'error');
+  var banner = el('bookingError');
+  if (banner) {
+    banner.textContent = msg;
+    banner.style.display = 'block';
+  }
 }
 
 if (document.readyState === 'loading') {
