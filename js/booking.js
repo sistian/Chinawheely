@@ -893,9 +893,14 @@ function showBookingErrorMsg(msg) {
 function submitBooking() {
   if (SUBMITTING) return;
   if (!ORDER_RESULT) { createOrder(); return; }
-  var ref = ORDER_RESULT.ref ? ('?ref=' + encodeURIComponent(ORDER_RESULT.ref)) : '';
-  var amt = ORDER_RESULT.amountCny ? ('&amount=' + encodeURIComponent(String(ORDER_RESULT.amountCny))) : '';
-  window.location.href = 'thank-you.html' + ref + amt + '#payment';
+  // 用后端给的 redirect（带 ref / 金额 / 自助管理 token）
+  var target = ORDER_RESULT.redirect;
+  if (!target) {
+    var ref = ORDER_RESULT.ref ? ('?ref=' + encodeURIComponent(ORDER_RESULT.ref)) : '';
+    var amt = ORDER_RESULT.amountCny ? ('&amount=' + encodeURIComponent(String(ORDER_RESULT.amountCny))) : '';
+    target = 'thank-you.html' + ref + amt;
+  }
+  window.location.href = target + (target.indexOf('#') >= 0 ? '' : '#payment');
 }
 
 /** 提交前把摘要信息同步到隐藏字段（弹窗此时还没开，直接从表单+报价算） */

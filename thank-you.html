@@ -136,7 +136,7 @@
  <div id="orderRefBox" style="display:none;background:#fff;border:2px solid #1B4D3E;border-radius:14px;padding:18px 22px;margin:18px auto;max-width:520px;text-align:center">
   <p style="margin:0 0 4px;font-size:14px;color:#64748b">Your order number</p>
   <p id="orderRefText" style="margin:0;font-size:24px;font-weight:700;color:#1B4D3E;letter-spacing:.5px">—</p>
-  <p style="margin:8px 0 0;font-size:13px;color:#64748b">We've emailed you a personal management link — use it to view details or reschedule (free up to 48 hours before pickup). <a href="manage-order.html">Manage booking</a></p>
+  <p style="margin:8px 0 0;font-size:13px;color:#64748b">We've emailed you a personal management link — use it to view details or reschedule (free up to 48 hours before pickup). <a id="manageLink" href="manage-order.html">Manage booking</a></p>
  </div>
 
  <!-- 付款区：客户提交后就停在这一页，必须能直接扫码付款 -->
@@ -347,14 +347,22 @@
 
 <script>
 (function () {
-  var m = new URLSearchParams(location.search).get('ref');
+  var q = new URLSearchParams(location.search);
+  var m = q.get('ref');
   if (m && /^CWO-\d{8}-[A-F0-9]{8}$/.test(m)) {
     document.getElementById('orderRefText').textContent = m;
     document.getElementById('orderRefBox').style.display = 'block';
 
+    // 自助管理链接（带 token）：邮件万一没发出去，客户也能在这里查单/改期
+    var token = q.get('token');
+    if (token && /^[a-f0-9]{16,64}$/i.test(token)) {
+      var ml = document.getElementById('manageLink');
+      if (ml) ml.href = 'manage-order.html?ref=' + encodeURIComponent(m) + '&token=' + encodeURIComponent(token);
+    }
+
     // 付款区：带上订单号就显示，金额由下单接口回传
     var box = document.getElementById('paymentBox');
-    var amt = new URLSearchParams(location.search).get('amount');
+    var amt = q.get('amount');
     document.getElementById('payAmountText').textContent =
       (amt && /^\d+(\.\d{1,2})?$/.test(amt)) ? ('¥' + amt + ' CNY') : 'see your booking page';
     box.style.display = 'block';

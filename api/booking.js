@@ -141,9 +141,12 @@ function respondOk(res, req, info) {
   setCorsHeaders(res, req);
   const orderRef = info.orderRef;
   const quoted = info.quoted;
+  const manageToken = info.manageToken || null;
   const loc = orderRef
     ? `${SUCCESS_URL}${SUCCESS_URL.includes('?') ? '&' : '?'}ref=${encodeURIComponent(orderRef)}` +
-      (quoted && quoted.total ? `&amount=${encodeURIComponent(String(quoted.total))}` : '')
+      (quoted && quoted.total ? `&amount=${encodeURIComponent(String(quoted.total))}` : '') +
+      // 自助管理 token 直接带上：邮件通道万一发不出去，客户在感谢页仍能改期/查单
+      (manageToken ? `&token=${encodeURIComponent(manageToken)}` : '')
     : SUCCESS_URL;
   if (wantsJson(req)) {
     const payload = {
@@ -153,7 +156,10 @@ function respondOk(res, req, info) {
       amountUsd: quoted ? quoted.usd : null,
       city: quoted ? quoted.city : ((info.data && (info.data.cityLabel || info.data.city)) || ''),
       vehicle: quoted ? quoted.vehicleName : ((info.data && info.data.vehicleLabel) || ''),
-      redirect: loc
+      redirect: loc,
+      manageUrl: manageToken
+        ? `${SUCCESS_URL.replace(/thank-you\.html.*$/i, '').replace(/\/+$/, '')}/manage-order.html?ref=${encodeURIComponent(orderRef || '')}&token=${encodeURIComponent(manageToken)}`
+        : null
     };
     if (info.mailWarning) payload.mailWarning = info.mailWarning;
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -616,7 +622,7 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
   // 先把订单结果返回给客户（订单已入库），邮件并行补齐。
   // handler 的 promise 仍然 pending，函数不会提前冻结，邮件能发完。
   const respondedAt = Date.now();
-  respondOk(res, req, { orderRef, quoted, data });
+  respondOk(res, req, { orderRef, quoted, data, manageToken });
   // 串行发送（不并发）：并发连 QQ SMTP 会被限速，实测并发耗时 54 秒、串行只要 8 秒
   for (const job of mailTasks) {
     await job();
