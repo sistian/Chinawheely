@@ -34,11 +34,17 @@ def resolve(host):
     return out, ips
 
 
+# 验证脚本要测的是「公网能不能访问」，不能被本机代理（Clash 等）影响。
+# 系统代理设置里常残留 http://127.0.0.1:7897，代理没跑时 urlopen 会直接
+# Connection refused，看起来像站点挂了。所以这里显式清空代理。
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
 def http(url, method="GET"):
     req = urllib.request.Request(url, method=method,
                                  headers={"User-Agent": "Mozilla/5.0"})
     try:
-        with urllib.request.urlopen(req, timeout=45) as r:
+        with _OPENER.open(req, timeout=45) as r:
             return r.status, r.geturl(), dict(r.headers)
     except urllib.error.HTTPError as e:
         return e.code, url, dict(e.headers)
