@@ -59,23 +59,69 @@ function resolveCityParam(raw) {
   return found;
 }
 
+/**
+ * 从来源页推断城市。
+ * 全站 3980 个预定链接里有 1992 个（50%）不带 ?city= 参数
+ * （每个城市页 hero 区的 "Book Now"、"View Details & Book →" 等都是裸 booking.html），
+ * 客户点了要自己从 53 城下拉里挑 —— 这里用 document.referrer 反推。
+ */
+var NON_CITY_SLUGS = {
+  'index': 1, 'booking': 1, 'contact': 1, 'prices': 1, 'manage-order': 1, 'admin': 1,
+  'about': 1, 'terms': 1, 'privacy': 1, 'help': 1, 'careers': 1, 'services': 1,
+  'cancellation': 1, 'cookies': 1, 'partners': 1, '404': 1, 'seo-swot-analysis': 1
+};
+
+function cityFromReferrer() {
+  var ref = document.referrer || '';
+  if (!ref) return '';
+  var u;
+  try {
+    u = new URL(ref, window.location.origin);
+  } catch (e) { return ''; }
+  if (u.host !== window.location.host) return '';
+  var m = /^\/([a-z0-9_]+)\.html$/i.exec(u.pathname);
+  if (!m) return '';
+  var slug = m[1].toLowerCase();
+  if (NON_CITY_SLUGS[slug]) return '';
+  return slug;
+}
+
 /** 把 CTA 的城市参数落到下拉框；无公开价的城市走「询价」通道并记住城市名 */
 function applyCityParam(raw) {
   var sel = el('city');
-  if (!sel || !raw) return;
-  var decoded = String(raw);
-  try { decoded = decodeURIComponent(raw); } catch (e) { /* 保留原值 */ }
+  if (!sel) return;
 
-  var match = resolveCityParam(decoded);
-  if (match) {
-    sel.value = match.slug;
+  // 1) 有 ?city= 就用它
+  var decoded = '';
+  if (raw) {
+    decoded = String(raw);
+    try { decoded = decodeURIComponent(raw); } catch (e) { /* 保留原值 */ }
+    var match = resolveCityParam(decoded);
+    if (match) {
+      sel.value = match.slug;
+      setRequestedCity('');
+      return;
+    }
+    // 没有公开价的城市（286 个 CTA 指向这类城市）：选中「询价」并把城市名带走
+    if (sel.querySelector('option[value="other"]')) {
+      sel.value = 'other';
+      setRequestedCity(decoded);
+      return;
+    }
+  }
+
+  // 2) 没有 ?city= → 从来源页城市反推
+  var slug = cityFromReferrer();
+  if (!slug) return;
+  var match2 = resolveCityParam(slug);
+  if (match2) {
+    sel.value = match2.slug;
     setRequestedCity('');
     return;
   }
-  // 没有公开价的城市（286 个 CTA 指向这类城市）：选中「询价」并把城市名带走
   if (sel.querySelector('option[value="other"]')) {
     sel.value = 'other';
-    setRequestedCity(decoded);
+    setRequestedCity(slug.charAt(0).toUpperCase() + slug.slice(1));
   }
 }
 
@@ -737,62 +783,101 @@ function updateSummary() {
 }
 
 // ============================================================
-//  提交：先走支付弹窗，再由弹窗按钮真正提交
+//  提交：先建单 → 再展示付款码 → 客户付款
+//  （旧流程是先付款再提交：客户付完钱关掉页面，钱就打了水漂，还没有订单）
 // ============================================================
 var SUBMITTING = false;
+var ORDER_RESULT = null;
 
-function submitBooking() {
-  // 防重复提交：按钮可能同时被 scripts.js 的全局委托和本模块监听器触发
+/** 把提交按钮切成忙碌状态 */
+function setSubmitBusy(busy) {
+  var buttons = document.querySelectorAll('[data-action="submit-booking"]');
+  buttons.forEach(function (b) {
+    b.disabled = busy;
+    if (busy) b.textContent = 'Creating your order…';
+    else b.textContent = 'I\'ve Made the Payment — View My Booking';
+  });
+  var cont = document.querySelector('#bookingForm button[type="submit"]');
+  if (cont) {
+    cont.disabled = busy;
+    cont.textContent = busy ? 'Creating your order…' : 'Continue to Payment';
+  }
+}
+
+/** 创建订单（fetch + JSON 响应），成功后展示付款码 */
+function createOrder() {
   if (SUBMITTING) return;
-
   var form = el('bookingForm');
   if (!form) return;
 
   SUBMITTING = true;
-  var buttons = document.querySelectorAll('[data-action="submit-booking"]');
-  buttons.forEach(function (b) {
-    b.disabled = true;
-    b.textContent = 'Submitting…';
-  });
-  // 万一提交没跳转出去，8 秒后恢复按钮，避免客户被卡死
-  setTimeout(function () {
+  setSubmitBusy(true);
+
+  fetch(form.action, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: new FormData(form)
+  }).then(function (r) {
+    return r.json().then(function (j) { return { status: r.status, json: j }; })
+      .catch(function () { return { status: r.status, json: null }; });
+  }).then(function (res) {
     SUBMITTING = false;
-    buttons.forEach(function (b) {
-      b.disabled = false;
-      b.textContent = 'I\'ve Completed Payment — Confirm Booking';
-    });
-  }, 8000);
+    setSubmitBusy(false);
+    var j = res.json;
+    if (!j || j.ok !== true) {
+      var msg = (j && (j.message || j.error)) || 'Booking failed. Please try again.';
+      showBookingErrorMsg(msg);
+      return;
+    }
+    ORDER_RESULT = j;
+    openPaymentModal(j);
+  }).catch(function () {
+    SUBMITTING = false;
+    setSubmitBusy(false);
+    showBookingErrorMsg('Network error — your booking was not submitted. Please check your connection, or message us on WhatsApp +86 155 2777 1775.');
+  });
+}
 
-  var formPrice = el('formPrice');
-  if (formPrice) formPrice.value = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total + ' CNY') : '';
+/** 把错误同时显示为横幅 + toast */
+function showBookingErrorMsg(msg) {
+  var banner = el('bookingError');
+  if (banner) {
+    banner.textContent = msg;
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  if (typeof showToast === 'function') showToast(msg, 'error');
+}
 
+/**
+ * 「我已付款」→ 去感谢页。
+ * 订单在打开付款弹窗之前就已经建好了，这里只负责带客户去看订单详情 + 付款说明。
+ */
+function submitBooking() {
+  if (SUBMITTING) return;
+  if (!ORDER_RESULT) { createOrder(); return; }
+  var ref = ORDER_RESULT.ref ? ('?ref=' + encodeURIComponent(ORDER_RESULT.ref)) : '';
+  var amt = ORDER_RESULT.amountCny ? ('&amount=' + encodeURIComponent(String(ORDER_RESULT.amountCny))) : '';
+  window.location.href = 'thank-you.html' + ref + amt + '#payment';
+}
+
+/** 提交前把摘要信息同步到隐藏字段（弹窗此时还没开，直接从表单+报价算） */
+function syncHiddenFields() {
   var formPaymentMethod = el('paymentMethod');
   if (formPaymentMethod) {
     var alipayTab = el('tab-alipay');
     formPaymentMethod.value = (alipayTab && alipayTab.classList.contains('active')) ? 'alipay' : 'paypal';
   }
-
   var formRouteSummary = el('formRouteSummary');
-  if (formRouteSummary) {
-    var modalRoute = el('modalRoute');
-    formRouteSummary.value = modalRoute ? modalRoute.textContent : '';
-  }
-
+  if (formRouteSummary) formRouteSummary.value = buildRouteSummary();
   var formServiceType = el('formServiceType');
-  if (formServiceType) {
-    var modalService = el('modalService');
-    formServiceType.value = modalService ? modalService.textContent : '';
-  }
-
+  if (formServiceType) formServiceType.value = productLabel(currentProduct());
   var formVehicleLabel = el('formVehicleLabel');
   if (formVehicleLabel) {
-    var modalVehicle = el('modalVehicle');
-    var modalPassengers = el('modalPassengers');
-    formVehicleLabel.value = (modalVehicle ? modalVehicle.textContent : '') +
-      (modalPassengers ? ' (' + modalPassengers.textContent + ' pax)' : '');
+    var pax = el('passengers') ? el('passengers').value : '';
+    formVehicleLabel.value = (QUOTE_RESULT ? QUOTE_RESULT.vehicleName : '') +
+      (pax ? ' (' + pax + ' pax)' : '');
   }
-
-  if (form) form.submit();
 }
 
 // ---- 支付弹窗：PayPal / 支付宝 切换 + 关闭 ----
@@ -870,7 +955,14 @@ function handleFormSubmit(e) {
     return;
   }
 
-  // 填支付弹窗
+  // 先把摘要写进隐藏字段，然后创建订单（订单建好后再弹付款码）
+  syncHiddenFields();
+  createOrder();
+}
+
+/** 展示付款弹窗：订单号 + 金额 + 收款码 */
+function openPaymentModal(orderResult) {
+  var product = currentProduct();
   var slug = citySlug();
   var cityName = '-';
   if (PRICE_DATA && slug && slug !== 'other') {
@@ -892,6 +984,21 @@ function handleFormSubmit(e) {
   if (mUsd) mUsd.textContent = QUOTE_RESULT ? ('≈ $' + QUOTE_RESULT.usd) : '—';
   var mCny = el('modalPriceCny');
   if (mCny) mCny.textContent = QUOTE_RESULT ? QUOTE_RESULT.total : '—';
+
+  // 扫码金额提示（PayPal / 支付宝都是扫码后自己输金额）
+  var amtTxt = QUOTE_RESULT ? ('¥' + QUOTE_RESULT.total + ' CNY') : 'the quoted amount';
+  ['modalPayAmountCny', 'modalPayAmountCnyAlipay'].forEach(function (id) {
+    var e = el(id);
+    if (e) e.textContent = amtTxt;
+  });
+
+  // 订单号：客户付款后要报这个号
+  var mRef = el('modalOrderRef');
+  if (mRef) {
+    mRef.textContent = (orderResult && orderResult.ref) ? orderResult.ref : '';
+    var wrap = el('modalOrderRefWrap');
+    if (wrap) wrap.style.display = (orderResult && orderResult.ref) ? 'flex' : 'none';
+  }
 
   var modal = el('paymentModal');
   if (modal) {

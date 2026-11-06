@@ -236,6 +236,42 @@
       border-radius: var(--radius-md);
       display: block;
       margin: 0 auto var(--space-3);
+      background: #fff;
+      padding: 6px;
+    }
+    /* 扫码金额提示：PayPal / 支付宝都是「扫码后自己输金额」 */
+    .qr-amount {
+      font-size: var(--text-base);
+      color: var(--color-gray-700);
+      margin: 0 0 var(--space-2);
+    }
+    .qr-amount strong {
+      color: var(--color-primary);
+      font-size: var(--text-lg);
+    }
+    .qr-zoom {
+      font-size: var(--text-sm);
+      color: var(--color-gray-600);
+      margin: 0 0 var(--space-3);
+    }
+    .modal-order-ref {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      margin-bottom: var(--space-3);
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: var(--color-gray-700);
+    }
+    .modal-order-ref strong {
+      color: var(--color-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: var(--text-base);
+      letter-spacing: .02em;
     }
     .qr-note {
       background: #fff9c4;
@@ -1026,6 +1062,10 @@
  <button type="button" class="modal-close" data-action="close-payment">&times;</button>
  </div>
  <div class="payment-modal-body">
+ <!-- 订单号：客户付款后要报这个号 -->
+ <div class="modal-order-ref" id="modalOrderRefWrap">
+ <span>Order number:</span><strong id="modalOrderRef">—</strong>
+ </div>
  <!-- Order Summary -->
  <div class="order-summary" id="modalOrderSummary">
  <div class="order-summary-row"><span>Service</span><span id="modalService">-</span></div>
@@ -1053,8 +1093,10 @@
  <!-- PayPal Content -->
  <div class="payment-tab-content active" id="tab-paypal">
  <div class="qr-section">
- <picture><source srcset="images/pay-paypal-qr.webp" type="image/webp"><img loading="lazy" width="1168" height="1180" decoding="async" src="images/pay-paypal-qr.webp" alt="PayPal QR Code"></picture>
+ <picture><source srcset="images/pay-paypal-qr-clean.webp" type="image/webp"><img loading="lazy" width="940" height="940" decoding="async" src="images/pay-paypal-qr-clean.png" alt="PayPal QR Code"></picture>
  <p class="u-38b7a70f">Scan with PayPal app to pay</p>
+ <p class="qr-amount">Enter this amount in PayPal: <strong id="modalPayAmountCny">—</strong></p>
+ <p class="qr-zoom">Can't scan? <a href="images/pay-paypal-qr-clean.png" target="_blank" rel="noopener">Open the QR code full size</a></p>
  <div class="qr-note">
  <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
  </div>
@@ -1064,8 +1106,10 @@
  <!-- Alipay Content -->
  <div class="payment-tab-content" id="tab-alipay">
  <div class="qr-section">
- <picture><source srcset="images/pay-alipay-qr.webp" type="image/webp"><img loading="lazy" width="1112" height="1480" decoding="async" src="images/pay-alipay-qr.webp" alt="Alipay QR Code"></picture>
+ <picture><source srcset="images/pay-alipay-qr-clean.webp" type="image/webp"><img loading="lazy" width="940" height="940" decoding="async" src="images/pay-alipay-qr-clean.png" alt="Alipay QR Code"></picture>
  <p class="u-38b7a70f">Scan with Alipay app to pay</p>
+ <p class="qr-amount">Enter this amount in Alipay: <strong id="modalPayAmountCnyAlipay">—</strong></p>
+ <p class="qr-zoom">Can't scan? <a href="images/pay-alipay-qr-clean.png" target="_blank" rel="noopener">Open the QR code full size</a></p>
  <div class="qr-note">
  <strong>📸 Screenshot Reminder:</strong> After payment, please take a screenshot of your payment confirmation and send it to us via WhatsApp or email. We'll confirm your booking within 10 minutes.
  </div>
@@ -1089,7 +1133,7 @@
 
  <!-- Final Submit -->
  <button type="button" class="btn btn-primary btn-large btn-submit" data-action="submit-booking">
- I've Completed Payment — Confirm Booking
+ I've Made the Payment — View My Booking
  </button>
  </div>
  </div>

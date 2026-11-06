@@ -139,6 +139,37 @@
   <p style="margin:8px 0 0;font-size:13px;color:#64748b">We've emailed you a personal management link — use it to view details or reschedule (free up to 48 hours before pickup). <a href="manage-order.html">Manage booking</a></p>
  </div>
 
+ <!-- 付款区：客户提交后就停在这一页，必须能直接扫码付款 -->
+ <div id="paymentBox" style="display:none;background:#fff;border:2px solid #1B4D3E;border-radius:14px;padding:22px;margin:18px auto;max-width:640px">
+  <h2 style="margin:0 0 4px;font-size:22px;color:#1B4D3E">💳 Complete Your Payment</h2>
+  <p style="margin:0 0 14px;font-size:14px;color:#64748b">Scan the code below and enter the amount. Then send us the payment screenshot on WhatsApp — we confirm within 10 minutes.</p>
+  <p style="margin:0 0 16px;font-size:16px;color:#1f2937">Amount to pay: <strong id="payAmountText" style="color:#1B4D3E;font-size:22px">—</strong></p>
+
+  <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center">
+   <div style="text-align:center;flex:1 1 220px;min-width:200px">
+    <div style="font-weight:600;margin-bottom:8px">PayPal</div>
+    <a href="images/pay-paypal-qr-clean.png" target="_blank" rel="noopener">
+     <picture><source srcset="images/pay-paypal-qr-clean.webp" type="image/webp"><img src="images/pay-paypal-qr-clean.png" width="940" height="940" loading="lazy" decoding="async" alt="PayPal QR Code" style="width:180px;height:180px;object-fit:contain;background:#fff;padding:6px;border:1px solid #e2e8f0;border-radius:10px"></picture>
+    </a>
+    <div style="font-size:13px;color:#64748b;margin-top:6px">Open full size</div>
+   </div>
+   <div style="text-align:center;flex:1 1 220px;min-width:200px">
+    <div style="font-weight:600;margin-bottom:8px">Alipay / 支付宝</div>
+    <a href="images/pay-alipay-qr-clean.png" target="_blank" rel="noopener">
+     <picture><source srcset="images/pay-alipay-qr-clean.webp" type="image/webp"><img src="images/pay-alipay-qr-clean.png" width="940" height="940" loading="lazy" decoding="async" alt="Alipay QR Code" style="width:180px;height:180px;object-fit:contain;background:#fff;padding:6px;border:1px solid #e2e8f0;border-radius:10px"></picture>
+    </a>
+    <div style="font-size:13px;color:#64748b;margin-top:6px">Open full size</div>
+   </div>
+  </div>
+
+  <p style="margin:18px 0 6px;font-size:14px;color:#475569">After paying, send us the screenshot:</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+   <a href="https://wa.me/8615527771775" class="btn btn-outline" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+   <a href="mailto:15527771775@qq.com" class="btn btn-outline">✉️ Email</a>
+  </div>
+  <p style="margin:12px 0 0;font-size:13px;color:#64748b">WhatsApp / WeChat: <strong>+86 155 2777 1775</strong> (8:00–24:00 Beijing time)</p>
+ </div>
+
  <div class="u-cf69b12b">
  <h2 class="lvl-h3 u-5534b3b3">📋 What Happens Next</h2>
  <ul class="u-f409778d">
@@ -320,6 +351,18 @@
   if (m && /^CWO-\d{8}-[A-F0-9]{8}$/.test(m)) {
     document.getElementById('orderRefText').textContent = m;
     document.getElementById('orderRefBox').style.display = 'block';
+
+    // 付款区：带上订单号就显示，金额由下单接口回传
+    var box = document.getElementById('paymentBox');
+    var amt = new URLSearchParams(location.search).get('amount');
+    document.getElementById('payAmountText').textContent =
+      (amt && /^\d+(\.\d{1,2})?$/.test(amt)) ? ('¥' + amt + ' CNY') : 'see your booking page';
+    box.style.display = 'block';
+
+    // 从 #payment 进入时滚到付款区
+    if (location.hash === '#payment') {
+      setTimeout(function () { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    }
   }
 })();
 </script>

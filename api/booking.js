@@ -114,9 +114,51 @@ function setCorsHeaders(res, req) {
 /** 出错时把用户送回预定页并带上可读原因，而不是丢一个纯文本 400 页面 */
 function redirectToBooking(res, req, code, message) {
   setCorsHeaders(res, req);
+  // 前端用 fetch 提交时（Accept: application/json）返回 JSON，而不是 302
+  if (wantsJson(req)) {
+    res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify({ ok: false, error: code, message: message || '' }));
+  }
   let url = BOOKING_URL + (BOOKING_URL.includes('?') ? '&' : '?') + 'error=' + encodeURIComponent(code);
   if (message) url += '&msg=' + encodeURIComponent(message);
   res.writeHead(302, { Location: url });
+  return res.end();
+}
+
+/** 前端是否用 fetch 提交（要 JSON 响应而不是 302） */
+function wantsJson(req) {
+  const a = String((req && req.headers && req.headers.accept) || '').toLowerCase();
+  return a.indexOf('application/json') !== -1;
+}
+
+/**
+ * 成功响应。
+ * - 普通表单提交 → 302 跳感谢页（保持旧行为，老缓存页也能用）
+ * - fetch 提交 → 200 JSON（先建单、再展示付款码的新流程用）
+ */
+function respondOk(res, req, info) {
+  setCorsHeaders(res, req);
+  const orderRef = info.orderRef;
+  const quoted = info.quoted;
+  const loc = orderRef
+    ? `${SUCCESS_URL}${SUCCESS_URL.includes('?') ? '&' : '?'}ref=${encodeURIComponent(orderRef)}` +
+      (quoted && quoted.total ? `&amount=${encodeURIComponent(String(quoted.total))}` : '')
+    : SUCCESS_URL;
+  if (wantsJson(req)) {
+    const payload = {
+      ok: true,
+      ref: orderRef || null,
+      amountCny: quoted ? quoted.total : null,
+      amountUsd: quoted ? quoted.usd : null,
+      city: quoted ? quoted.city : ((info.data && (info.data.cityLabel || info.data.city)) || ''),
+      vehicle: quoted ? quoted.vehicleName : ((info.data && info.data.vehicleLabel) || ''),
+      redirect: loc
+    };
+    if (info.mailWarning) payload.mailWarning = info.mailWarning;
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify(payload));
+  }
+  res.writeHead(302, { Location: loc });
   return res.end();
 }
 
@@ -494,7 +536,7 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
 </table>
 <div style="margin:14px 0">${priceLine}</div>
 <h3 style="color:#1B4D3E;font-size:15px;margin:18px 0 6px">How to pay</h3>
-<p style="font-size:14px">Pay via <strong>PayPal</strong> or <strong>Alipay</strong> — scan the QR code on our <a href="${siteBase}/booking.html">booking page</a>, then send the payment screenshot to our WhatsApp below. We confirm within 10 minutes.</p>
+<p style="font-size:14px">Pay via <strong>PayPal</strong> or <strong>Alipay</strong> — scan the QR code on our <a href="${siteBase}/thank-you.html?ref=${encodeURIComponent(orderRef)}${quoted && quoted.total ? '&amount=' + encodeURIComponent(String(quoted.total)) : ''}#payment">payment page</a>${quoted && quoted.total ? ` and enter <strong>¥${quoted.total}</strong>` : ''}, then send the payment screenshot to our WhatsApp below. We confirm within 10 minutes.</p>
 <h3 style="color:#1B4D3E;font-size:15px;margin:18px 0 6px">Manage your booking</h3>
 <p style="font-size:14px">View details or reschedule (free up to 48 hours before pickup):<br>
 <a href="${manageUrl}">${manageUrl}</a></p>
@@ -511,7 +553,7 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
         q.vehicleLabel ? `Vehicle: ${q.vehicleLabel}` : '',
         quoted ? `Price: ¥${q.total} CNY (≈ $${q.usd} USD)` : 'Price: quote to follow within 2 hours',
         '',
-        'How to pay: PayPal or Alipay QR on the booking page; send screenshot to WhatsApp +86 155 2777 1775.',
+        'How to pay: PayPal or Alipay QR on your payment page; send screenshot to WhatsApp +86 155 2777 1775.',
         '',
         `Manage your booking (reschedule up to 48h before pickup):`,
         manageUrl,
@@ -539,15 +581,13 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
       replyTo: replyEmail
     });
     await markMail(reference, 'sent');
-    setCorsHeaders(res, req);
-    const loc = orderRef
-      ? `${SUCCESS_URL}${SUCCESS_URL.includes('?') ? '&' : '?'}ref=${encodeURIComponent(orderRef)}`
-      : SUCCESS_URL;
-    res.writeHead(302, { Location: loc });
-    return res.end();
+    return respondOk(res, req, { orderRef, quoted, data });
   } catch (err) {
     console.error('Chinawheely booking mail error:', err && err.message);
     await markMail(reference, 'failed', (err && err.message) || 'unknown error');
+    // ⚠ 订单已经落库（orderRef 已生成）——绝不能因为「通知邮件没发出去」就把客户挡回去，
+    // 否则客户会以为失败而重复下单。后台仍能在 cw_orders 里看到这单。
+    if (orderRef) return respondOk(res, req, { orderRef, quoted, data, mailWarning: 'admin mail failed' });
     setCorsHeaders(res, req);
     res.statusCode = 502;
     return res.end('Mail error: ' + (err && err.message ? err.message : 'unknown error'));
