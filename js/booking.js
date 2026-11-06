@@ -847,8 +847,13 @@ function createOrder() {
 
   fetch(form.action, {
     method: 'POST',
-    headers: { 'Accept': 'application/json' },
-    body: new FormData(form)
+    headers: {
+      'Accept': 'application/json',
+      // 用 urlencoded 而不是 FormData（multipart）：与原生表单提交完全一致，
+      // 也省掉一次 CORS 预检
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: new URLSearchParams(new FormData(form)).toString()
   }).then(function (r) {
     return r.json().then(function (j) { return { status: r.status, json: j }; })
       .catch(function () { return { status: r.status, json: null }; });

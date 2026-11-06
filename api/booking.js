@@ -1,4 +1,5 @@
 const querystring = require('querystring');
+const { parseRequestBody } = require('./_lib/body');
 const { mailerConfigured, sendMail } = require('./_lib/mailer');
 const { createLead, markMail } = require('./_lib/leads');
 const { buildLeadRecord, clientIp } = require('./_lib/fields');
@@ -346,7 +347,8 @@ module.exports = async (req, res) => {
     return res.end('Payload too large');
   }
 
-  const raw = querystring.parse(body);
+  // 前端可能发 urlencoded（传统表单）或 multipart（fetch + FormData），两种都支持
+  const raw = parseRequestBody(body, req.headers['content-type']);
   // 同名字段重复提交（hidden + radio 共用 name）会让 querystring 返回数组 —— 统一压成单值
   const data = {};
   for (const key of Object.keys(raw)) {

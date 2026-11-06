@@ -1,4 +1,5 @@
 const querystring = require('querystring');
+const { parseRequestBody } = require('./_lib/body');
 const { mailerConfigured, sendMail } = require('./_lib/mailer');
 const { createLead, markMail } = require('./_lib/leads');
 const { buildLeadRecord, clientIp } = require('./_lib/fields');
@@ -108,7 +109,8 @@ module.exports = async (req, res) => {
     return res.end('Payload too large');
   }
 
-  const data = querystring.parse(body);
+  // urlencoded（传统表单）与 multipart（fetch + FormData）都支持
+  const data = parseRequestBody(body, req.headers['content-type']);
 
   // Honeypot: silently succeed if a bot filled the hidden field
   if ((data.website && String(data.website).trim()) || (data._honey && String(data._honey).trim())) {
