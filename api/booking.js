@@ -613,7 +613,9 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
 
   // 先把订单结果返回给客户（订单已入库），邮件并行补齐。
   // handler 的 promise 仍然 pending，函数不会提前冻结，邮件能发完。
+  const respondedAt = Date.now();
   respondOk(res, req, { orderRef, quoted, data });
   await Promise.all(mailTasks);
+  console.log(`[booking] ${orderRef} mails settled ${Date.now() - respondedAt}ms after response (sent=${mailTasks.length})`);
   return;
 }
