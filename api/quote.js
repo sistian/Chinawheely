@@ -84,6 +84,24 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'BAD_REQUEST' });
   }
 
+  // 同名字段重复提交时字段可能是数组（如旧版表单的 product 同时有 hidden 和 radio），
+  // 直接传给定价引擎会被当成非法值（UNKNOWN_PRODUCT），这里统一归一成标量。
+  ['city', 'product', 'vehicle', 'tier', 'extraMinutes', 'extraKm', 'passengers', 'luggage'].forEach(function (k) {
+    if (data[k] === undefined || data[k] === null) return;
+    if (Array.isArray(data[k])) {
+      var picked = '';
+      for (var i = 0; i < data[k].length; i++) {
+        if (data[k][i] !== undefined && data[k][i] !== null && String(data[k][i]).trim() !== '') {
+          picked = String(data[k][i]).trim();
+          break;
+        }
+      }
+      data[k] = picked;
+    } else {
+      data[k] = String(data[k]).trim();
+    }
+  });
+
   try {
     // 元数据查询
     if (data.action === 'options') {
