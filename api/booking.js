@@ -624,9 +624,16 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
   const respondedAt = Date.now();
   respondOk(res, req, { orderRef, quoted, data, manageToken });
   // 串行发送（不并发）：并发连 QQ SMTP 会被限速，实测并发耗时 54 秒、串行只要 8 秒
-  for (const job of mailTasks) {
-    await job();
-  }
+  // 硬上限 40 秒：SMTP 通道挂起时不拖住函数实例
+  const MAIL_DEADLINE = 40000;
+  await Promise.race([
+    (async () => {
+      for (const job of mailTasks) {
+        await job();
+      }
+    })(),
+    new Promise(resolve => setTimeout(resolve, MAIL_DEADLINE))
+  ]);
   console.log(`[booking] ${orderRef} mails settled ${Date.now() - respondedAt}ms after response (sent=${mailTasks.length})`);
   return;
 }
