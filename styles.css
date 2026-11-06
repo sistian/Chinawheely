@@ -1111,3 +1111,6 @@
   .hero-slide:first-child { opacity: 1; }
 }
 @media print { .hero-slides { display: none !important; } }
+
+/* ===== Perf: homepage city cards use <img loading=lazy> (CSS background can't lazy-load) ===== */
+.city-card-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
