@@ -129,7 +129,9 @@ async function sendMail({ to, subject, html, text, replyTo }) {
         return info;
       } catch (err) {
         lastErr = err;
-        console.error(`[mail] ${p.label} failed (${mailTarget()}):`, err && err.message);
+        // command 能定位卡在哪一步（CONN / EHLO / AUTH / MAIL / RCPT / DATA）
+        console.error(`[mail] ${p.label} failed (${mailTarget()}) cmd=${err && err.command} code=${err && err.code} err=${err && err.message}`);
+        if (err && err.stack) console.error('[mail] stack:', String(err.stack).split('\n').slice(0, 4).join(' | '));
         if (i < plans.length - 1) {
           await new Promise(r => setTimeout(r, 800));
         }
