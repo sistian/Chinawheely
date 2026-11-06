@@ -12,6 +12,10 @@ os.chdir(ROOT)
 
 CORE = {"index", "about", "contact", "booking", "thank-you", "admin", "terms",
         "privacy", "sitemap", "services", "404", "prices", "faq"}
+# CORE 里存的是页面 slug（无扩展名）。files 里是 "index.html" 这种带扩展名的文件名，
+# 直接拿 CORE 比对文件名永远不成立 —— 核心页从来没被真正豁免过。
+# 文件名比对用 CORE_FILES；slug 比对（canonical 路径）继续用 CORE。
+CORE_FILES = {c + ".html" for c in CORE}
 SUB_TYPES = ["airport-transfer-to", "day-trips", "best-time", "food-shopping",
              "photo-spots", "tea-culture"]
 TOOLS_PAGES = ["batch_download.html", "image_downloader.html", "seo-swot-analysis.html"]
@@ -127,7 +131,7 @@ if _city_orphans:
 else:
     ok("内链:孤岛城市页", "0")
 
-weak = [f for f in files if f not in CORE and inbound.get(f, 0) < 3
+weak = [f for f in files if f not in CORE_FILES and inbound.get(f, 0) < 3
         and f not in REDIRECT_SOURCES and f not in NOINDEX_PAGES]
 if weak:
     warn("内链:弱内链页(<3入链)", f"{len(weak)} 个  {' '.join(weak[:8])}")
@@ -314,17 +318,23 @@ if os.path.exists(".htaccess"):
 # noindex 页（别名桩 / 工具页 / 后台）不进索引，不需要转化入口和价格信息
 NOINDEX = {f for f in files
            if re.search(r'<meta\s+name="robots"[^>]*noindex', pages[f], re.I)}
-no_cta = [f for f in files if f not in CORE and f not in NOINDEX
+no_cta = [f for f in files if f not in CORE_FILES and f not in NOINDEX
           and "booking.html" not in pages[f]]
 if no_cta:
     warn("转化:无预订入口", f"{len(no_cta)}  {' '.join(no_cta[:6])}")
 else:
     ok("转化:无预订入口", "0")
 
-no_price = [f for f in files if f not in CORE and f not in NOINDEX
+# 法务/说明类页面（about / terms / privacy / help / careers）本来就不卖东西，
+# 上面加价格表反而是噪声；它们只要求有转化入口（见上一项门禁）。
+LEGAL_PAGES = {"about.html", "terms.html", "privacy.html", "help.html", "careers.html"}
+no_price = [f for f in files if f not in CORE_FILES and f not in NOINDEX and f not in LEGAL_PAGES
             and not re.search(r"(?:¥|\$)\d", pages[f])
             and not re.search(r"Quote on request", pages[f])]
-warn("转化:无价格信息", f"{len(no_price)} 页无价格  {' '.join(no_price[:6])}")
+if no_price:
+    warn("转化:无价格信息", f"{len(no_price)} 页无价格  {' '.join(no_price[:6])}")
+else:
+    ok("转化:无价格信息", "0")
 
 # ---------- 8. 价格一致性（P3 引入） ----------
 try:

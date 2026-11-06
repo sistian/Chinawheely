@@ -399,6 +399,9 @@ def render_food(slug, d, city):
     _ps = plan_section(d, city, "food and shopping day")
     if _ps:
         o.append(_ps)
+    _pb = price_block(city, 'day trip')
+    if _pb:
+        o.append(_pb)
     o.append(faq_block(d.get('faq', [])))
     return '\n'.join(o)
 
@@ -433,6 +436,9 @@ def render_tea(slug, d, city):
     et = d.get('etiquette', {})
     if et:
         o.append(section(et.get('heading', 'Ordering tea'), paras(et.get('paragraphs', []))))
+    _pb = price_block(city, 'day trip')
+    if _pb:
+        o.append(_pb)
     o.append(faq_block(d.get('faq', [])))
     return '\n'.join(o)
 

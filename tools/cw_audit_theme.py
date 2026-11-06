@@ -157,7 +157,7 @@ few_ld = []
 for f in data:
     h = data[f][2]
     blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
-    if len(blocks) < 4:
+    if len(blocks) < 4 and f not in REDIRECT_SOURCES:
         few_ld.append(f'{f}({len(blocks)})')
     for b in blocks:
         try:
@@ -198,13 +198,24 @@ def city_of_slug(slug):
     return slug
 
 
+# 句子必须落在同一个块元素内：把整页压平成一行会把
+# “<span>best light: …</span><p>Getting there: …</p>” 这种
+# 带标签前缀的字段拼成一句假的重复句。
+# 301 跳转桩（REDIRECT_SOURCES）的正文按设计就是目标页的副本，
+# 且带 noindex + canonical，不参与内容重复度门禁。
 sent = collections.defaultdict(set)
 for f in data:
-    t = data[f][1]
-    for s in re.split(r'(?<=[.!?])\s+', t):
-        w = s.split()
-        if len(w) >= DUP_SENTENCE_WORDS:
-            sent[' '.join(w[:DUP_SENTENCE_WORDS])].add(f)
+    if f in REDIRECT_SOURCES:
+        continue
+    h = body_of(data[f][2])
+    blocks = re.findall(r'<(?:p|li|h2|h3|h4|blockquote)\b[^>]*>(.*?)</(?:p|li|h2|h3|h4|blockquote)>',
+                         h, re.S | re.I)
+    for b in blocks:
+        bt = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', b)).strip()
+        for s in re.split(r'(?<=[.!?])\s+', bt):
+            w = s.split()
+            if len(w) >= DUP_SENTENCE_WORDS:
+                sent[' '.join(w[:DUP_SENTENCE_WORDS])].add(f)
 dup = {}
 for k, v in sent.items():
     if len(v) > 1 and len({city_of_slug(x[:-5]) for x in v}) > 1:
