@@ -9,6 +9,7 @@
  */
 const net = require('net');
 const tls = require('tls');
+const { sendMail } = require('./_lib/mailer');
 
 const SMTP_HOST = process.env.SMTP_HOST || '';
 const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
@@ -92,12 +93,33 @@ module.exports = async (req, res) => {
   }
   const ok = checks.some(c => c.reachable);
   res.writeHead(200);
-  return res.end(JSON.stringify({
+  const result = {
     ok,
     host: SMTP_HOST.replace(/^(\w{2})\w+/, '$1***'),   // 只显示前两个字母
     configuredPort: SMTP_PORT,
     checks,
     tlsChecks,
     checkedAt: new Date().toISOString()
-  }));
+  };
+
+  // ?send=1 → 实测一封真邮件（发给业务邮箱），把真实错误同步返回
+  if (req.query && req.query.send) {
+    const t0 = Date.now();
+    try {
+      const info = await sendMail({
+        to: process.env.RECIPIENT_EMAIL,
+        subject: '[Chinawheely] 邮件通道测试 ' + new Date().toISOString(),
+        html: '<p>Chinawheely 邮件通道自检（可忽略）。</p>',
+        text: 'Chinawheely 邮件通道自检（可忽略）。'
+      });
+      result.send = { ok: true, ms: Date.now() - t0, messageId: info && info.messageId };
+    } catch (e) {
+      result.send = {
+        ok: false, ms: Date.now() - t0,
+        command: e && e.command, code: e && e.code, error: e && e.message
+      };
+    }
+  }
+
+  return res.end(JSON.stringify(result));
 };
