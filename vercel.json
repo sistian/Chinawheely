@@ -1,5 +1,4 @@
 {
-  "regions": ["hnd1"],
   "headers": [
     {
       "source": "/(.*)",
