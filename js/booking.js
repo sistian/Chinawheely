@@ -832,7 +832,7 @@ function setSubmitBusy(busy) {
   var cont = document.querySelector('#bookingForm button[type="submit"]');
   if (cont) {
     cont.disabled = busy;
-    cont.textContent = busy ? 'Creating your order…' : 'Continue to Payment';
+    cont.textContent = busy ? 'Creating your order… (usually a few seconds)' : 'Continue to Payment';
   }
 }
 

@@ -507,6 +507,20 @@ module.exports = async (req, res) => {
 
   const baseSubject = buildSubject(data);
   const subject = (reference || orderRef) ? `${baseSubject} [${orderRef || reference}]` : baseSubject;
+
+  // ⚠ 订单没入库就不能让客户以为提交成功（否则后台看不到这单）
+  if (!orderRef) {
+    console.error('Chinawheely order not created (no ref)');
+    setCorsHeaders(res, req);
+    if (wantsJson(req)) {
+      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({
+        ok: false, error: 'order_create_failed',
+        message: 'We could not create your booking. Please try again, or message us on WhatsApp +86 155 2777 1775.'
+      }));
+    }
+    return redirectToBooking(res, req, 'order_create_failed', 'Please try again or contact us on WhatsApp +86 155 2777 1775');
+  }
   const { html, plain } = buildEmail(data, {
     reference: reference || orderRef,
     orderRef,
@@ -516,6 +530,12 @@ module.exports = async (req, res) => {
   });
 
   const replyEmail = data[REPLY_TO_FIELD] && String(data[REPLY_TO_FIELD]).trim();
+
+  // 邮件改为并行发送，且**不阻塞响应**：
+  // 旧写法是「客户邮件 → 通知邮件」串行 await 再响应，实测要 8～10 秒，
+  // 客户盯着「Creating your order…」会以为卡死而重复提交。
+  // 现在：订单入库后立即返回（1 秒内），邮件在响应后补齐。
+  const mailTasks = [];
 
   // P4 - 客户确认邮件（含订单号 + 自助管理链接）；失败不阻断主流程
   try {
@@ -562,36 +582,38 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
         '',
         `Support: WhatsApp/WeChat +86 155 2777 1775 (8:00-24:00 Beijing) · ${RECIPIENT_EMAIL}`
       ].filter(l => l !== undefined).join('\n');
-      await sendMail({
+      mailTasks.push(sendMail({
         to: String(data.email).trim(),
         subject: `Your Chinawheely booking ${orderRef}`,
         html: custHtml,
         text: custPlain,
         replyTo: RECIPIENT_EMAIL
-      });
+      }).catch(function (err) {
+        console.error('Chinawheely customer mail error:', err && err.message);
+      }));
     }
   } catch (mailErr) {
-    console.error('Chinawheely customer mail error:', mailErr && mailErr.message);
+    console.error('Chinawheely customer mail build error:', mailErr && mailErr.message);
   }
 
-  try {
-    await sendMail({
+  mailTasks.push(
+    sendMail({
       to: RECIPIENT_EMAIL,
       subject,
       html,
       text: plain,
       replyTo: replyEmail
-    });
-    await markMail(reference, 'sent');
-    return respondOk(res, req, { orderRef, quoted, data });
-  } catch (err) {
-    console.error('Chinawheely booking mail error:', err && err.message);
-    await markMail(reference, 'failed', (err && err.message) || 'unknown error');
-    // ⚠ 订单已经落库（orderRef 已生成）——绝不能因为「通知邮件没发出去」就把客户挡回去，
-    // 否则客户会以为失败而重复下单。后台仍能在 cw_orders 里看到这单。
-    if (orderRef) return respondOk(res, req, { orderRef, quoted, data, mailWarning: 'admin mail failed' });
-    setCorsHeaders(res, req);
-    res.statusCode = 502;
-    return res.end('Mail error: ' + (err && err.message ? err.message : 'unknown error'));
-  }
-};
+    })
+      .then(function () { return markMail(reference, 'sent'); })
+      .catch(function (err) {
+        console.error('Chinawheely booking mail error:', err && err.message);
+        return markMail(reference, 'failed', (err && err.message) || 'unknown error');
+      })
+  );
+
+  // 先把订单结果返回给客户（订单已入库），邮件并行补齐。
+  // handler 的 promise 仍然 pending，函数不会提前冻结，邮件能发完。
+  respondOk(res, req, { orderRef, quoted, data });
+  await Promise.all(mailTasks);
+  return;
+}
