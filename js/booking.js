@@ -121,8 +121,40 @@ function applyCityParam(raw) {
   }
   if (sel.querySelector('option[value="other"]')) {
     sel.value = 'other';
-    setRequestedCity(slug.charAt(0).toUpperCase() + slug.slice(1));
+    var guess = slug.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    setRequestedCity(guess);
+    refineCityFromReferrerTitle(guess);
   }
+}
+
+/**
+ * 城市名兜底：从来源页 <title> 取真实城市名。
+ * 标题格式固定：「<城市> Airport Transfer & Car Service | Chinawheely」
+ * 「Fuzhou (Jiangxi) …」这种重名城市也能拿到准确名字。
+ */
+function refineCityFromReferrerTitle(fallbackName) {
+  var ref = document.referrer || '';
+  if (!ref) return;
+  try {
+    fetch(ref, { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : ''; })
+      .then(function (html) {
+        if (!html) return;
+        var m = /<title[^>]*>([^<]*)<\/title>/i.exec(html);
+        if (!m) return;
+        var name = decodeHtmlEntities(m[1].split(/[|｜]/)[0])
+          .replace(/\s+(Airport|Private Car|Car|Charter|Intercity|Transfer)\b.*$/i, '')
+          .trim();
+        if (name && name.length <= 40) setRequestedCity(name);
+      })
+      .catch(function () { /* 失败就用兜底名 */ });
+  } catch (e) { /* 忽略 */ }
+}
+
+function decodeHtmlEntities(s) {
+  return String(s)
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
 }
 
 function setRequestedCity(name) {
