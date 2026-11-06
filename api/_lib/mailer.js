@@ -17,6 +17,14 @@ const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || MAIL_FROM;
 
 let smtpTransport = null;
 
+// 超时：nodemailer 默认连接超时 120 秒，Vercel 函数等不到那会儿，
+// 失败时整单能拖几十秒。收紧到 15 秒，失败就快速换下一条通道。
+const SMTP_TIMEOUT = {
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 20000
+};
+
 function getSmtpTransport() {
   if (!SMTP_USER || !SMTP_PASS) return null;
   if (!smtpTransport) {
@@ -26,10 +34,29 @@ function getSmtpTransport() {
       host: SMTP_HOST,
       port: SMTP_PORT,
       secure: SMTP_PORT === 465,
-      auth: { user: SMTP_USER, pass: SMTP_PASS }
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+      ...SMTP_TIMEOUT
     });
   }
   return smtpTransport;
+}
+
+/** 备选通道：换端口 / 换 TLS 模式（出口 IP 被 SMTP 服务端拉黑时能救回来） */
+function buildAltTransport(port, secure) {
+  const nodemailer = require('nodemailer');
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: port,
+    secure: secure,
+    requireTLS: !secure && port !== 25,
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+    ...SMTP_TIMEOUT
+  });
+}
+
+/** 诊断信息（不含密码）：主机、端口、TLS 模式、账号 */
+function mailTarget() {
+  return `${SMTP_HOST}:${SMTP_PORT} secure=${SMTP_PORT === 465} user=${SMTP_USER}`;
 }
 
 function mailerConfigured() {
@@ -75,17 +102,40 @@ function sendViaSendGrid({ to, subject, html, text, replyTo }) {
 }
 
 async function sendMail({ to, subject, html, text, replyTo }) {
-  const transport = getSmtpTransport();
-  if (transport) {
-    const info = await transport.sendMail({
-      from: `"${MAIL_FROM_NAME}" <${MAIL_FROM}>`,
-      to,
-      subject,
-      html,
-      text,
-      replyTo: replyTo || undefined
-    });
-    return info;
+  const message = {
+    from: `"${MAIL_FROM_NAME}" <${MAIL_FROM}>`,
+    to,
+    subject,
+    html,
+    text,
+    replyTo: replyTo || undefined
+  };
+
+  if (SMTP_USER && SMTP_PASS) {
+    // 主通道 → 换端口/TLS 模式 → 再试一次（Vercel 可能换了个出口 IP）
+    const altPort = SMTP_PORT === 465 ? 587 : 465;
+    const altSecure = SMTP_PORT !== 465;
+    const plans = [
+      { label: 'smtp-primary', transport: getSmtpTransport() },
+      { label: 'smtp-alt', transport: buildAltTransport(altPort, altSecure) },
+      { label: 'smtp-retry', transport: buildAltTransport(SMTP_PORT, SMTP_PORT === 465) }
+    ];
+    let lastErr = null;
+    for (let i = 0; i < plans.length; i++) {
+      const p = plans[i];
+      try {
+        const info = await p.transport.sendMail(message);
+        console.log(`[mail] ok via ${p.label} (${mailTarget()}) -> ${to}`);
+        return info;
+      } catch (err) {
+        lastErr = err;
+        console.error(`[mail] ${p.label} failed (${mailTarget()}):`, err && err.message);
+        if (i < plans.length - 1) {
+          await new Promise(r => setTimeout(r, 800));
+        }
+      }
+    }
+    throw lastErr;
   }
   if (SENDGRID_API_KEY) {
     return sendViaSendGrid({ to, subject, html, text, replyTo });
