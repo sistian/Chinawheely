@@ -619,21 +619,16 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
       });
   });
 
-  // 先把订单结果返回给客户（订单已入库），邮件并行补齐。
-  // handler 的 promise 仍然 pending，函数不会提前冻结，邮件能发完。
-  const respondedAt = Date.now();
-  respondOk(res, req, { orderRef, quoted, data, manageToken });
-  // 串行发送（不并发）：并发连 QQ SMTP 会被限速，实测并发耗时 54 秒、串行只要 8 秒
-  // 硬上限 40 秒：SMTP 通道挂起时不拖住函数实例
-  const MAIL_DEADLINE = 40000;
+  // 两封邮件并行发送（各自建连接），实测 ~3 秒
+  // ⚠ 必须在响应之前发：Vercel 响应后会把实例冻结，实测响应后再发会
+  //   连接超时 / TLS 握手被掐（客户和后台都收不到邮件）。
+  // 最多等 15 秒：邮件通道完全挂死时也不能把客户卡在这里（订单已入库，
+  // 后台仪表盘仍能看到这单）。
   await Promise.race([
-    (async () => {
-      for (const job of mailTasks) {
-        await job();
-      }
-    })(),
-    new Promise(resolve => setTimeout(resolve, MAIL_DEADLINE))
+    Promise.all(mailTasks.map(function (job) { return job(); })),
+    new Promise(function (resolve) { setTimeout(resolve, 15000); })
   ]);
-  console.log(`[booking] ${orderRef} mails settled ${Date.now() - respondedAt}ms after response (sent=${mailTasks.length})`);
+
+  respondOk(res, req, { orderRef, quoted, data, manageToken });
   return;
-}
+};
