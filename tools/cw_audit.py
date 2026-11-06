@@ -232,6 +232,15 @@ try:
 except Exception:
     pass
 html_files -= MERGED_REDIRECT_SOURCES
+# noindex 页（别名/重复页/内部页）本就不该进 sitemap，从“未收录”口径里排除
+for _f in list(html_files):
+    try:
+        _h = open(_f, encoding="utf-8", errors="ignore").read()
+    except Exception:
+        continue
+    _m = re.search(r'name="robots"\s+content="([^"]*)"', _h)
+    if _m and "noindex" in _m.group(1):
+        html_files.discard(_f)
 missing_sm = sorted(html_files - sm_files)
 if missing_sm:
     warn("sitemap:未收录页", f"{len(missing_sm)}  {' '.join(missing_sm[:8])}")
