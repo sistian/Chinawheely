@@ -582,22 +582,24 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
         '',
         `Support: WhatsApp/WeChat +86 155 2777 1775 (8:00-24:00 Beijing) · ${RECIPIENT_EMAIL}`
       ].filter(l => l !== undefined).join('\n');
-      mailTasks.push(sendMail({
-        to: String(data.email).trim(),
-        subject: `Your Chinawheely booking ${orderRef}`,
-        html: custHtml,
-        text: custPlain,
-        replyTo: RECIPIENT_EMAIL
-      }).catch(function (err) {
-        console.error('Chinawheely customer mail error:', err && err.message);
-      }));
+      mailTasks.push(function () {
+        return sendMail({
+          to: String(data.email).trim(),
+          subject: `Your Chinawheely booking ${orderRef}`,
+          html: custHtml,
+          text: custPlain,
+          replyTo: RECIPIENT_EMAIL
+        }).catch(function (err) {
+          console.error('Chinawheely customer mail error:', err && err.message);
+        });
+      });
     }
   } catch (mailErr) {
     console.error('Chinawheely customer mail build error:', mailErr && mailErr.message);
   }
 
-  mailTasks.push(
-    sendMail({
+  mailTasks.push(function () {
+    return sendMail({
       to: RECIPIENT_EMAIL,
       subject,
       html,
@@ -608,14 +610,17 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
       .catch(function (err) {
         console.error('Chinawheely booking mail error:', err && err.message);
         return markMail(reference, 'failed', (err && err.message) || 'unknown error');
-      })
-  );
+      });
+  });
 
   // 先把订单结果返回给客户（订单已入库），邮件并行补齐。
   // handler 的 promise 仍然 pending，函数不会提前冻结，邮件能发完。
   const respondedAt = Date.now();
   respondOk(res, req, { orderRef, quoted, data });
-  await Promise.all(mailTasks);
+  // 串行发送（不并发）：并发连 QQ SMTP 会被限速，实测并发耗时 54 秒、串行只要 8 秒
+  for (const job of mailTasks) {
+    await job();
+  }
   console.log(`[booking] ${orderRef} mails settled ${Date.now() - respondedAt}ms after response (sent=${mailTasks.length})`);
   return;
 }
