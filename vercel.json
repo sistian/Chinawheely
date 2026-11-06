@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/booking.js": { "maxDuration": 60 },
+    "api/contact.js": { "maxDuration": 30 },
+    "api/mail-health.js": { "maxDuration": 40 }
+  },
   "headers": [
     {
       "source": "/(.*)",
