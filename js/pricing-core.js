@@ -268,11 +268,12 @@
     var routeMinutes = numOrNull(opts.routeMinutes);
     var lim = limitsCfg(data);
     // 超上限 → 视为异常值，不自动计附加费，转人工确认
-    if (routeKm != null && (routeKm < 0 || routeKm > lim.maxRouteKm)) {
+    // 城际不走超额计费（noOverage），无需限制
+    if (!prod.noOverage && routeKm != null && (routeKm < 0 || routeKm > lim.maxRouteKm)) {
       warnings.push('The route distance you entered looks unusual. Our team will confirm the final price with you before you pay.');
       routeKm = null;
     }
-    if (routeMinutes != null && (routeMinutes < 0 || routeMinutes > lim.maxRouteMinutes)) {
+    if (!prod.noOverage && routeMinutes != null && (routeMinutes < 0 || routeMinutes > lim.maxRouteMinutes)) {
       warnings.push('The driving time you entered looks unusual. Our team will confirm the final price with you before you pay.');
       routeMinutes = null;
     }
