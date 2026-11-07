@@ -1,0 +1,207 @@
+/* ============================================================
+   Chinawheely Footer v2 — 2026-11-07
+   自包含、全站统一：作用域 .cw-footer，不依赖 styles.css 变量
+   （主题页不加载 styles.css，故颜色全部写死，与主站调色板一致）
+   ============================================================ */
+
+.cw-footer{
+  background:#0F2E25;
+  color:#C5BFB5;
+  padding:0 0 22px;
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.cw-footer *,
+.cw-footer *::before,
+.cw-footer *::after{ box-sizing:border-box; }
+.cw-footer a{ color:inherit; text-decoration:none; transition:color .18s ease; }
+.cw-footer img{ display:block; max-width:100%; height:auto; }
+.cw-footer ul{ list-style:none; margin:0; padding:0; }
+.cw-footer p{ margin:0; }
+.cw-footer sup{ font-size:.55em; }
+
+.cwf-inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+/* ---------- 1. CTA 转化条 ---------- */
+.cwf-cta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px 24px;
+  margin:0 -8px 0;
+  padding:20px 26px;
+  background:linear-gradient(120deg,rgba(212,168,67,.14) 0%,rgba(42,127,98,.16) 100%);
+  border:1px solid rgba(212,168,67,.32);
+  border-bottom:none;
+  border-radius:16px 16px 0 0;
+}
+.cwf-cta-info{ display:flex; flex-direction:column; gap:3px; min-width:260px; flex:1 1 320px; }
+.cwf-cta-title{
+  font-family:"Playfair Display",Georgia,serif;
+  font-size:21px;
+  font-weight:700;
+  color:#FFFFFF;
+  letter-spacing:.01em;
+}
+.cwf-cta-sub{ font-size:13px; color:#A39E96; }
+.cwf-cta-actions{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.cwf-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 20px;
+  border-radius:999px;
+  font-size:14.5px;
+  font-weight:700;
+  white-space:nowrap;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+}
+.cwf-btn img{ width:19px; height:19px; }
+.cwf-btn-wa{ background:#1FB857; color:#FFFFFF; box-shadow:0 4px 14px rgba(31,184,87,.28); }
+.cwf-btn-wa:hover{ background:#189E49; color:#FFFFFF; transform:translateY(-1px); box-shadow:0 6px 18px rgba(31,184,87,.36); }
+.cwf-btn-book{ background:#D4A843; color:#141412; box-shadow:0 4px 14px rgba(212,168,67,.25); }
+.cwf-btn-book:hover{ background:#E8C872; color:#141412; transform:translateY(-1px); }
+
+/* ---------- 2. 主网格 ---------- */
+.cwf-grid{
+  display:grid;
+  grid-template-columns:1.55fr 1fr 1.5fr 1fr 1fr;
+  gap:34px 28px;
+  padding:38px 8px 10px;
+}
+
+/* 品牌列 */
+.cwf-logo{ display:flex; align-items:center; gap:11px; margin-bottom:12px; }
+.cwf-logo img{ width:44px; height:44px; border-radius:50%; }
+.cwf-logo-name{
+  font-family:"Playfair Display",Georgia,serif;
+  font-size:23px;
+  font-weight:700;
+  color:#FFFFFF;
+}
+.cwf-tagline{ font-size:13.5px; color:#A39E96; max-width:300px; margin-bottom:16px; }
+.cwf-contact li{ font-size:13.5px; margin-bottom:7px; color:#A39E96; }
+.cwf-contact a{ color:#E2DED6; font-weight:600; }
+.cwf-contact a:hover{ color:#D4A843; }
+
+/* 列 */
+.cwf-title{
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:12.5px;
+  font-weight:700;
+  color:#FFFFFF;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  margin:0 0 14px;
+}
+.cwf-links li{ margin-bottom:9px; }
+.cwf-links a{ font-size:13.5px; color:#A39E96; }
+.cwf-links a:hover{ color:#E8C872; }
+.cwf-links .cwf-more a{ color:#D4A843; font-weight:700; }
+.cwf-links .cwf-more a:hover{ color:#E8C872; }
+
+/* 城市胶囊 */
+.cwf-cities .cwf-links{ display:flex; flex-wrap:wrap; gap:7px 8px; }
+.cwf-cities .cwf-links li{ margin:0; }
+.cwf-cities .cwf-links a{
+  display:inline-block;
+  padding:4px 11px;
+  font-size:12.5px;
+  color:#C5BFB5;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:999px;
+  transition:color .18s ease, background .18s ease, border-color .18s ease;
+}
+.cwf-cities .cwf-links a:hover{ color:#141412; background:#D4A843; border-color:#D4A843; }
+.cwf-cities .cwf-links .cwf-more a{
+  color:#D4A843;
+  background:rgba(212,168,67,.1);
+  border-color:rgba(212,168,67,.4);
+  font-weight:700;
+}
+.cwf-cities .cwf-links .cwf-more a:hover{ color:#141412; background:#D4A843; border-color:#D4A843; }
+
+/* ---------- 3. 牌照条 ---------- */
+.cwf-license{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:30px;
+  padding:16px 20px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+}
+.cwf-license img{
+  width:104px;
+  flex:0 0 auto;
+  border-radius:8px;
+  background:#FFFFFF;
+  padding:5px;
+  border:1px solid rgba(255,255,255,.16);
+}
+.cwf-license-strong{ display:block; font-size:14px; font-weight:700; color:#E8C872; margin-bottom:4px; }
+.cwf-license p{ font-size:12.5px; color:#A39E96; line-height:1.65; }
+
+/* ---------- 4. 友链 ---------- */
+.cwf-friends{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin-top:22px;
+  font-size:12.5px;
+}
+.cwf-friends-label{ color:#7A756E; }
+.cwf-friends a{ color:#A39E96; }
+.cwf-friends a:hover{ color:#D4A843; }
+
+/* ---------- 5. 底栏 ---------- */
+.cwf-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px 20px;
+  margin-top:22px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.09);
+  font-size:12px;
+  color:#7A756E;
+}
+.cwf-legal{ display:flex; gap:18px; }
+.cwf-legal a{ color:#7A756E; }
+.cwf-legal a:hover{ color:#C5BFB5; }
+
+/* 焦点可见性 */
+.cw-footer a:focus-visible{
+  outline:2px solid #D4A843;
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .cwf-grid{ grid-template-columns:1fr 1fr; gap:28px 24px; }
+  .cwf-brand{ grid-column:1 / -1; }
+  .cwf-tagline{ max-width:560px; }
+}
+@media (max-width:680px){
+  .cwf-inner{ padding:0 16px; }
+  .cwf-cta{ padding:18px 18px; flex-direction:column; align-items:flex-start; }
+  .cwf-grid{ grid-template-columns:1fr; gap:26px; padding-top:30px; }
+  .cwf-license{ flex-direction:column; align-items:flex-start; gap:12px; padding:16px; }
+  .cwf-license img{ width:120px; }
+  .cwf-bottom{ flex-direction:column; align-items:flex-start; }
+}
+@media (prefers-reduced-motion:reduce){
+  .cw-footer a, .cwf-btn{ transition:none; }
+  .cwf-btn:hover{ transform:none; }
+}
