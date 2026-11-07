@@ -269,12 +269,15 @@
     var lim = limitsCfg(data);
     // 超上限 → 视为异常值，不自动计附加费，转人工确认
     // 城际不走超额计费（noOverage），无需限制
-    if (!prod.noOverage && routeKm != null && (routeKm < 0 || routeKm > lim.maxRouteKm)) {
-      warnings.push('The route distance you entered looks unusual. Our team will confirm the final price with you before you pay.');
-      routeKm = null;
+    // 任一维度异常 → 时长与里程一起作废（填错时通常两个数都不对）
+    var routeAbnormal = false;
+    if (!prod.noOverage) {
+      if (routeKm != null && (routeKm < 0 || routeKm > lim.maxRouteKm)) routeAbnormal = true;
+      if (routeMinutes != null && (routeMinutes < 0 || routeMinutes > lim.maxRouteMinutes)) routeAbnormal = true;
     }
-    if (!prod.noOverage && routeMinutes != null && (routeMinutes < 0 || routeMinutes > lim.maxRouteMinutes)) {
-      warnings.push('The driving time you entered looks unusual. Our team will confirm the final price with you before you pay.');
+    if (routeAbnormal) {
+      warnings.push('The route distance or driving time you entered looks unusual. Our team will confirm the final price with you before you pay.');
+      routeKm = null;
       routeMinutes = null;
     }
     var rawExtraKm = routeKm != null
