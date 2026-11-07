@@ -412,13 +412,13 @@
  var emailField = document.getElementById('contactEmail');
  form.addEventListener('submit', function(e) {
  if (window.ChinawheelySecurity &&!window.ChinawheelySecurity.rateLimiter.check('contact')) {
- e.preventDefault;
+ e.preventDefault();
  if (window.showToast) showToast('Too many attempts. Please wait a minute.', 'error');
  else alert('Too many attempts. Please wait a minute.');
  return;
  }
  if (emailField && emailField.value && window.ChinawheelySecurity &&!window.ChinawheelySecurity.isValidEmail(emailField.value)) {
- e.preventDefault;
+ e.preventDefault();
  if (window.showToast) showToast('Please enter a valid email address.', 'error');
  else alert('Please enter a valid email address.');
  return;
