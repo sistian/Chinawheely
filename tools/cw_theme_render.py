@@ -511,6 +511,26 @@ def section_titles(family, d):
 
 
 # ---------------------------------------------------------------- 主流程
+def _matching_close(h, pos, tag):
+    """返回 h[pos:] 中与 pos 处开标签配对的 </tag> 的起始下标（绝对坐标）；找不到返回 -1。
+
+    只统计同名的开/闭标签，正确处理嵌套与自闭合。
+    """
+    depth = 1
+    pat = re.compile(r'<(/?)' + re.escape(tag) + r'\b[^>]*?(/?)>', re.I)
+    for m in pat.finditer(h, pos):
+        closing, selfclose = m.group(1), m.group(2)
+        if selfclose:
+            continue
+        if closing:
+            depth -= 1
+            if depth == 0:
+                return m.start()
+        else:
+            depth += 1
+    return -1
+
+
 def patch_page(slug, family, city, d, title, desc, dry=False):
     p = f'{slug}.html'
     h = open(p, encoding='utf-8').read()
@@ -614,7 +634,16 @@ def patch_page(slug, family, city, d, title, desc, dry=False):
                           _drop_post, h[mend2:sib2], flags=re.S)
                  + h[sib2:])
     else:
-        # 新模板：hero </section> 之后的 <div class="container ..."> 才是正文容器
+        # 新模板：hero </section> 之后的 <div class="container ..."> 才是正文容器。
+        #
+        # ⚠ 根因（2026-11-07 修）：旧写法
+        #     h = h[:start] + '<main>…</main>' + h[sib:]
+        #   把 [start, sib) 整段切掉，其中包含正文容器自己的 </div>、
+        #   以及「包裹正文的外层 <section>」的 </section>。
+        #   那些祖先的开标签留在 h[:start] 里，闭合标签却被删了 →
+        #   tag_balance 失衡，浏览器/Google 解析时把 main 之后的
+        #   page-siblings、footer 一起裹进未闭合的 section，内容被判为不可见。
+        #   正确做法：只替换容器「内部」的内容，容器与所有祖先的闭合标签原样保留。
         start = None
         hero_end = h.find('</section>')
         if hero_end > 0:
@@ -627,7 +656,21 @@ def patch_page(slug, family, city, d, title, desc, dry=False):
                 start = c.start()
         if start is None:
             print(f'  !! {slug}: 找不到正文容器，跳过'); return False
-        h = h[:start] + ('<main class="u-pad-xl">\n' + body_html + '\n</main>\n') + h[sib:]
+
+        open_m = re.match(r'<div\b[^>]*>', h[start:])
+        if not open_m:
+            print(f'  !! {slug}: 正文容器不是 div，跳过'); return False
+        open_end = start + open_m.end()
+        close_at = _matching_close(h, open_end, 'div')
+        if close_at < 0:
+            # 容器没有配对的 </div>：退化为「切掉并重写」，但要补回闭合标签
+            print(f'  !! {slug}: 正文容器 </div> 缺失，改用保守替换')
+            h = h[:start] + ('<main class="u-pad-xl">\n' + body_html + '\n</main>\n'
+                             + h[close_at if close_at >= 0 else sib:])
+        else:
+            inner = h[open_end:close_at]
+            new_inner = ('\n<main class="u-pad-xl">\n' + body_html + '\n</main>\n')
+            h = h[:open_end] + new_inner + h[close_at:]
 
     if h != orig and not dry:
         open(p, 'w', encoding='utf-8').write(h)
