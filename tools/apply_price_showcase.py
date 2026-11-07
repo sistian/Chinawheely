@@ -257,10 +257,10 @@ def build_price_table(c):
    <div class="pl-card">
     <h4 class="pl-card-title">🛬 Airport &amp; Intercity Transfer</h4>
     <p class="pl-card-sub">One flat fare for airport pickup, drop-off or city-to-city &mdash;
-    <strong>intercity costs the same as the airport run</strong>. 35&nbsp;km included; beyond that
+    <strong>intercity costs the same as the airport run</strong>. 35&nbsp;km and 60&nbsp;minutes included; beyond that
     we charge by the minute and the kilometre at the rates shown.</p>
     <table class="pl-table">
-     <thead><tr><th>Vehicle</th><th>Seats</th><th>Bags</th><th>Fixed fare</th><th>USD</th><th>Beyond 35 km</th></tr></thead>
+     <thead><tr><th>Vehicle</th><th>Seats</th><th>Bags</th><th>Fixed fare</th><th>USD</th><th>Beyond 35 km / 60 min</th></tr></thead>
      <tbody>
 {ap_rows}
      </tbody>

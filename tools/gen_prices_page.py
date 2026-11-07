@@ -167,7 +167,7 @@ for slug, c in ordered:
     parts.append('<div class="city-body">')
 
     if a_vals:
-        parts.append('<h3 class="tbl-title">Airport &amp; Intercity Transfer (package includes 35 km)</h3>')
+        parts.append('<h3 class="tbl-title">Airport &amp; Intercity Transfer (package includes 35 km + 60 minutes)</h3>')
         parts.append('<table><thead><tr><th>Vehicle</th><th>Seats</th><th>Luggage</th>'
                      '<th>Package</th><th>USD</th><th>Overtime /min</th><th>Extra /km</th></tr></thead><tbody>')
         for vkey, v in c.get("airport", {}).items():
