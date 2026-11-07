@@ -2,7 +2,8 @@
  * POST /api/quote — 实时报价（给 booking.html 用）
  *
  * 请求体(JSON 或 form-urlencoded):
- *   city, product, vehicle, tier, extraMinutes, extraKm, pax
+ *   city, product, vehicle, tier, routeKm, routeMinutes (Google Maps 总里程/总时长),
+ *   extraMinutes, extraKm (旧字段，兼容), pax
  *
  * 响应:
  *   { ok, currency, lines[], total, usd, usdRate, warnings[], ... }
@@ -86,7 +87,7 @@ module.exports = async function handler(req, res) {
 
   // 同名字段重复提交时字段可能是数组（如旧版表单的 product 同时有 hidden 和 radio），
   // 直接传给定价引擎会被当成非法值（UNKNOWN_PRODUCT），这里统一归一成标量。
-  ['city', 'product', 'vehicle', 'tier', 'extraMinutes', 'extraKm', 'passengers', 'luggage'].forEach(function (k) {
+  ['city', 'product', 'vehicle', 'tier', 'extraMinutes', 'extraKm', 'routeKm', 'routeMinutes', 'passengers', 'luggage'].forEach(function (k) {
     if (data[k] === undefined || data[k] === null) return;
     if (Array.isArray(data[k])) {
       var picked = '';

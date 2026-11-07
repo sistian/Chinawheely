@@ -55,6 +55,8 @@
       label: 'Intercity Transfer',
       table: 'airport',   // 城际与接送机同价
       includedKm: 35,
+      // 城际按出发城市一口价，不叠加机场接送的超时/超里程（否则长途会算出荒谬价格）
+      noOverage: true,
     },
     charter: {
       key: 'charter',
@@ -88,6 +90,56 @@
   function rate(data) {
     var r = parseFloat(data && data.meta && data.meta.usdCnyRate);
     return r > 0 ? r : DEFAULT_USD_CNY_RATE;
+  }
+
+  // ==========================================================
+  //  超时 / 超里程：2026-11-07 用户确认的新口径
+  //  客人不再自己算「超出多少」——表单让他直接填 Google Maps 的
+  //  「总里程」和「总行车时长」，系统自动减去套餐已含部分，再计费。
+  //  计费块沿用报价单口径：超时 30 分钟一块、超里程 5 公里一块。
+  // ==========================================================
+  function billingCfg(data) {
+    var b = (data && data.meta && data.meta.billing) || {};
+    var t = Math.round(Number(b.timeBlockMin) || 30);
+    var k = Number(b.kmBlock) || 5;
+    return {
+      timeBlockMin: t > 0 ? t : 30,
+      kmBlock: k > 0 ? k : 5,
+    };
+  }
+
+  /** 机场 / 城际套餐含多少分钟（标准时长）；报价单未列时长，取 meta 配置 */
+  function airportIncludedMinutes(data) {
+    var a = (data && data.meta && data.meta.allowances) || {};
+    var v = Number(a.airportIncludedMinutes);
+    return isFinite(v) && v > 0 ? v : 60;
+  }
+
+  /** 向上取整到计费块（不足一块按一块算） */
+  function ceilToBlock(value, block) {
+    if (!(value > 0)) return 0;
+    if (!block) return value;
+    return Math.ceil(value / block - 1e-9) * block;
+  }
+
+  /** 空字符串 / 非数字 → null（区别于 0） */
+  function numOrNull(v) {
+    if (v === undefined || v === null) return null;
+    var s = String(v).trim();
+    if (s === '') return null;
+    var n = Number(s);
+    return isFinite(n) ? n : null;
+  }
+
+  /** 输入上限（防手误/恶意输入算出荒谬价格） */
+  function limitsCfg(data) {
+    var l = (data && data.meta && data.meta.limits) || {};
+    var km = Number(l.maxRouteKm);
+    var min = Number(l.maxRouteMinutes);
+    return {
+      maxRouteKm: km > 0 ? km : 2000,
+      maxRouteMinutes: min > 0 ? min : 1440,
+    };
   }
 
   function toUsd(cny, data) {
@@ -155,16 +207,19 @@
     var lines = [];
     var pkg = null;
     var includedKm = null;
+    var includedMinutes = null;
     var tierMeta = null;
 
     if (prod.table === 'airport') {
       pkg = entry.pkg;
       includedKm = entry.includedKm || prod.includedKm;
+      includedMinutes = airportIncludedMinutes(data);
       tierMeta = {
         key: 'standard',
-        name: 'Standard transfer (includes ' + includedKm + ' km)',
+        name: 'Standard transfer (includes ' + includedKm + ' km + ' + includedMinutes + ' min)',
         hours: null,
         includedKm: includedKm,
+        includedMinutes: includedMinutes,
         perMin: entry.perMin,
         perKm: entry.perKm,
       };
@@ -194,6 +249,7 @@
         name: tierEn(tier),
         hours: tier.hours,
         includedKm: includedKm,
+        includedMinutes: tier.hours ? Math.round(tier.hours * 60) : null,
         perMin: tier.perMin,
         perKm: tier.perKm,
       };
@@ -204,34 +260,62 @@
       });
     }
 
-    // 超时
-    var extraMinutes = Math.max(0, Math.floor(Number(opts.extraMinutes) || 0));
-    if (extraMinutes > 0) {
+    // 超时 / 超里程
+    // 客人填「Google Maps 总时长 / 总里程」，系统自动减掉套餐已含部分；
+    // 若客人直接填了旧的「extra」字段（兼容），则视为已超出量。
+    var billing = billingCfg(data);
+    var routeKm = numOrNull(opts.routeKm);
+    var routeMinutes = numOrNull(opts.routeMinutes);
+    var lim = limitsCfg(data);
+    // 超上限 → 视为异常值，不自动计附加费，转人工确认
+    if (routeKm != null && (routeKm < 0 || routeKm > lim.maxRouteKm)) {
+      warnings.push('The route distance you entered looks unusual. Our team will confirm the final price with you before you pay.');
+      routeKm = null;
+    }
+    if (routeMinutes != null && (routeMinutes < 0 || routeMinutes > lim.maxRouteMinutes)) {
+      warnings.push('The driving time you entered looks unusual. Our team will confirm the final price with you before you pay.');
+      routeMinutes = null;
+    }
+    var rawExtraKm = routeKm != null
+      ? Math.max(0, routeKm - (includedKm || 0))
+      : Math.max(0, Number(opts.extraKm) || 0);
+    var rawExtraMinutes = routeMinutes != null
+      ? Math.max(0, routeMinutes - (tierMeta.includedMinutes || 0))
+      : Math.max(0, Number(opts.extraMinutes) || 0);
+
+    if (prod.noOverage) {
+      rawExtraKm = 0;
+      rawExtraMinutes = 0;
+      warnings.push('Intercity transfers run at the published rate of the departure city. Long-distance routes are quoted on request — our team confirms the final price with you before you pay.');
+    }
+    // 按报价单口径取整到计费块
+    var billedKm = round2(ceilToBlock(rawExtraKm, billing.kmBlock));
+    var billedMinutes = Math.round(ceilToBlock(rawExtraMinutes, billing.timeBlockMin));
+
+    if (billedMinutes > 0) {
       if (tierMeta.perMin == null) {
         warnings.push('Overtime rate is not published for this city/vehicle — our team will confirm it manually');
       } else {
         lines.push({
           key: 'extra_time',
-          label: 'Overtime ' + extraMinutes + ' min × ¥' + tierMeta.perMin + '/min',
-          qty: extraMinutes, unit: 'min',
+          label: 'Overtime ' + billedMinutes + ' min × ¥' + tierMeta.perMin + '/min',
+          qty: billedMinutes, unit: 'min',
           unitPrice: tierMeta.perMin,
-          amount: round2(tierMeta.perMin * extraMinutes),
+          amount: round2(tierMeta.perMin * billedMinutes),
         });
       }
     }
 
-    // 超里程
-    var extraKm = Math.max(0, Math.round(Number(opts.extraKm) || 0));
-    if (extraKm > 0) {
+    if (billedKm > 0) {
       if (tierMeta.perKm == null) {
         warnings.push('Extra-distance rate is not published for this city/vehicle — our team will confirm it manually');
       } else {
         lines.push({
           key: 'extra_km',
-          label: 'Extra distance ' + extraKm + ' km × ¥' + tierMeta.perKm + '/km',
-          qty: extraKm, unit: 'km',
+          label: 'Extra distance ' + billedKm + ' km × ¥' + tierMeta.perKm + '/km',
+          qty: billedKm, unit: 'km',
           unitPrice: tierMeta.perKm,
-          amount: round2(tierMeta.perKm * extraKm),
+          amount: round2(tierMeta.perKm * billedKm),
         });
       }
     }
@@ -261,6 +345,14 @@
       tier: tierMeta.key,
       tierName: tierMeta.name,
       includedKm: includedKm,
+      includedMinutes: tierMeta.includedMinutes,
+      routeKm: routeKm,
+      routeMinutes: routeMinutes,
+      extraKmRaw: round2(rawExtraKm),
+      extraMinutesRaw: round2(rawExtraMinutes),
+      billedKm: billedKm,
+      billedMinutes: billedMinutes,
+      billing: billing,
       lines: lines,
       total: total,
       usd: toUsd(total, data),

@@ -168,18 +168,12 @@ function setRequestedCity(name) {
 // ============================================================
 var DISTANCE_BAND_KM = { '0-35': 17.5, '35-50': 42.5, '50-80': 65, '80+': 80 };
 
-function derivedExtraKm(band, includedKm) {
-  var mid = DISTANCE_BAND_KM[String(band || '').trim()];
-  if (mid == null) return 0;
-  var inc = Number(includedKm) || 0;
-  return Math.max(0, Math.round(mid - inc));
-}
-
-/** 距离档变了就把超里程数写进 extraKm 输入框（否则「距离」只是个摆设，不影响报价） */
-function syncExtraKmFromDistance() {
+/** 距离档变了就把预估总里程写进 routeKm（不动客人自己填的 Google Maps 精确值） */
+function syncRouteKmFromDistance() {
   var dr = el('distanceRange');
-  var ek = el('extraKm');
-  if (!dr || !ek) return;
+  var rk = el('routeKm');
+  if (!dr || !rk) return;
+  if (rk.value && String(rk.value).trim() !== '') return;   // 客人已填精确值 → 不覆盖
   if (currentProduct() !== 'airport') return;
   var slug = citySlug();
   if (!slug || slug === 'other' || !PRICE_DATA) return;
@@ -189,8 +183,9 @@ function syncExtraKmFromDistance() {
   if (!o) return;
   var v = o.airport.filter(function (x) { return x.key === vkey; })[0];
   if (!v) return;
-  var derived = derivedExtraKm(dr.value, v.includedKm);
-  if (derived > 0) ek.value = derived;
+  var mid = DISTANCE_BAND_KM[String(dr.value || '').trim()];
+  if (mid == null) return;
+  rk.value = Math.round(mid);
 }
 
 // ============================================================
@@ -341,7 +336,7 @@ function renderVehicles() {
 
     input.addEventListener('change', function () {
       if (tiered) renderTiers(v);
-      syncExtraKmFromDistance();
+      syncRouteKmFromDistance();
       refreshQuote();
     });
   });
@@ -354,7 +349,7 @@ function renderVehicles() {
   }
 
   updateAirportOptions();
-  syncExtraKmFromDistance();
+  syncRouteKmFromDistance();
   refreshQuote();
 }
 
@@ -531,7 +526,7 @@ function updateDistanceDefault() {
   if (dist == null) return;
   var v = dist <= 35 ? '0-35' : (dist <= 50 ? '35-50' : (dist <= 80 ? '50-80' : '80+'));
   dr.value = v;
-  syncExtraKmFromDistance();
+  syncRouteKmFromDistance();
 }
 
 // ============================================================
@@ -552,6 +547,8 @@ function refreshQuote() {
   var product = currentProduct();
   var vkey = selectedVehicleKey();
   var tkey = selectedTierKey();
+  var routeKmRaw = el('routeKm') ? String(el('routeKm').value).trim() : '';
+  var routeMinRaw = el('routeMinutes') ? String(el('routeMinutes').value).trim() : '';
   var extraMin = parseInt(el('extraMinutes') ? el('extraMinutes').value : 0, 10) || 0;
   var extraKm = parseInt(el('extraKm') ? el('extraKm').value : 0, 10) || 0;
   var pax = parseInt(el('passengers') ? el('passengers').value : 1, 10) || 1;
@@ -600,15 +597,17 @@ function refreshQuote() {
       }
     }
   }
-  if (og) og.style.display = hasSurcharge ? 'block' : 'none';
+  if (og) og.style.display = (hasSurcharge && product !== 'intercity') ? 'block' : 'none';
   if (!hasSurcharge) {
     var hint = el('overtimeHint');
     if (hint && slug && slug !== 'other' && vkey) {
       hint.textContent = 'Overage rates are not published for this city and vehicle — our team will confirm the final amount.';
     }
-  } else {
+  } else if (product !== 'intercity') {
     var hint2 = el('overtimeHint');
-    if (hint2) hint2.textContent = 'Charged at the published rate for your city and vehicle. Final settlement is confirmed by our team.';
+    if (hint2) {
+      hint2.innerHTML = 'Open Google Maps, tap <strong>Directions</strong> and read the driving distance and time for your route, then type them in here. We automatically subtract what your package already includes — you never have to work out the overage yourself. Leave both fields empty if you prefer us to use the standard route.';
+    }
   }
 
   // 容量提示
@@ -632,6 +631,7 @@ function refreshQuote() {
     currentPrice = 0;
     renderQuotePanel(null);
     updateVehicleLabels(null);
+    renderOveragePreview(null);
     return;
   }
 
@@ -640,6 +640,8 @@ function refreshQuote() {
     product: product,
     vehicle: vkey,
     tier: tkey,
+    routeKm: routeKmRaw,
+    routeMinutes: routeMinRaw,
     extraMinutes: extraMin,
     extraKm: extraKm,
     pax: pax
@@ -650,6 +652,7 @@ function refreshQuote() {
     currentPrice = 0;
     renderQuotePanel(null);
     updateVehicleLabels(null);
+    renderOveragePreview(null);
     return;
   }
 
@@ -657,6 +660,52 @@ function refreshQuote() {
   currentPrice = q.total;
   renderQuotePanel(q);
   updateVehicleLabels(q);
+  renderOveragePreview(q);
+
+  // 隐藏字段保留真实超额值（服务端优先用 routeKm/routeMinutes，这里只做兼容兼底）
+  if (el('formExtraMinutes')) el('formExtraMinutes').value = q.extraMinutesRaw || 0;
+  if (el('formExtraKm')) el('formExtraKm').value = q.extraKmRaw || 0;
+}
+
+/**
+ * 实时预览：套餐含多少 → 客人填了多少 → 超出多少 → 按报价单口径计费多少
+ * 只做展示，最终价格由服务端权威重算
+ */
+function renderOveragePreview(q) {
+  var box = el('routeOveragePreview');
+  if (!box) return;
+  if (!q || !q.ok) { box.innerHTML = ''; return; }
+  if (!q.includedMinutes && !q.includedKm) { box.innerHTML = ''; return; }
+
+  var html = [];
+  html.push('<div style="margin-top:.75rem;padding:.85rem 1rem;border:1px solid #d8e4dd;border-radius:.75rem;background:#f6faf7;font-size:.85rem;line-height:1.6">');
+  html.push('<strong>Your package includes ' + q.includedKm + ' km and ' + q.includedMinutes + ' minutes.</strong>');
+
+  if (q.routeKm === null && q.routeMinutes === null) {
+    html.push('Enter the distance and driving time from Google Maps and we will show the overage here — you only pay the difference.');
+    html.push('</div>');
+    box.innerHTML = html.join('');
+    return;
+  }
+
+  var surchargeLines = q.lines.filter(function (l) { return l.key === 'extra_time' || l.key === 'extra_km'; });
+  if (!surchargeLines.length) {
+    html.push('Your route fits inside the package — <strong>no overage, no extra charge</strong>.');
+  } else {
+    html.push('Your route: ' + (q.routeKm === null ? '—' : q.routeKm) + ' km / ' +
+      (q.routeMinutes === null ? '—' : q.routeMinutes) + ' min → over the included allowance by ' +
+      q.extraKmRaw + ' km and ' + q.extraMinutesRaw + ' min.');
+    html.push('<ul style="margin:.4rem 0 .2rem 1.1rem">');
+    surchargeLines.forEach(function (l) {
+      html.push('<li>' + l.label + ' = <strong>¥' + l.amount + '</strong></li>');
+    });
+    html.push('</ul>');
+    html.push('Overtime is billed in ' + q.billing.timeBlockMin + '-minute blocks and extra distance in ' +
+      q.billing.kmBlock + ' km blocks, so a small overage may be rounded up to the next block. ' +
+      'Final settlement is confirmed by our team before you pay.');
+  }
+  html.push('</div>');
+  box.innerHTML = html.join('');
 }
 
 function updateVehicleLabels(q) {
@@ -1142,7 +1191,7 @@ function initBooking() {
     });
   });
 
-  ['extraMinutes', 'extraKm', 'passengers', 'date', 'time',
+  ['routeKm', 'routeMinutes', 'passengers', 'date', 'time',
     'transferDirection', 'hotelAddress', 'charterRoute', 'fromCity', 'toCity'
   ].forEach(function (id) {
     var e = el(id);
@@ -1169,7 +1218,7 @@ function initBooking() {
   var dr = el('distanceRange');
   if (dr) {
     dr.addEventListener('change', function () {
-      syncExtraKmFromDistance();
+      syncRouteKmFromDistance();
       refreshQuote();
       updateSummary();
     });

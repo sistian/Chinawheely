@@ -76,15 +76,18 @@ function computePrice(data) {
       product: data.product || data.serviceType || 'airport',
       vehicle: data.vehicle,
       tier: data.tier,
+      // 新口径：客人填 Google Maps 的「总里程 / 总行车时长」，引擎自动减去套餐已含部分
+      routeKm: data.routeKm,
+      routeMinutes: data.routeMinutes,
       extraMinutes: data.extraMinutes,
       extraKm: data.extraKm,
       pax: data.passengers,
       bags: data.luggage
     };
     let q = pricing.quote(opts);
-    // 用户没填额外里程、但选了距离档时，按该车型的免费里程自动折算超里程费
+    // 客人没填精确里程、但选了距离档时，按该车型的免费里程自动折算超里程费
     // （否则「距离」是必填项却完全不影响价格，80km 接送会和 20km 同价）
-    if (q.ok && !Number(opts.extraKm) && data.distanceRange) {
+    if (q.ok && !Number(opts.routeKm) && !Number(opts.extraKm) && data.distanceRange) {
       const derived = extraKmFromBand(data.distanceRange, q.includedKm);
       if (derived > 0) {
         const q2 = pricing.quote(Object.assign({}, opts, { extraKm: derived }));
@@ -198,6 +201,14 @@ function escapeHtml(text) {
 }
 
 function formatLabel(key) {
+  const custom = {
+    routeKm: 'Route Distance (Google Maps, km)',
+    routeMinutes: 'Route Driving Time (Google Maps, min)',
+    distanceRange: 'Rough Distance Estimate',
+    formExtraKm: 'Extra Distance (legacy)',
+    formExtraMinutes: 'Extra Time (legacy)'
+  };
+  if (custom[key]) return custom[key];
   return String(key)
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/_/g, ' ')
@@ -333,7 +344,7 @@ ${quoteBlock}`;
   return { html, plain };
 }
 
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   if (req.method === 'OPTIONS') {
     setCorsHeaders(res, req);
     res.statusCode = 204;
@@ -489,7 +500,9 @@ module.exports = async (req, res) => {
       } : null,
       trip: {
         date: data.date, time: data.time,
-        pax: data.passengers, luggage: data.luggage
+        pax: data.passengers, luggage: data.luggage,
+        routeKm: data.routeKm || null,
+        routeMinutes: data.routeMinutes || null
       },
       contact: {
         airport: data.airport, transferDirection: data.transferDirection,
@@ -632,3 +645,7 @@ ${q.vehicleLabel ? `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0;bac
   respondOk(res, req, { orderRef, quoted, data, manageToken });
   return;
 };
+
+module.exports = handler;
+// 测试用：导出服务端权威算价函数（不改变 handler 本身的调用方式）
+module.exports.computePrice = computePrice;

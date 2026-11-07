@@ -535,15 +535,15 @@
  <input type="text" class="form-input" id="hotelAddress" name="hotelAddress" required placeholder="Hotel name or full address (e.g., Park Hyatt Shanghai, 100 Century Avenue)" aria-label="Hotel name or full address">
  </div>
  <div class="form-group u-bc38d4de">
- <label class="form-label" for="distanceRange">Approximate Distance (km) *</label>
- <select class="form-select" id="distanceRange" name="distanceRange" required aria-label="Approximate distance from airport to destination">
- <option value="" disabled selected>Select distance range</option>
- <option value="0-35">0–35 km (included in package)</option>
+ <label class="form-label" for="distanceRange">Rough Distance (optional)</label>
+ <select class="form-select" id="distanceRange" name="distanceRange" aria-label="Rough distance estimate">
+ <option value="">I will enter the exact distance below</option>
+ <option value="0-35">Up to 35 km</option>
  <option value="35-50">35–50 km</option>
  <option value="50-80">50–80 km</option>
- <option value="80+">80+ km</option>
+ <option value="80+">80 km or more</option>
  </select>
- <p class="text-small u-fd04e2ad">Distances beyond the included 35 km are charged at the published per-km rate.</p>
+ <p class="text-small u-fd04e2ad">Not sure? Pick a rough range and we will use it as an estimate — or open Google Maps and enter the exact numbers below.</p>
  </div>
  </div>
 
@@ -572,20 +572,21 @@
  <p class="text-small u-fd04e2ad">Intercity transfers are priced at the same published rate as airport transfers for the departure city.</p>
  </div>
 
- <!-- 超时 / 超里程 -->
+ <!-- 路线时长 / 里程（Google Maps） -->
  <div class="form-group" id="overtimeGroup">
- <label class="form-label">Estimated Overage (optional)</label>
+ <label class="form-label" for="routeKm">Your Route from Google Maps</label>
  <div class="form-row">
  <div>
- <label class="form-label" for="extraMinutes">Extra Time (minutes)</label>
- <input type="number" class="form-input" id="extraMinutes" name="extraMinutes" min="0" step="15" value="0" placeholder="0" aria-label="Estimated extra driving minutes">
+ <label class="form-label" for="routeKm">Total driving distance (km)</label>
+ <input type="number" class="form-input" id="routeKm" name="routeKm" min="0" step="1" placeholder="e.g. 48" aria-label="Total driving distance in kilometers from Google Maps">
  </div>
  <div>
- <label class="form-label" for="extraKm">Extra Distance (km)</label>
- <input type="number" class="form-input" id="extraKm" name="extraKm" min="0" step="5" value="0" placeholder="0" aria-label="Estimated extra kilometers">
+ <label class="form-label" for="routeMinutes">Total driving time (minutes)</label>
+ <input type="number" class="form-input" id="routeMinutes" name="routeMinutes" min="0" step="5" placeholder="e.g. 65" aria-label="Total driving time in minutes from Google Maps">
  </div>
  </div>
- <p class="text-small u-fd04e2ad" id="overtimeHint">Charged at the published rate for your city and vehicle. Final settlement is confirmed by our team.</p>
+ <p class="text-small u-fd04e2ad" id="overtimeHint">Open Google Maps, tap <strong>Directions</strong> and read the driving distance and time for your route, then type them in here. We automatically subtract what your package already includes — you never have to work out the overage yourself. Leave both fields empty if you prefer us to use the standard route.</p>
+ <div id="routeOveragePreview" class="u-fd04e2ad"></div>
  </div>
 
  <!-- Flight Details (conditional) -->
@@ -714,7 +715,7 @@
  <div class="u-3b1096f1">
  <label class="u-aa4a0616">
  <input type="checkbox" name="extras" value="childseat" class="u-897b8581">
- <span>Child / Baby Seat <span class="u-fdaeaff1">(Free)</span></span>
+ <span>Child / Baby Seat <span class="u-fdaeaff1">(Extra Charge)</span></span>
  </label>
  <label class="u-aa4a0616">
  <input type="checkbox" name="extras" value="meetgreet" class="u-897b8581">
@@ -725,6 +726,7 @@
  <span>In-Car WiFi <span class="u-fdaeaff1">(On Request)</span></span>
  </label>
  </div>
+ <p class="text-small u-fd04e2ad"><strong>Child / Baby Seat</strong> is not included in the quoted fare — it is an extra charge. Tell us your child's age and weight and we will confirm the exact price before you pay. <strong>In-Car WiFi</strong> is on request: message us before pickup and your driver will switch on a mobile hotspot and share the network with you (data speeds depend on local coverage; the hotspot is shared, so please use it for messaging and browsing rather than streaming).</p>
  </div>
 
  <button type="submit" class="btn btn-primary btn-large u-84ae2b6d">
