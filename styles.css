@@ -1154,3 +1154,7 @@
 }
 
 .service-option-box, .vehicle-option-box{ position: relative; }
+
+/* booking Step1 三服务卡桌面端 3 列对称排布（.form-row 默认 2 列放 3 张会半宽换行）*/
+@media (min-width: 769px){ #productRow{ grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 769px){ #charterTiers .form-row{ grid-template-columns: repeat(3, 1fr); } }
