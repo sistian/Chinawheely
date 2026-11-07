@@ -661,80 +661,20 @@
  </div>
  
  <!-- Browse All Cities Button -->
- <style>.browse-all-btn {
- display: flex;
- align-items: center;
- justify-content: center;
- width: 100%;
- max-width: 500px;
- margin: 2rem auto;
- background: linear-gradient(135deg, #e67e22, #d35400);
- color: white;
- border: none;
- padding: 1rem 2rem;
- font-size: 1.1rem;
- font-weight: 600;
- cursor: pointer;
- transition: all 0.3s ease;
- border-radius: 50px;
- box-shadow: 0 4px 20px rgba(230, 126, 3
-/* City Card Chinese Name Style */.city-card-title {
- font-size: 1.1rem;
- font-weight: 600;
- margin-bottom: 2px;
-}.city-card-chinese {
- display: block;
- font-size: 0.85rem;
- font-weight: 400;
- color: rgba(255, 255, 255, 0.9);
- letter-spacing: 2px;
- margin-top: 2px;
- text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
-
-/* Performance: Gradient placeholders for faster perceived load */.city-card-bg {
- background-color: #1B4D3E;
- background: linear-gradient(135deg, #1B4D3E 0%, #0d3d27 100%);
-}
-
- 4, 0.4);
- }.browse-all-btn:hover {
- transform: translateY(-3px);
- box-shadow: 0 8px 30px rgba(230, 126, 34, 0.5);
- }.browse-all-btn.arrow {
- margin-left: 8px;
- transition: transform 0.3s ease;
- }.browse-all-btn.active.arrow {
- transform: rotate(180deg);
- }.letter-filter {
- display: none;
- flex-wrap: wrap;
- justify-content: center;
- gap: 0.5rem;
- margin: 1.5rem 0;
- padding: 1rem;
- background: rgba(255,255,255,0.05);
- border-radius: 12px;
- }.letter-filter.visible {
- display: flex;
- }.letter-btn {
- width: 40px;
- height: 40px;
- border: 2px solid rgba(255,255,255,0.3);
- background: rgba(255,255,255,0.1);
- color: white;
- border-radius: 8px;
- cursor: pointer;
- font-weight: 700;
- font-size: 0.9rem;
- transition: all 0.2s ease;
- }.letter-btn:hover,.letter-btn.active {
- background: linear-gradient(135deg, #e67e22, #d35400);
- border-color: #e67e22;
- }.city-card-wrapper.hidden {
- display: none!important;
- }
- </style>
+ <style>
+.browse-all-btn{display:flex;align-items:center;justify-content:center;width:100%;max-width:500px;margin:2rem auto;background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;border:none;padding:1rem 2rem;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s ease;border-radius:50px;box-shadow:0 4px 20px rgba(230,126,34,.4)}
+.browse-all-btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(230,126,34,.5)}
+.browse-all-btn .arrow{margin-left:8px;transition:transform .3s ease}
+.browse-all-btn.active .arrow{transform:rotate(180deg)}
+.letter-filter{display:none;flex-wrap:wrap;justify-content:center;gap:.5rem;margin:1.5rem 0;padding:1rem;background:rgba(255,255,255,.05);border-radius:12px}
+.letter-filter.visible{display:flex}
+.letter-btn{width:40px;height:40px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;cursor:pointer;font-weight:700;font-size:.9rem;transition:all .2s ease}
+.letter-btn:hover,.letter-btn.active{background:linear-gradient(135deg,#e67e22,#d35400);border-color:#e67e22}
+.city-card-title{font-size:1.1rem;font-weight:600;margin-bottom:2px}
+.city-card-chinese{display:block;font-size:.85rem;font-weight:400;color:rgba(255,255,255,.9);letter-spacing:2px;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.city-card-bg{background-color:#1B4D3E;background:linear-gradient(135deg,#1B4D3E 0%,#0d3d27 100%)}
+.city-card-wrapper.hidden{display:none!important}
+</style>
 
  <div style="text-align: center;">
  <button class="browse-all-btn" id="browseAllBtn" onclick="toggleBrowseAll">
@@ -744,112 +684,82 @@
  </div>
 
  <script>
- // Initialize: Show Less state (only cities with photos visible)
+ // Initial state: Show Less — only cities with real photos visible
+ function cwHasCityPhoto(card) {
+  var img = card.querySelector(".city-card-bg img");
+  if (img) { var s = img.getAttribute("src") || ""; if (s && s.indexOf("images/card/") === 0) return true; }
+  var bg = card.querySelector(".city-card-bg");
+  if (bg && bg.style && bg.style.backgroundImage && bg.style.backgroundImage.indexOf("url(") !== -1) return true;
+  return false;
+ }
  document.addEventListener("DOMContentLoaded", function() {
- var cards = document.querySelectorAll(".city-card-wrapper");
- cards.forEach(function(card) {
- var bg = card.querySelector(".city-card-bg");
- var hasPhoto = bg && bg.style.backgroundImage && bg.style.backgroundImage.includes("url(");
- if (hasPhoto) {
- card.classList.remove("hidden");
- } else {
- card.classList.add("hidden");
- }
+  var cards = document.querySelectorAll(".city-card-wrapper");
+  cards.forEach(function(card) { card.classList.toggle("hidden", !cwHasCityPhoto(card)); });
+  var btn = document.getElementById("browseAllBtn");
+  if (btn) { btn.classList.add("active"); btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>"; }
+  var filter = document.getElementById("letterFilter");
+  if (filter) { filter.classList.add("visible"); }
  });
- // Set button to Show Less state
- var btn = document.getElementById("browseAllBtn");
- if (btn) {
- btn.classList.add("active");
- btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
- }
- var filter = document.getElementById("letterFilter");
- if (filter) {
- filter.classList.add("visible");
- }
- });
- </script>
+</script>
  <div class="letter-filter" id="letterFilter">
- <button class="letter-btn active" onclick="filterByLetter3('ALL')">ALL</button>
- <button class="letter-btn" onclick="filterByLetter3('A')">A</button>
- <button class="letter-btn" onclick="filterByLetter3('B')">B</button>
- <button class="letter-btn" onclick="filterByLetter3('C')">C</button>
- <button class="letter-btn" onclick="filterByLetter3('D')">D</button>
- <button class="letter-btn" onclick="filterByLetter3('E')">E</button>
- <button class="letter-btn" onclick="filterByLetter3('F')">F</button>
- <button class="letter-btn" onclick="filterByLetter3('G')">G</button>
- <button class="letter-btn" onclick="filterByLetter3('H')">H</button>
- <button class="letter-btn" onclick="filterByLetter3('J')">J</button>
- <button class="letter-btn" onclick="filterByLetter3('K')">K</button>
- <button class="letter-btn" onclick="filterByLetter3('L')">L</button>
- <button class="letter-btn" onclick="filterByLetter3('M')">M</button>
- <button class="letter-btn" onclick="filterByLetter3('N')">N</button>
- <button class="letter-btn" onclick="filterByLetter3('P')">P</button>
- <button class="letter-btn" onclick="filterByLetter3('Q')">Q</button>
- <button class="letter-btn" onclick="filterByLetter3('R')">R</button>
- <button class="letter-btn" onclick="filterByLetter3('S')">S</button>
- <button class="letter-btn" onclick="filterByLetter3('T')">T</button>
- <button class="letter-btn" onclick="filterByLetter3('W')">W</button>
- <button class="letter-btn" onclick="filterByLetter3('X')">X</button>
- <button class="letter-btn" onclick="filterByLetter3('Y')">Y</button>
- <button class="letter-btn" onclick="filterByLetter3('Z')">Z</button>
+ <button class="letter-btn active" onclick=\"filterByLetter3(this, 'ALL')\">ALL</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'A')\">A</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'B')\">B</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'C')\">C</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'D')\">D</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'E')\">E</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'F')\">F</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'G')\">G</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'H')\">H</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'J')\">J</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'K')\">K</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'L')\">L</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'M')\">M</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'N')\">N</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'P')\">P</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'Q')\">Q</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'R')\">R</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'S')\">S</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'T')\">T</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'W')\">W</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'X')\">X</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'Y')\">Y</button>
+ <button class="letter-btn" onclick=\"filterByLetter3(this, 'Z')\">Z</button>
  </div>
 
  <script>
  function toggleBrowseAll() {
- var btn = document.getElementById("browseAllBtn");
- var filter = document.getElementById("letterFilter");
- var cards = document.querySelectorAll(".city-card-wrapper");
- 
- if (btn.classList.contains("active")) {
- // Currently in "Show Less" state (only photos visible) - switch to "Browse All"
- btn.classList.remove("active");
- btn.innerHTML = "<span>Browse All 333 China Cities</span><span class=\"arrow\">▼</span>";
- filter.classList.remove("visible");
- // Show ALL cards (browse all)
- cards.forEach(function(card) {
- card.classList.remove("hidden");
- });
- } else {
- // Currently in "Browse All" state (all visible) - switch to "Show Less"
- btn.classList.add("active");
- btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
- filter.classList.add("visible");
- // Hide all cards except those with photos
- cards.forEach(function(card) {
- var bg = card.querySelector(".city-card-bg");
- var hasPhoto = bg && bg.style.backgroundImage && bg.style.backgroundImage.includes("url(images/");
- if (hasPhoto) {
- card.classList.remove("hidden");
- } else {
- card.classList.add("hidden");
- }
- });
- }
+  var btn = document.getElementById("browseAllBtn");
+  var filter = document.getElementById("letterFilter");
+  var cards = document.querySelectorAll(".city-card-wrapper");
+  if (btn.classList.contains("active")) {
+   // Show Less -> Browse All
+   btn.classList.remove("active");
+   btn.innerHTML = "<span>Browse All 333 China Cities</span><span class=\"arrow\">▼</span>";
+   filter.classList.remove("visible");
+   cards.forEach(function(card) { card.classList.remove("hidden"); });
+  } else {
+   // Browse All -> Show Less (photo cities only)
+   btn.classList.add("active");
+   btn.innerHTML = "<span>Show Less</span><span class=\"arrow\">▲</span>";
+   filter.classList.add("visible");
+   cards.forEach(function(card) { card.classList.toggle("hidden", !cwHasCityPhoto(card)); });
+  }
  }
 
- function filterByLetter3(letter) {
- // Update active button
- document.querySelectorAll(".letter-btn").forEach(function(btn) {
- btn.classList.remove("active");
- });
- event.target.classList.add("active");
- 
- // Filter cards
- var cards = document.querySelectorAll(".city-card-wrapper");
- cards.forEach(function(card) {
- var nameEl = card.querySelector(".city-card-name");
- if (!nameEl) return;
- var name = nameEl.textContent.trim;
- var firstLetter = name.charAt(0).toUpperCase;
- 
- if (letter === "ALL" || firstLetter === letter) {
- card.classList.remove("hidden");
- } else {
- card.classList.add("hidden");
+ function filterByLetter3(btn, letter) {
+  document.querySelectorAll(".letter-btn").forEach(function(b) { b.classList.remove("active"); });
+  if (btn && btn.classList) btn.classList.add("active");
+  var cards = document.querySelectorAll(".city-card-wrapper");
+  cards.forEach(function(card) {
+   var nameEl = card.querySelector(".city-card-name");
+   if (!nameEl) { card.classList.add("hidden"); return; }
+   var name = (nameEl.textContent || "").trim();
+   var first = name.charAt(0).toUpperCase();
+   card.classList.toggle("hidden", !(letter === "ALL" || first === letter));
+  });
  }
- });
- }
- </script>
+</script>
 
 <div class="grid grid-4">
  <div class="city-card-wrapper">
