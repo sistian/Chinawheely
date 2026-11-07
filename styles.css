@@ -1123,3 +1123,34 @@
 .tp-note p{ font-size:var(--text-sm); color:var(--color-gray-600); line-height:1.65; margin-bottom:0; }
 .tp-note-more{ text-align:center; margin:var(--space-10) 0 0; }
 @media (max-width: 768px){ .tp-note-grid{ grid-template-columns:1fr; } }
+
+/* ===== Booking form option selected states（Step1 服务卡/车型卡/时长档 选中视觉反馈）===== */
+.service-option input:checked + .service-option-box,
+.vehicle-option input:checked + .vehicle-option-box{
+  border-color: var(--color-primary) !important;
+  background: rgba(27, 77, 62, 0.05);
+  box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.14);
+}
+.service-option input:checked + .service-option-box .u-344f893f,
+.vehicle-option input:checked + .vehicle-option-box .u-d57eba37{
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.service-option input:checked + .service-option-box::after,
+.vehicle-option input:checked + .vehicle-option-box::after{
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+.service-option-box, .vehicle-option-box{ position: relative; }
