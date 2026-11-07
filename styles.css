@@ -1158,3 +1158,8 @@
 /* booking Step1 三服务卡桌面端 3 列对称排布（.form-row 默认 2 列放 3 张会半宽换行）*/
 @media (min-width: 769px){ #productRow{ grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 769px){ #charterTiers .form-row{ grid-template-columns: repeat(3, 1fr); } }
+
+/* booking 表单卡高 2200px+（远超视口），position:sticky 会让下半部分
+   （Contact Information / 提交按钮）在 Chrome 里永远滚不到 → 改为 static。
+   右侧报价卡较矮，sticky 保留。 */
+.booking-form-card{ position: static; }

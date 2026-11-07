@@ -55,13 +55,13 @@ const vehicleLabels = {
   'business': 'Business Sedan',
   'mpv': 'MPV / Van',
   'luxury': 'Luxury Vehicle',
-  'sedan_economy': '4座 经济型专车 / 4-seat Economy Sedan',
-  'sedan_comfort': '4座 舒适型专车 / 4-seat Comfort Sedan',
-  'sedan_4': '4座 专车 / 4-seat Sedan',
-  'mpv_6': '6座 商务车 / 6-seat MPV',
-  'van_8_11': '8-11座 商务车 / 8-11-seat Minivan',
-  'van_12_18': '12-18座 商务车 / 12-18-seat Van',
-  'coach_19_55': '19-55座 大巴 / 19-55-seat Coach'
+  'sedan_economy': '4-seat Economy Sedan',
+  'sedan_comfort': '4-seat Premium Sedan',
+  'sedan_4': '4-seat Sedan',
+  'mpv_6': '6-seat MPV',
+  'van_8_11': '8-11 seat Minivan',
+  'van_12_18': '12-18 seat Minibus',
+  'coach_19_55': '19-55 seat Coach'
 };
 
 /**

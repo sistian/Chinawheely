@@ -20,22 +20,45 @@
 
   var DEFAULT_USD_CNY_RATE = 7.10;
 
+  // 车型英文名（预订页面向外国客人，不出现中文）
+  var VEHICLE_EN = {
+    sedan_economy: '4-seat Economy Sedan',
+    sedan_comfort: '4-seat Premium Sedan',
+    sedan_4: '4-seat Sedan',
+    mpv_6: '6-seat MPV',
+    van_8_11: '8-11 seat Minivan',
+    van_12_18: '12-18 seat Minibus',
+    coach_19_55: '19-55 seat Coach',
+  };
+
+  function vehicleEn(key) {
+    return VEHICLE_EN[key] || key;
+  }
+
+  // 时长档英文名（charter）
+  function tierEn(tier) {
+    var h = tier.hours ? tier.hours + ' hours' : '';
+    var km = tier.includedKm ? tier.includedKm + ' km included' : '';
+    if (h && km) return h + ' / ' + km;
+    return h || km || 'Package';
+  }
+
   var PRODUCTS = {
     airport: {
       key: 'airport',
-      label: '机场接送 Airport Transfer',
+      label: 'Airport Transfer',
       table: 'airport',
       includedKm: 35,
     },
     intercity: {
       key: 'intercity',
-      label: '城际接送 Intercity Transfer',
+      label: 'Intercity Transfer',
       table: 'airport',   // 城际与接送机同价
       includedKm: 35,
     },
     charter: {
       key: 'charter',
-      label: '包车（按小时）Hourly Charter',
+      label: 'Hourly Charter',
       table: 'charter',
       includedKm: null,
     },
@@ -139,7 +162,7 @@
       includedKm = entry.includedKm || prod.includedKm;
       tierMeta = {
         key: 'standard',
-        name: '标准接送（含 ' + includedKm + ' 公里）',
+        name: 'Standard transfer (includes ' + includedKm + ' km)',
         hours: null,
         includedKm: includedKm,
         perMin: entry.perMin,
@@ -147,8 +170,8 @@
       };
       lines.push({
         key: 'package',
-        label: entry.name + ' ' + tierMeta.name,
-        qty: 1, unit: '次', unitPrice: pkg, amount: pkg,
+        label: vehicleEn(vehicleKey) + ' — ' + tierMeta.name,
+        qty: 1, unit: 'trip', unitPrice: pkg, amount: pkg,
       });
     } else {
       var tierKey = String(opts.tier || '').trim();
@@ -168,7 +191,7 @@
       includedKm = tier.includedKm;
       tierMeta = {
         key: tierKey,
-        name: tier.name,
+        name: tierEn(tier),
         hours: tier.hours,
         includedKm: includedKm,
         perMin: tier.perMin,
@@ -176,8 +199,8 @@
       };
       lines.push({
         key: 'package',
-        label: entry.name + ' ' + tier.name + ' 套餐价',
-        qty: 1, unit: '次', unitPrice: pkg, amount: pkg,
+        label: vehicleEn(vehicleKey) + ' — ' + tierMeta.name,
+        qty: 1, unit: 'package', unitPrice: pkg, amount: pkg,
       });
     }
 
@@ -185,12 +208,12 @@
     var extraMinutes = Math.max(0, Math.floor(Number(opts.extraMinutes) || 0));
     if (extraMinutes > 0) {
       if (tierMeta.perMin == null) {
-        warnings.push('该城市/车型未公布超时单价，超时费用需人工核算');
+        warnings.push('Overtime rate is not published for this city/vehicle — our team will confirm it manually');
       } else {
         lines.push({
           key: 'extra_time',
-          label: '超时 ' + extraMinutes + ' 分钟 × ¥' + tierMeta.perMin + '/分钟',
-          qty: extraMinutes, unit: '分钟',
+          label: 'Overtime ' + extraMinutes + ' min × ¥' + tierMeta.perMin + '/min',
+          qty: extraMinutes, unit: 'min',
           unitPrice: tierMeta.perMin,
           amount: round2(tierMeta.perMin * extraMinutes),
         });
@@ -201,12 +224,12 @@
     var extraKm = Math.max(0, Math.round(Number(opts.extraKm) || 0));
     if (extraKm > 0) {
       if (tierMeta.perKm == null) {
-        warnings.push('该城市/车型未公布超里程单价，超里程费用需人工核算');
+        warnings.push('Extra-distance rate is not published for this city/vehicle — our team will confirm it manually');
       } else {
         lines.push({
           key: 'extra_km',
-          label: '超里程 ' + extraKm + ' 公里 × ¥' + tierMeta.perKm + '/公里',
-          qty: extraKm, unit: '公里',
+          label: 'Extra distance ' + extraKm + ' km × ¥' + tierMeta.perKm + '/km',
+          qty: extraKm, unit: 'km',
           unitPrice: tierMeta.perKm,
           amount: round2(tierMeta.perKm * extraKm),
         });
@@ -218,7 +241,7 @@
     // 载客校验
     var pax = parseInt(opts.pax, 10);
     if (isFinite(pax) && pax > 0 && entry.seats && pax > entry.seats) {
-      warnings.push('所选车型限乘 ' + entry.seats + ' 人，当前填写 ' + pax + ' 人，请升级车型或分车');
+      warnings.push('This vehicle takes up to ' + entry.seats + ' passengers, but you selected ' + pax + '. Please upgrade the vehicle or split the group.');
     }
 
     return {
@@ -231,7 +254,8 @@
       product: product,
       productLabel: prod.label,
       vehicle: vehicleKey,
-      vehicleName: entry.name,
+      vehicleName: vehicleEn(vehicleKey),
+      vehicleNameCn: entry.name,
       vehicleSeats: entry.seats,
       vehicleBags: entry.bags,
       tier: tierMeta.key,
@@ -271,7 +295,7 @@
       var c = cities[k];
       var lo = lowestPrice(data, k, 'airport');
       return {
-        slug: k, cn: c.cn, en: c.en, prov: c.prov || '', provCn: c.provCn || '',
+        slug: k, cn: c.cn, en: c.en, py: c.py || '', prov: c.prov || '', provCn: c.provCn || '',
         fromCny: lo ? lo.cny : null,
         fromUsd: lo ? lo.usd : null,
       };
@@ -290,7 +314,7 @@
       airport: Object.keys(c.airport || {}).map(function (k) {
         var v = c.airport[k];
         return {
-          key: k, name: v.name, seats: v.seats, bags: v.bags,
+          key: k, name: vehicleEn(k), nameCn: v.name, seats: v.seats, bags: v.bags,
           includedKm: v.includedKm, pkg: v.pkg,
           perMin: v.perMin, perKm: v.perKm,
         };
@@ -298,11 +322,11 @@
       charter: Object.keys(c.charter || {}).map(function (k) {
         var v = c.charter[k];
         return {
-          key: k, name: v.name, seats: v.seats, bags: v.bags,
+          key: k, name: vehicleEn(k), nameCn: v.name, seats: v.seats, bags: v.bags,
           tiers: Object.keys(v.tiers || {}).map(function (tk) {
             var t = v.tiers[tk];
             return {
-              key: tk, name: t.name, hours: t.hours, includedKm: t.includedKm,
+              key: tk, name: tierEn(t), nameCn: t.name, hours: t.hours, includedKm: t.includedKm,
               pkg: t.pkg, perMin: t.perMin, perKm: t.perKm,
             };
           }),

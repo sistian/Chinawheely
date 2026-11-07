@@ -217,33 +217,26 @@ function populateCities() {
     return;
   }
 
-  // 分组：热门入境口岸 / 其余城市按省份 A-Z 分组（组内按英文名序）
-  var hot = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'chengdu',
-    'hangzhou', 'xian', 'wuhan'];
-  var g1 = document.createElement('optgroup');
-  g1.label = 'Top Entry Points (Most Popular)';
-  var byProv = {};
-  var provOrder = {};
+  // 分组：按中文拼音首字母 A–Z，组内按全拼排序
+  // （pricing.json 每城带 py 字段 = 中文名全拼，无声调）
+  var byInitial = {};
   CITY_LIST.forEach(function (c) {
-    if (hot.indexOf(c.slug) >= 0) {
-      var oh = document.createElement('option');
-      oh.value = c.slug;
-      oh.textContent = c.cn + ' ' + c.en + ' — From ¥' + c.fromCny;
-      g1.appendChild(oh);
-      return;
-    }
-    var p = c.prov || 'Other Regions';
-    (byProv[p] = byProv[p] || []).push(c);
+    var py = c.py || (c.en || '').toLowerCase().replace(/[^a-z]/g, '');
+    var initial = (py[0] || '#').toUpperCase();
+    (byInitial[initial] = byInitial[initial] || []).push(c);
   });
-  sel.appendChild(g1);
-  Object.keys(byProv).sort().forEach(function (p) {
+  Object.keys(byInitial).sort().forEach(function (initial) {
     var g = document.createElement('optgroup');
-    g.label = p;
-    var list = byProv[p].sort(function (a, b) { return a.en < b.en ? -1 : (a.en > b.en ? 1 : 0); });
+    g.label = initial;
+    var list = byInitial[initial].sort(function (a, b) {
+      var pa = a.py || (a.en || '').toLowerCase();
+      var pb = b.py || (b.en || '').toLowerCase();
+      return pa < pb ? -1 : (pa > pb ? 1 : 0);
+    });
     list.forEach(function (c) {
       var o = document.createElement('option');
       o.value = c.slug;
-      o.textContent = c.cn + ' ' + c.en;
+      o.textContent = c.en + ' ' + c.cn;
       g.appendChild(o);
     });
     sel.appendChild(g);
