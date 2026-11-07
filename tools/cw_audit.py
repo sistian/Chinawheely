@@ -350,7 +350,7 @@ try:
     pdata = json.load(open("pricing/pricing.json", encoding="utf-8"))
     PC = pdata["cities"]
     PRATE = pdata["meta"]["usdCnyRate"]
-    SLUG_ALIAS = {"huhehaote": "hohhot"}
+    SLUG_ALIAS = {}  # pricing.json 已统一用站点 slug（huhehaote）
 
     fake = [f for f, s in pages.items()
             if re.search(r"From \$\d", s)]

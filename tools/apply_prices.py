@@ -31,7 +31,7 @@ HOUR_TIER = {2: "2h_35km", 4: "4h_50km", 6: "6h_75km", 8: "8h_100km", 10: "10h_1
 
 # 页面 slug → 价格表 slug（同名不同市/别名页需显式映射）
 SLUG_ALIAS = {
-    "huhehaote": "hohhot",   # 呼和浩特 = Hohhot
+    "huhehaote": "huhehaote",  # pricing.json 已用站点 slug   # 呼和浩特 = Hohhot
 }
 
 # index.html 具名航线 → 城市 slug

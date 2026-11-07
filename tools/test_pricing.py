@@ -238,7 +238,7 @@ def main():
           "intercity 应复用 airport 价")
     check(len(cities) == 53, f"城市数应为 53，实际 {len(cities)}")
     check("xian" in cities, "Xi'an 应映射为 slug xian")
-    check("hohhot" in cities, "呼和浩特应在价格表中")
+    check("huhehaote" in cities, "呼和浩特应在价格表中")
 
     print(f"检查项 {CHECKED}")
     if FAIL:

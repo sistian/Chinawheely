@@ -35,7 +35,7 @@ HOUR_TIER = {2: "2h_35km", 4: "4h_50km", 6: "6h_75km", 8: "8h_100km", 10: "10h_1
 
 # 页面 slug → 价格表 slug
 SLUG_ALIAS = {
-    "huhehaote": "hohhot",
+    "huhehaote": "huhehaote",  # pricing.json 已用站点 slug
 }
 
 # 首页具名航线 → 城市 slug（用 IATA 三字码，机场全名会变，三字码稳定）

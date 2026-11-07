@@ -28,20 +28,59 @@ def U(c):
 
 
 parts = []
+n_cities = len(CITIES)
+ORDERED = sorted(CITIES.items(), key=lambda kv: (0, kv[1]["en"]) if kv[0] == "beijing" else (1, kv[1]["en"]))
+itemlist = json.dumps([
+    {"@type": "ListItem", "position": i, "name": c["en"],
+     "url": f"https://www.chinawheely.com/{slug}.html"}
+    for i, (slug, c) in enumerate(ORDERED, 1)
+], ensure_ascii=False)
 parts.append(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Published Transfer &amp; Charter Prices 2026 — 53 Cities | Chinawheely</title>
-<meta name="description" content="Full published price list for Chinawheely airport transfers, intercity transfers and hourly charters in 53 Chinese cities. Fixed prices in CNY with USD reference. No hidden fees.">
+<title>Published Transfer &amp; Charter Prices 2026 — {n_cities} Cities | Chinawheely</title>
+<meta name="description" content="Full published price list for Chinawheely airport transfers, intercity transfers and hourly charters in {n_cities} Chinese cities. Fixed prices in CNY with USD reference. No hidden fees.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://www.chinawheely.com/prices.html">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Published Transfer &amp; Charter Prices — 53 Chinese Cities | Chinawheely">
-<meta property="og:description" content="Fixed, published prices for airport transfers and hourly charters in 53 Chinese cities. CNY with USD reference.">
+<meta property="og:title" content="Published Transfer &amp; Charter Prices — {n_cities} Chinese Cities | Chinawheely">
+<meta property="og:description" content="Fixed, published prices for airport transfers and hourly charters in {n_cities} Chinese cities. CNY with USD reference.">
 <meta property="og:url" content="https://www.chinawheely.com/prices.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.chinawheely.com/images/beijing.webp">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="533">
+<meta name="twitter:site" content="@chinawheely"/>
+<meta name="twitter:card" content="summary_large_image">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://api.chinawheely.com https://open.er-api.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<script type="application/ld+json">
+{{
+ "@context": "https://schema.org",
+ "@type": "WebPage",
+ "@id": "https://www.chinawheely.com/prices.html#webpage",
+ "url": "https://www.chinawheely.com/prices.html",
+ "name": "Published Transfer & Charter Prices — {n_cities} Chinese Cities",
+ "description": "Full published price list for Chinawheely airport transfers, intercity transfers and hourly charters in {n_cities} Chinese cities. Fixed prices in CNY with USD reference.",
+ "inLanguage": "en",
+ "isPartOf": {{
+  "@type": "WebSite",
+  "name": "Chinawheely",
+  "url": "https://www.chinawheely.com"
+ }}
+}}
+</script>
+<script type="application/ld+json">
+{{
+ "@context": "https://schema.org",
+ "@type": "ItemList",
+ "name": "Chinawheely published transfer prices by city",
+ "numberOfItems": {n_cities},
+ "itemListElement": {itemlist}
+}}
+</script>
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#1f2937;line-height:1.6;background:#f8fafc}}
@@ -74,6 +113,7 @@ td.price{{font-weight:700;color:#dc2626;white-space:nowrap}}
 td.usd{{color:#64748b;white-space:nowrap}}
 .notes{{font-size:13px;color:#64748b;margin-top:8px}}
 .book-cta{{display:inline-block;margin-top:12px;padding:9px 18px;background:#1B4D3E;color:#fff;border-radius:10px;text-decoration:none;font-size:14px}}
+.city-guide-link{{display:inline-block;margin-top:12px;margin-right:10px;color:#1B4D3E;font-weight:600;font-size:14px;text-decoration:underline}}
 .book-cta:hover{{background:#16382d}}
 footer{{background:#0f2b23;color:#cbd5e1;padding:28px 0;font-size:14px}}
 footer a{{color:#fff}}
@@ -110,7 +150,7 @@ footer a{{color:#fff}}
  </div>
 """)
 
-ordered = sorted(CITIES.items(), key=lambda kv: (0, kv[1]["en"]) if kv[0] == "beijing" else (1, kv[1]["en"]))
+ordered = ORDERED
 
 for slug, c in ordered:
     a_vals = [v for v in c.get("airport", {}).values() if v.get("pkg") is not None]
@@ -157,6 +197,7 @@ for slug, c in ordered:
     parts.append('<p class="notes">Prices include vehicle, driver, fuel, tolls and standard insurance. '
                  'Overtime beyond the included time and distance is charged at the published rates above. '
                  'Final price is confirmed by our team before dispatch.</p>')
+    parts.append(f'<a class="city-guide-link" href="{slug}.html">{html.escape(c["en"])} city guide &rarr;</a> ')
     parts.append(f'<a class="book-cta" href="booking.html">Book {html.escape(c["en"])} transfer</a>')
     parts.append('</div></details>')
 

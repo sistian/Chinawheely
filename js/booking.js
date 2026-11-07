@@ -194,8 +194,15 @@ function syncExtraKmFromDistance() {
 }
 
 // ============================================================
-//  城市下拉
+//  城市下拉（331 城：热门口岸 + 按省分组）
 // ============================================================
+function currentCityLabel() {
+  var c = el('city');
+  if (!c || !c.value || c.value === 'other') return '';
+  var o = c.options[c.selectedIndex];
+  return o ? (o.textContent || '').split(' — ')[0].trim() : '';
+}
+
 function populateCities() {
   var sel = el('city');
   if (!sel) return;
@@ -210,20 +217,36 @@ function populateCities() {
     return;
   }
 
-  // 分组：热门入境口岸 / 其他有价城市
+  // 分组：热门入境口岸 / 其余城市按省份 A-Z 分组（组内按英文名序）
   var hot = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'chengdu',
     'hangzhou', 'xian', 'wuhan'];
   var g1 = document.createElement('optgroup');
   g1.label = 'Top Entry Points (Most Popular)';
-  var g2 = document.createElement('optgroup');
-  g2.label = 'Cities with Published Prices';
-
+  var byProv = {};
+  var provOrder = {};
   CITY_LIST.forEach(function (c) {
-    var o = document.createElement('option');
-    o.value = c.slug;
-    o.textContent = c.cn + ' ' + c.en + ' — From ¥' + c.fromCny;
-    if (hot.indexOf(c.slug) >= 0) g1.appendChild(o);
-    else g2.appendChild(o);
+    if (hot.indexOf(c.slug) >= 0) {
+      var oh = document.createElement('option');
+      oh.value = c.slug;
+      oh.textContent = c.cn + ' ' + c.en + ' — From ¥' + c.fromCny;
+      g1.appendChild(oh);
+      return;
+    }
+    var p = c.prov || 'Other Regions';
+    (byProv[p] = byProv[p] || []).push(c);
+  });
+  sel.appendChild(g1);
+  Object.keys(byProv).sort().forEach(function (p) {
+    var g = document.createElement('optgroup');
+    g.label = p;
+    var list = byProv[p].sort(function (a, b) { return a.en < b.en ? -1 : (a.en > b.en ? 1 : 0); });
+    list.forEach(function (c) {
+      var o = document.createElement('option');
+      o.value = c.slug;
+      o.textContent = c.cn + ' ' + c.en;
+      g.appendChild(o);
+    });
+    sel.appendChild(g);
   });
 
   var other = document.createElement('optgroup');
@@ -232,9 +255,6 @@ function populateCities() {
   oo.value = 'other';
   oo.textContent = 'Other city / not listed (quote on request)';
   other.appendChild(oo);
-
-  sel.appendChild(g1);
-  sel.appendChild(g2);
   sel.appendChild(other);
 }
 
@@ -449,11 +469,17 @@ function updateAirportOptions() {
   var slug = citySlug();
   var isOther = (slug === 'other');
 
-  // 「其他城市 / 询价」没有机场库，改成自由文本填写，否则下拉永远为空、表单永远提交不了
-  if (isOther) {
+  // 「其他城市 / 询价」及尚无机场库的城市（331 城全覆盖后部分小城无机场数据）：
+  // 改成自由文本填写，否则下拉永远为空、表单永远提交不了
+  var noAirportData = !isOther && slug && slug !== 'other' &&
+    !(window.AIRPORT_DB && window.AIRPORT_DB[slug]) &&
+    !(typeof window.getAirportsForCity === 'function' && (window.getAirportsForCity(slug) || []).length);
+  if (isOther || noAirportData) {
     sel.style.display = 'none';
     if (freeText) freeText.style.display = 'block';
-    if (info) info.textContent = 'Tell us which airport you are arriving at — we will confirm the route and price.';
+    if (info) info.textContent = isOther
+      ? 'Tell us which airport you are arriving at — we will confirm the route and price.'
+      : 'Type the airport or station name (e.g., ' + (currentCityLabel() || 'your city') + ' Airport) — we will confirm the route.';
     return;
   }
   sel.style.display = '';
@@ -964,8 +990,11 @@ function handleFormSubmit(e) {
   var isOtherCity = (slugNow === 'other');
   if (product === 'airport') {
     requiredIds.push('transferDirection', 'hotelAddress', 'distanceRange');
-    // 「其他城市」没有机场库，用自由文本填机场；否则下拉永远为空、客户永远提交不了
-    if (isOtherCity) requiredIds.push('airportFreeText');
+    // 「其他城市」或无机场库的城市（自由文本填机场）；否则下拉永远为空、提交被卡死
+    var hasAirportDb = slugNow && slugNow !== 'other' &&
+      ((window.AIRPORT_DB && window.AIRPORT_DB[slugNow]) ||
+       (typeof window.getAirportsForCity === 'function' && (window.getAirportsForCity(slugNow) || []).length));
+    if (isOtherCity || !hasAirportDb) requiredIds.push('airportFreeText');
     else requiredIds.push('airport');
   } else if (product === 'charter') {
     requiredIds.push('charterRoute');
@@ -1067,6 +1096,10 @@ function buildRouteSummary() {
     if (ap) {
       var apEl = el('airport');
       parts.push(apEl.options[apEl.selectedIndex] ? apEl.options[apEl.selectedIndex].text : ap);
+    } else {
+      // 无机场库的城市用自由文本填机场，摘要里也要带上（否则路由信息只剩目的地）
+      var ft = el('airportFreeText') ? el('airportFreeText').value.trim() : '';
+      if (ft) parts.push(ft);
     }
     var dir = el('transferDirection') ? el('transferDirection').value : '';
     if (dir === 'airport-to-hotel') parts.push('→ Hotel');

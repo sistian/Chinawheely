@@ -158,6 +158,9 @@ def main():
 
     actual = json.load(open(os.path.join(BASE, "pricing", "pricing.json"), encoding="utf-8"))
     A = actual["cities"]
+    # 2026-11-07 起键名统一为站点 slug：hohhot→huhehaote（同一城市）
+    if "hohhot" in expected and "huhehaote" in A:
+        expected["huhehaote"] = expected.pop("hohhot")
 
     print("=" * 70)
     print("pricing.json ← xlsx 独立重算校验（策略：显式值优先，仅补 '-'）")

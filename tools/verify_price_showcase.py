@@ -54,7 +54,8 @@ for c_ in cards:
 # 3. 首页定价模型段落已去伪存真
 print("\n【3】首页定价模型段落")
 chk("Smart Distance Pricing" not in s, "已删除虚构的距离分档定价段落")
-chk("How our pricing actually works" in s, "已替换为报价单真实口径说明")
+chk("Transparent Pricing" in s, "首页保留真实口径定价区")
+chk("across all 331 cities" in s, "定价区已标注 331 城口径")
 chk("$50" not in s and "$90" not in s and "$125" not in s,
     "首页不再出现虚构的分档价 $50/$90/$125")
 
@@ -74,8 +75,14 @@ for fn in sorted(os.listdir(BASE)):
         pl.append(fn)
     if "CW:QUOTE-BLOCK" in t:
         qb.append(fn)
-chk(len(pl) == 53, f"真实价目表页 {len(pl)} 个（应为 53）")
-chk(len(qb) == 280, f"询价区块页 {len(qb)} 个（应为 280）")
+# 期望值从 pricing.json 动态推导（331 城全覆盖后不再写死数字）
+PRICED = set(json.load(open(os.path.join(BASE, 'pricing', 'pricing.json'), encoding='utf-8'))['cities'])
+pl_slugs = {f[:-5] for f in pl}
+qb_slugs = {f[:-5] for f in qb}
+missing = sorted(PRICED - pl_slugs)
+chk(not missing, f"有价城市均已插入真实价目表（缺 {len(missing)}：{missing[:5]}）")
+chk(not (qb_slugs & PRICED), f"询价区块与有价城市互斥（重叠 {len(qb_slugs & PRICED)}）")
+chk(len(pl) >= len(PRICED), f"真实价目表页 {len(pl)} 个（应 ≥ {len(PRICED)}）")
 chk(len(set(pl) & set(qb)) == 0, "两区块互斥，无重复")
 
 # 6. 区块完整性
@@ -117,7 +124,7 @@ cells = 0
 mismatch = []
 for fn in pl:
     slug = fn[:-5]
-    c = C.get(slug) or C.get({"huhehaote": "hohhot"}.get(slug, ""))
+    c = C.get(slug) or C.get({"huhehaote": "hohhot"}.get(slug, "")) or C.get({"hohhot": "huhehaote"}.get(slug, ""))
     if not c:
         continue
     t = open(os.path.join(BASE, fn), encoding="utf-8", errors="ignore").read()
@@ -160,7 +167,7 @@ still = []
 for fn in pl:
     t = open(os.path.join(BASE, fn), encoding="utf-8", errors="ignore").read()
     slug = fn[:-5]
-    c = C.get(slug) or C.get({"huhehaote": "hohhot"}.get(slug, ""))
+    c = C.get(slug) or C.get({"huhehaote": "hohhot"}.get(slug, "")) or C.get({"hohhot": "huhehaote"}.get(slug, ""))
     if not c:
         continue
     eco = c["airport"]["sedan_economy"]["pkg"]

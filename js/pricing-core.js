@@ -271,7 +271,7 @@
       var c = cities[k];
       var lo = lowestPrice(data, k, 'airport');
       return {
-        slug: k, cn: c.cn, en: c.en,
+        slug: k, cn: c.cn, en: c.en, prov: c.prov || '', provCn: c.provCn || '',
         fromCny: lo ? lo.cny : null,
         fromUsd: lo ? lo.usd : null,
       };

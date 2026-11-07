@@ -31,8 +31,8 @@ HOUR_TIER = {2: "2h_35km", 4: "4h_50km", 6: "6h_75km", 8: "8h_100km", 10: "10h_1
 
 # 卡片价格位：<span style="font-size:var(--text-2xl);color:var(--color-primary);font-weight:700;">50</span>
 SPAN_RE = re.compile(
-    r'(<span style="font-size:var\(--text-2xl\);color:var\(--color-primary\);font-weight:700;">)'
-    r'(\d+)'
+    r'(<span style="font-size:var\(--text-(?:2xl|lg)\);color:var\(--color-primary\);font-weight:700;">)'
+    r'(Quote on request|\d+)'
     r'(</span>)'
 )
 
