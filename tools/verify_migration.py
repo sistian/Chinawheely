@@ -37,7 +37,22 @@ def resolve(host):
 # 验证脚本要测的是「公网能不能访问」，不能被本机代理（Clash 等）影响。
 # 系统代理设置里常残留 http://127.0.0.1:7897，代理没跑时 urlopen 会直接
 # Connection refused，看起来像站点挂了。所以这里显式清空代理。
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+# 关键：默认 opener 会自动跟随 3xx，导致永远看不到 301 状态，
+# 从而把「重定向已生效」误判成「未生效」（2026-11-08 修复前的长期误报来源）。
+# 这里显式关掉重定向跟随，让调用方能拿到原始 30x + Location。
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """不跟随 3xx，让调用方拿到原始 30x + Location。
+
+    注意：必须写成子类 + 正常方法定义。直接给实例属性赋 lambda 会因为
+    绑定方式不同而报「missing 1 required positional argument: newurl」。
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_OPENER = urllib.request.build_opener(
+    urllib.request.ProxyHandler({}), _NoRedirect())
 
 
 def http(url, method="GET"):
@@ -49,6 +64,8 @@ def http(url, method="GET"):
     except urllib.error.HTTPError as e:
         return e.code, url, dict(e.headers)
     except Exception as e:
+        # 打印真实异常，否则 http=0 会把「网络抖动」和「未生效」搞混
+        print(f"      [调试] {type(e).__name__}: {str(e)[:160]}")
         return 0, str(e), {}
 
 
