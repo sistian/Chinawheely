@@ -113,6 +113,7 @@
     <div class="tabs">
       <button class="tab-btn active" id="tabLeads" data-tab="leads">线索<span class="cnt" id="cntLeads"></span></button>
       <button class="tab-btn" id="tabOrders" data-tab="orders">订单<span class="cnt" id="cntOrders"></span></button>
+      <button class="tab-btn" id="tabData" data-tab="data">数据<span class="cnt" id="cntData"></span></button>
     </div>
 
     <div id="viewLeads">
@@ -177,6 +178,32 @@
       <span class="row"><button class="ghost" id="oBtnPrev">上一页</button><button class="ghost" id="oBtnNext">下一页</button></span>
     </div>
     </div><!-- /viewOrders -->
+
+    <!-- ==================== 数据（自建流量分析） ==================== -->
+    <div id="viewData" class="hidden">
+    <div class="stats" id="aStats"></div>
+
+    <div class="card">
+      <div class="filters">
+        <div><label>事件</label><select id="aFEvent"><option value="all">全部</option></select></div>
+        <div class="row"><button id="aBtnSearch">筛选</button><button class="ghost" id="aBtnReset">重置</button><button class="ghost" id="aBtnRefresh">刷新</button></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:auto;">
+      <table>
+        <thead><tr>
+          <th>时间</th><th>事件</th><th>城市</th><th>路径</th><th>来源 (referrer)</th>
+        </tr></thead>
+        <tbody id="aRows"></tbody>
+      </table>
+      <div class="empty hidden" id="aEmpty">暂无事件数据。</div>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-bottom:40px;">
+      <span class="hint" id="aCountInfo"></span>
+    </div>
+    </div><!-- /viewData -->
   </div>
 </div>
 
@@ -285,8 +312,87 @@
     });
     $('viewLeads').classList.toggle('hidden', tab !== 'leads');
     $('viewOrders').classList.toggle('hidden', tab !== 'orders');
+    $('viewData').classList.toggle('hidden', tab !== 'data');
     if (tab === 'orders') loadOrders();
+    else if (tab === 'data') loadAnalytics();
     else load();
+  }
+
+  /* ---------- 流量分析（自建，替代 GA4） ---------- */
+  var aOffset = 0;
+  var A_EVENT_LABEL = {
+    page_view: '浏览',
+    booking_start: '开始预订',
+    booking_submit: '提交订单',
+    booking_error: '提交失败',
+    contact_submit: '提交询盘',
+    quote_request: '请求报价',
+    whatsapp_click: 'WhatsApp',
+    phone_click: '电话',
+    city_card_click: '城市卡片',
+    price_cta_click: '价格 CTA',
+    nav_click: '导航'
+  };
+
+  function aQuery() {
+    var p = [];
+    var ev = $('aFEvent').value;
+    if (ev && ev !== 'all') p.push('event=' + encodeURIComponent(ev));
+    p.push('limit=' + LIMIT);
+    return p.join('&');
+  }
+
+  function loadAnalytics() {
+    api('/analytics-stats?' + aQuery()).then(function(r) {
+      if (r.status === 401) { logout(true); return; }
+      if (!r.ok) { alert('加载失败：' + ((r.data && r.data.error) || r.status)); return; }
+      if (r.data && r.data.error) {
+        alert('加载失败：' + r.data.error + (r.data.detail ? '（' + r.data.detail + '）' : ''));
+        return;
+      }
+      renderAStats(r.data.stats || {});
+      renderARows(r.data.rows || []);
+      if (r.data.events && r.data.events.length) fillAEvents(r.data.events);
+    }).catch(function(){ alert('网络错误'); });
+  }
+
+  function renderAStats(s) {
+    var today = s.today || {};
+    var cards = [
+      ['今日浏览 PV', today.page_view || 0, false],
+      ['今日订单提交', today.booking_submit || 0, (today.booking_submit || 0) > 0],
+      ['今日询盘提交', today.contact_submit || 0, (today.contact_submit || 0) > 0],
+      ['今日事件总数', today.total || 0, false],
+      ['近 7 天会话', s.sessions7d || 0, false]
+    ];
+    $('aStats').innerHTML = cards.map(function(c) {
+      return '<div class="stat' + (c[2] ? ' alert' : '') + '"><div class="n">' + c[1] + '</div><div class="l">' + c[0] + '</div></div>';
+    }).join('');
+    $('cntData').textContent = today.total || 0;
+  }
+
+  function renderARows(rows) {
+    var tb = $('aRows');
+    show($('aEmpty'), rows.length === 0);
+    tb.innerHTML = rows.map(function(r) {
+      return '<tr>' +
+        '<td>' + esc(fmtTime(r.ts)) + '</td>' +
+        '<td>' + esc(A_EVENT_LABEL[r.event] || r.event || '-') + ' <span style="color:var(--muted);font-size:11px">' + esc(r.event || '') + '</span></td>' +
+        '<td>' + esc(r.city || '-') + '</td>' +
+        '<td>' + esc(r.path || '-') + '</td>' +
+        '<td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(r.referrer || '-') + '</td>' +
+      '</tr>';
+    }).join('');
+    $('aCountInfo').textContent = '最近 ' + rows.length + ' 条事件';
+  }
+
+  function fillAEvents(events) {
+    var sel = $('aFEvent');
+    var cur = sel.value;
+    sel.innerHTML = '<option value="all">全部</option>' + (events || []).map(function(e) {
+      return '<option value="' + esc(e) + '">' + esc(A_EVENT_LABEL[e] || e) + ' (' + esc(e) + ')</option>';
+    }).join('');
+    sel.value = cur;
   }
 
   /* ---------- 订单列表 ---------- */
@@ -647,6 +753,10 @@
     // 订单视图绑定
     $('tabLeads').addEventListener('click', function(){ switchTab('leads'); });
     $('tabOrders').addEventListener('click', function(){ switchTab('orders'); });
+    $('tabData').addEventListener('click', function(){ switchTab('data'); });
+    $('aBtnSearch').addEventListener('click', function(){ loadAnalytics(); });
+    $('aBtnReset').addEventListener('click', function(){ $('aFEvent').value = 'all'; loadAnalytics(); });
+    $('aBtnRefresh').addEventListener('click', function(){ loadAnalytics(); });
     $('oBtnSearch').addEventListener('click', function(){ oOffset = 0; loadOrders(); });
     $('oBtnReset').addEventListener('click', function(){
       $('oFStatus').value='all'; $('oFPay').value='all'; $('oFFrom').value='';
