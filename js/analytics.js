@@ -99,6 +99,13 @@
     return document.body.getAttribute('data-city') || '';
   }
 
+  /** 从链接 href 解析城市 slug（如 beijing.html → beijing），非城市页返回空 */
+  function cityFromHref(href) {
+    var m = String(href || '').match(/(?:^|\/)([a-z0-9_-]+)\.html(?:[?#]|$)/i);
+    if (m && m[1] && m[1] !== 'index') { return m[1]; }
+    return '';
+  }
+
   /** 从表单收集 UTM / 落地页维度 */
   function sessionContext() {
     try {
@@ -146,7 +153,8 @@
     return {
       event: eventName,
       path: window.location.pathname + window.location.search,
-      city: currentCity(),
+      // 事件自带 city 时（如城市卡片点击）优先用它，否则用当前页城市
+      city: (params && params.city) || currentCity(),
       referrer: (document.referrer || '').slice(0, 300),
       session_id: sessionId(),
       ua: userAgent(),
@@ -222,7 +230,8 @@
         window.cwgTrack('phone_click', sessionContext());
       } else if (/city-card/i.test(cls)) {
         window.cwgTrack('city_card_click', Object.assign(sessionContext(), {
-          city: (el.getAttribute('data-city') || currentCity())
+          // 首页城市卡片没有 data-city，从 href 推导目标城市
+          city: (el.getAttribute('data-city') || cityFromHref(href) || currentCity())
         }));
       } else if (/price-cta|qb-cta|pl-cta/i.test(cls)) {
         window.cwgTrack('price_cta_click', sessionContext());
