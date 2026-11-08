@@ -107,7 +107,7 @@ async function callApi(method, url, body) {
     pickup_date: '2026-12-20', pickup_time: '10:00', pax: 2, luggage: 2,
     notes: null, created_at: '2026-11-05T00:00:00Z', updated_at: '2026-11-05T00:00:00Z',
     // 关键：jsonb 列返回的是「已解析对象」，不是字符串
-    quote_json: { total: 328, usd: 46.2, lines: [{ name: '4座 经济型专车', pkg: 328 }] },
+    quote_json: { total: 328, usd: 46.2, lines: [{ name: '4-seat Economy Sedan', pkg: 328 }] },
     manage_token_hash: tokenHash,
     manage_token_expires_at: '2027-01-01T00:00:00Z'
   };

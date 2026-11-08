@@ -40,7 +40,7 @@ t('⑦ 城际 · 填 1200km/720min（不叠加机场超里程）', {
   product: 'intercity', fromCity: 'Beijing', toCity: 'Shanghai',
   routeKm: '1200', routeMinutes: '720',
 });
-t('⑧ 上海 6座商务车 · 填 60km/75min', {
+t('⑧ 上海 6-seat Business Van · 填 60km/75min', {
   city: 'shanghai', vehicle: 'mpv_6', routeKm: '60', routeMinutes: '75',
 });
 t('⑨ 恶意输入：routeKm=abc / routeMinutes=-50', { routeKm: 'abc', routeMinutes: '-50' });

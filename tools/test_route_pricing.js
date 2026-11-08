@@ -63,7 +63,7 @@ show('北京 接送机 · 填 0km/0min', {
   city: 'beijing', product: 'airport', vehicle: 'sedan_economy',
   routeKm: 0, routeMinutes: 0
 });
-// 11) 上海 6座商务车
+// 11) 上海 6-seat Business Van
 show('上海 接送机 6座 · 客人填 60km/75min', {
   city: 'shanghai', product: 'airport', vehicle: 'mpv_6',
   routeKm: 60, routeMinutes: 75
