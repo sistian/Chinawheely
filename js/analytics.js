@@ -27,7 +27,7 @@
 
   // ★↓↓ GA4 ID（留空则只走自建分析） ★↓↓
   // Chinawheely 专属数据流（GA4 属性 563169774 / Web 数据流 16296752182）
-  var GA_MEASUREMENT_ID = 'G-96ZBZERXVR';
+  var GA_MEASUREMENT_ID = 'G-C5QWKTNSQ6';
 
   // 自建分析接口（与 booking.html / contact.html 使用同一后端域名）
   var ANALYTICS_API = 'https://api.chinawheely.com/api/analytics';
