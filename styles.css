@@ -1157,3 +1157,15 @@
 
 /* 图库标题：转为非标题元素后保留 h2 的视觉（margin） */
 .gallery-title{ margin: 0.83em 0; }
+
+/* ===== On-this-page TOC（标题差异化 P1 自动生成） ===== */
+.toc{ margin:0 0 var(--space-10); padding:var(--space-5) var(--space-6); background:var(--color-gray-50);
+  border:1px solid var(--color-gray-200); border-radius:var(--radius-lg); }
+.toc-title{ font-weight:700; font-size:0.95rem; margin:0 0 var(--space-3); color:var(--color-gray-700); }
+.toc ul{ list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:2px var(--space-5); }
+.toc li{ margin:0; }
+.toc a{ display:block; font-size:0.92rem; color:var(--color-primary); text-decoration:none;
+  padding:3px 0; line-height:1.45; }
+.toc a:hover{ text-decoration:underline; }
+@media(max-width:640px){ .toc ul{ grid-template-columns:1fr; } }
