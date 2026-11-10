@@ -110,16 +110,19 @@
     <h1>Chinawheely 线索 · 订单管理</h1>
     <div class="row">
       <span class="who" id="whoami"></span>
+      <button class="ghost" id="btnHelp" style="padding:6px 12px;">帮助</button>
       <button class="ghost" id="btnPwd" style="padding:6px 12px;">修改密码</button>
       <button class="ghost" id="btnLogout" style="padding:6px 12px;">退出</button>
     </div>
   </header>
 
   <div class="wrap">
+    <div class="stats" id="ovStats" style="margin-bottom:12px"></div>
     <div class="tabs">
       <button class="tab-btn active" id="tabLeads" data-tab="leads">线索<span class="cnt" id="cntLeads"></span></button>
       <button class="tab-btn" id="tabOrders" data-tab="orders">订单<span class="cnt" id="cntOrders"></span></button>
       <button class="tab-btn" id="tabData" data-tab="data">数据<span class="cnt" id="cntData"></span></button>
+      <button class="tab-btn" id="tabPrice" data-tab="price">报价<span class="cnt" id="cntPrice"></span></button>
     </div>
 
     <div id="viewLeads">
@@ -186,8 +189,29 @@
     </div><!-- /viewOrders -->
 
     <!-- ==================== 数据（自建流量分析） ==================== -->
-    <div id="viewData" class="hidden">
+    
+    <div id="viewPrice" class="hidden">
+      <div class="filters" style="align-items:end">
+        <div style="flex:2"><label>城市（中文名 / 英文名 / 拼音）</label><input id="pCity" list="pCities" placeholder="如：成都 或 Chengdu" style="width:100%"/></div>
+        <datalist id="pCities"></datalist>
+        <div class="row"><label style="display:flex;align-items:center;gap:6px;font-weight:400"><input type="checkbox" id="pUsd" checked/> 显示 ≈$ 美元</label></div>
+        <div class="row"><button id="pBtnGo" class="ghost">查看</button></div>
+      </div>
+      <div id="pCard"></div>
+      <p class="hint" id="pNote"></p>
+    </div>
+
+<div id="viewData" class="hidden">
     <div class="stats" id="aStats"></div>
+      <div class="row" style="gap:14px;align-items:stretch;margin-bottom:14px">
+        <div style="flex:1;border:1px solid var(--line);border-radius:10px;padding:12px">
+          <b style="font-size:13px">今日转化漏斗</b><div id="aFunnel" style="margin-top:8px"></div>
+        </div>
+        <div style="flex:1;border:1px solid var(--line);border-radius:10px;padding:12px">
+          <b style="font-size:13px">最近事件 Top（城市 / 页面）</b><div id="aTop" style="margin-top:8px"></div>
+        </div>
+      </div>
+      
 
     <div class="card">
       <div class="filters">
@@ -247,6 +271,13 @@
     <div style="flex:1"><label>出发日期</label><input id="oDDate" type="date"/></div>
     <div style="flex:1"><label>出发时间</label><input id="oDTime" type="time"/></div>
   </div>
+  <div class="row qbtns" style="margin-bottom:12px;flex-wrap:wrap">
+    <button type="button" class="ghost" data-oq="confirmed">→ 已确认</button>
+    <button type="button" class="ghost" data-oq="in_service">→ 用车中</button>
+    <button type="button" class="ghost" data-oq="completed">→ 已完成</button>
+    <button type="button" class="ghost" data-oq="paid">¥ 标记已付</button>
+    <button type="button" class="ghost" data-oq="cancelled" style="color:var(--danger)">取消订单</button>
+  </div>
   <div class="row" style="margin-bottom:20px;">
     <button id="oDSave">保存</button>
     <button class="ghost" id="oDWhatsapp">WhatsApp</button>
@@ -255,6 +286,20 @@
     <button class="ghost" id="oDClose">关闭</button>
   </div>
   <div id="oDMsg" class="err"></div>
+</div>
+
+<div class="mask hidden" id="helpMask"></div>
+<div class="drawer hidden" id="helpPanel" style="width:min(460px,100%)">
+  <h3>后台使用说明</h3>
+  <div style="font-size:13px;line-height:1.8;color:var(--text,#333)">
+    <p><b>总览</b>：登录后顶部六卡 = 今日线索 / 今日订单 / 待确认 / 待核销 / 未收金 / 近7天会话。</p>
+    <p><b>线索 Tab</b>：contact / booking 表单产生的咨询。点行开抽屉：改状态、评级、备注，一键 WhatsApp / 邮件 / 复制。CSV 可导出。</p>
+    <p><b>订单 Tab</b>：三步预订表单产生的正式订单（CW- 开头参考号）。筛选支持服务状态 / 支付状态 / 日期 / 关键词。抽屉里「快捷动作」可一键流转状态或标记已付；也可手动改出发日期时间、备注。金额为人民币，含定金口径。</p>
+    <p><b>数据 Tab</b>：自建埋点（不上报 PII）。今日漏斗 = 浏览→开始预订→提交订单→询盘；Top 城市/页面来自最近事件。</p>
+    <p><b>报价 Tab</b>：331 城报价速查，与线上报价引擎同源（pricing/pricing.json）。接送机/城际同价（含 35km+60min），包车 5 档时长。城际按出发城市计价。超程按 perKm、超时按 perMin（30 分钟计费块）。</p>
+    <p><b>安全</b>：会话仅存于当前标签页（关闭即失效）；右上角可改密码。若 401 会自动退回登录页。</p>
+  </div>
+  <div class="row" style="margin-top:14px"><button class="ghost" id="helpClose">关闭</button></div>
 </div>
 
 <!-- 修改密码 -->
@@ -319,6 +364,8 @@
     $('viewLeads').classList.toggle('hidden', tab !== 'leads');
     $('viewOrders').classList.toggle('hidden', tab !== 'orders');
     $('viewData').classList.toggle('hidden', tab !== 'data');
+    $('viewPrice').classList.toggle('hidden', tab !== 'price');
+    if (tab === 'price') loadPricing();
     if (tab === 'orders') loadOrders();
     else if (tab === 'data') loadAnalytics();
     else load();
@@ -375,6 +422,7 @@
       return '<div class="stat' + (c[2] ? ' alert' : '') + '"><div class="n">' + c[1] + '</div><div class="l">' + c[0] + '</div></div>';
     }).join('');
     $('cntData').textContent = today.total || 0;
+    renderAFunnel(today);
   }
 
   function renderARows(rows) {
@@ -390,6 +438,7 @@
       '</tr>';
     }).join('');
     $('aCountInfo').textContent = '最近 ' + rows.length + ' 条事件';
+    renderATop(rows);
   }
 
   function fillAEvents(events) {
@@ -559,7 +608,9 @@
         } catch(e){}
         $('whoami').textContent = r.data.email;
         show($('loginView'), false); show($('appView'), true);
+        load();show($('loginView'), false); show($('appView'), true);
         load();
+        loadOverview();
       })
       .catch(function(){ $('loginBtn').disabled = false; $('loginErr').textContent = '网络错误，请重试'; });
   }
@@ -716,6 +767,127 @@
     if (!silent) $('loginErr').textContent = '';
   }
 
+
+  /* ---------- v2: 总览 / 报价 / 漏斗 / 帮助 ---------- */
+  function loadOverview(){
+    Promise.all([
+      api('/admin/leads?limit=1'),
+      api('/admin/orders?limit=1'),
+      api('/analytics-stats?limit=1')
+    ]).then(function(rs){
+      if (rs[2] && rs[2].status === 401) { logout(true); return; }
+      var ls = (rs[0].ok && rs[0].data && rs[0].data.stats) || {};
+      var os = (rs[1].ok && rs[1].data && rs[1].data.stats) || {};
+      var as = (rs[2].ok && rs[2].data && rs[2].data.stats) || {};
+      var cards = [
+        ['今日线索', ls.today || 0, (ls.today || 0) > 0],
+        ['今日订单', os.today || 0, (os.today || 0) > 0],
+        ['待确认订单', (os.byStatus && os.byStatus.pending) || 0, ((os.byStatus && os.byStatus.pending) || 0) > 0],
+        ['待核销支付', (os.byPayment && os.byPayment.payment_submitted) || 0, ((os.byPayment && os.byPayment.payment_submitted) || 0) > 0],
+        ['未收金 ¥', os.pendingValueCny || 0, false],
+        ['近7天会话', as.sessions7d || 0, false]
+      ];
+      $('ovStats').innerHTML = cards.map(function(c){
+        return '<div class="stat' + (c[2] ? ' alert' : '') + '"><div class="n">' + c[1] + '</div><div class="l">' + c[0] + '</div></div>';
+      }).join('');
+    }).catch(function(){});
+  }
+
+  var pricingData = null, cityIndex = {};
+  function loadPricing(){
+    if (pricingData) { renderPriceCard(); return; }
+    fetch('/pricing/pricing.json').then(function(r){ return r.json(); }).then(function(d){
+      pricingData = d;
+      var cities = d.cities || {};
+      $('cntPrice').textContent = d.meta && d.meta.cityCount ? d.meta.cityCount : Object.keys(cities).length;
+      var opts = [];
+      Object.keys(cities).forEach(function(slug){
+        var c = cities[slug];
+        var label = c.cn + ' ' + c.en;
+        cityIndex[label] = slug;
+        cityIndex[c.cn] = slug;
+        cityIndex[c.en] = slug;
+        cityIndex[slug] = slug;
+        opts.push('<option value="' + esc(label) + '">');
+      });
+      $('pCities').innerHTML = opts.join('');
+      if (!$('pCity').value) $('pCity').value = cities.beijing ? (cities.beijing.cn + ' ' + cities.beijing.en) : label0(cities);
+      renderPriceCard();
+      var m = d.meta || {};
+      $('pNote').textContent = '口径：接送机/城际同价（含 35km + 60min）；城际按出发城市计价；包车按档位含时长里程；超程 ¥/km、超时 ¥/min（30 分钟计费块）；汇率 1 USD = ' +
+        (m.usdCnyRate || '?') + ' CNY；53 城为报价单显式价，其余按同省参考城。';
+    }).catch(function(){ $('pCard').innerHTML = '<p class="err">报价数据加载失败，请刷新重试。</p>'; });
+  }
+  function label0(cities){ var k = Object.keys(cities)[0]; return cities[k].cn + ' ' + cities[k].en; }
+  function money(v, usd){
+    if (v == null) return '-';
+    var t = '¥' + v;
+    if (usd && pricingData && pricingData.meta && pricingData.meta.usdCnyRate) {
+      t += ' <span style="color:var(--muted);font-size:11px">≈$' + Math.round(v / pricingData.meta.usdCnyRate) + '</span>';
+    }
+    return t;
+  }
+  function renderPriceCard(){
+    if (!pricingData) return;
+    var usd = $('pUsd').checked;
+    var q = $('pCity').value.trim();
+    var slug = cityIndex[q] || cityIndex[q.split(' ')[0]] || 'beijing';
+    var c = pricingData.cities[slug];
+    if (!c) { $('pCard').innerHTML = '<p class="err">未找到该城市，试试中文名或拼音。</p>'; return; }
+    var ap = pricingData.vehicles.airport || [];
+    var rows1 = ap.map(function(v){
+      var pr = (c.airport || {})[v.key];
+      if (!pr) return '';
+      return '<tr><td>' + esc(pr.name || v.name) + '</td><td>' + (pr.seats || v.seats || '-') + '座 / ' + (pr.bags || v.bags || '-') + '行李</td>' +
+        '<td style="font-weight:600">' + money(pr.pkg, usd) + '</td>' +
+        '<td>' + (pr.includedKm || 35) + 'km</td>' +
+        '<td>¥' + pr.perKm + '/km · ¥' + pr.perMin + '/min</td></tr>';
+    }).join('');
+    var tiers = pricingData.charterTiers || [];
+    var cvs = pricingData.vehicles.charter || [];
+    var head = '<tr><th>包车车型</th>' + tiers.map(function(t){ return '<th>' + esc(t.name) + '</th>'; }).join('') + '</tr>';
+    var rows2 = cvs.map(function(v){
+      var cell = tiers.map(function(t){
+        var pr = ((c.charter || {})[v.key] || {}).tiers && c.charter[v.key].tiers[t.key];
+        return '<td>' + (pr ? money(pr.pkg, usd) : '-') + '</td>';
+      }).join('');
+      return '<tr><td style="font-weight:600">' + esc(v.name) + '</td>' + cell + '</tr>';
+    }).join('');
+    $('pCard').innerHTML =
+      '<div class="card" style="border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px">' +
+      '<h3 style="margin:0 0 4px">' + esc(c.cn) + ' <span style="color:var(--muted);font-size:13px">' + esc(c.en) + ' · ' + esc(slug) + '</span></h3>' +
+      '<b style="font-size:13px">接送机 / 城际（同价）</b>' +
+      '<div class="table-wrap" style="overflow-x:auto"><table style="margin:8px 0 14px"><thead><tr><th>车型</th><th>规格</th><th>一口价</th><th>含里程</th><th>超程/超时</th></tr></thead><tbody>' + rows1 + '</tbody></table></div>' +
+      '<b style="font-size:13px">包车（按档位）</b>' +
+      '<div class="table-wrap" style="overflow-x:auto"><table style="margin:8px 0 0"><thead>' + head + '</thead><tbody>' + rows2 + '</tbody></table></div>' +
+      '</div>';
+  }
+
+  function renderAFunnel(t){
+    t = t || {};
+    var steps = [['page_view', '浏览'], ['booking_start', '开始预订'], ['booking_submit', '提交订单'], ['contact_submit', '询盘']];
+    var max = 1;
+    steps.forEach(function(s){ if ((t[s[0]] || 0) > max) max = t[s[0]]; });
+    $('aFunnel').innerHTML = steps.map(function(s){
+      var v = t[s[0]] || 0;
+      var w = Math.max(4, Math.round(v / max * 100));
+      return '<div style="margin-bottom:8px"><div style="font-size:12px;color:var(--muted)">' + s[1] + ' · ' + v + '</div>' +
+        '<div style="height:16px;border-radius:4px;background:var(--green);width:' + w + '%"></div></div>';
+    }).join('') || '<p class="hint">暂无数据</p>';
+  }
+  function renderATop(rows){
+    var byCity = {}, byPath = {};
+    rows.forEach(function(r){
+      if (r.city) byCity[r.city] = (byCity[r.city] || 0) + 1;
+      if (r.path) byPath[r.path] = (byPath[r.path] || 0) + 1;
+    });
+    function top5(o){
+      return Object.keys(o).sort(function(a, b){ return o[b] - o[a]; }).slice(0, 5)
+        .map(function(k){ return '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(k) + '</span><b>' + o[k] + '</b></div>'; }).join('');
+    }
+    $('aTop').innerHTML = (top5(byCity) || '<p class="hint">暂无数据</p>') + '<div style="height:8px"></div>' + (top5(byPath) || '');
+  }
+
   /* ---------- 绑定 ---------- */
   document.addEventListener('DOMContentLoaded', function(){
     $('loginBtn').addEventListener('click', doLogin);
@@ -760,6 +932,21 @@
     $('tabLeads').addEventListener('click', function(){ switchTab('leads'); });
     $('tabOrders').addEventListener('click', function(){ switchTab('orders'); });
     $('tabData').addEventListener('click', function(){ switchTab('data'); });
+    $('tabPrice').addEventListener('click', function(){ switchTab('price'); });
+    $('pBtnGo').addEventListener('click', renderPriceCard);
+    $('pCity').addEventListener('change', renderPriceCard);
+    $('pUsd').addEventListener('change', renderPriceCard);
+    $('btnHelp').addEventListener('click', function(){ show($('helpMask'), true); show($('helpPanel'), true); });
+    $('helpClose').addEventListener('click', function(){ show($('helpPanel'), false); show($('helpMask'), false); });
+    $('helpMask').addEventListener('click', function(){ show($('helpPanel'), false); show($('helpMask'), false); });
+    $('oDrawer').addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('[data-oq]') : null;
+      if (!b || !oCurrent) return;
+      var a = b.getAttribute('data-oq');
+      if (a === 'paid') { $('oDPay').value = 'paid'; saveODetail(); return; }
+      if (a === 'cancelled') { if (confirm('确认取消订单 ' + oCurrent.ref + '？')) { $('oDStatus').value = 'cancelled'; saveODetail(); } return; }
+      $('oDStatus').value = a; saveODetail();
+    });
     $('aBtnSearch').addEventListener('click', function(){ loadAnalytics(); });
     $('aBtnReset').addEventListener('click', function(){ $('aFEvent').value = 'all'; loadAnalytics(); });
     $('aBtnRefresh').addEventListener('click', function(){ loadAnalytics(); });
@@ -803,6 +990,8 @@
       api('/admin/leads?limit=1').then(function(r){
         if (r.status === 401) { logout(true); return; }
         load();
+        // 预取订单计数load();
+        loadOverview();
         // 预取订单计数
         api('/admin/orders?limit=1').then(function(r2){
           if (r2.ok && r2.data.stats) $('cntOrders').textContent = r2.data.stats.total || 0;
