@@ -231,7 +231,7 @@ def build_overview(city, f):
  </div>
  </div>
  </section>
-""" % (sec_header("%s at a Glance" % city, "%s blends local culture with regional attractions%s." % (city, seat)),
+""" % (sec_header("%s at a Glance" % city, "%s blends local culture with regional attractions%s" % (city, seat)),
        cards,
        f.get("name_origin_html") or "<p>The name %s reflects the area's long local heritage and trading history.</p>" % city,
        f.get("education_html") or "<p>%s is served by local colleges, vocational schools and teacher-training institutions rather than by large research universities.</p>" % city,
