@@ -455,7 +455,7 @@ def build_getting(city, f):
                             "%s has no commercial passenger airport of its own, so most visitors arrive by rail or road "
                             "and transfer to a private car for the last leg. Your driver collects you at the station "
                             "or hotel and takes you straight to your destination in %s." % (city, city)))
-    for extra in (f.get("airport_alt") or [])[:1]:
+    for extra in (f.get("airport_alt") or [])[:3]:
         acards.append(acard("✈️ %s" % extra.get("name_en", ""), "Secondary airport",
                             esc(extra.get("note_en") or "")))
     rcards = []
