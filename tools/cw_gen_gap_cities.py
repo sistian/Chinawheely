@@ -99,11 +99,11 @@ def build_hero(city, slug, ap, img, photo):
     bg = ("background-image: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85)), url('%s');" % img) if photo \
          else "background: linear-gradient(rgba(15,46,37,0.75), rgba(15,46,37,0.85));"
     if ap:
-        h1 = "%s Airport Transfer &amp; Private Car" % city
+        h1 = "%s <span>Airport Transfer &amp; Private Car</span>" % city
         lead = ("%s to downtown with a licensed professional driver. Fixed price, free flight tracking. "
                 "Explore %s in comfort." % (ap.get("name_en") or (city + " Airport"), city))
     else:
-        h1 = "%s Private Car &amp; Transfer Service" % city
+        h1 = "%s <span>Private Car &amp; Transfer Service</span>" % city
         lead = ("Door-to-door private car service across %s — station, airport and intercity transfers with a "
                 "licensed local driver who knows the roads." % city)
     return """<!-- City Hero -->
