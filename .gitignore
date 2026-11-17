@@ -33,3 +33,7 @@ npm-debug.log*
 pricing/source/
 .vercel
 .env*
+
+# 图片工具缓存与报告
+tools/img_hash_cache.json
+tools/gallery_expand_report.json
