@@ -5,92 +5,10 @@
    "宜春",
    "伊春",
    "保留当前"
-  ],
-  [
-   "suzhou",
-   "宿州",
-   "苏州市",
-   "改为页面值"
-  ],
-  [
-   "fuzhou",
-   "抚州",
-   "福州市",
-   "改为页面值"
-  ],
-  [
-   "jian",
-   "吉安",
-   "建阳",
-   "改为页面值"
-  ],
-  [
-   "yulin",
-   "榆林",
-   "玉林",
-   "改为页面值"
   ]
  ],
- "en_fixed": [
-  [
-   "wulanchabu",
-   "Ulanqab",
-   "Wulanchabu"
-  ],
-  [
-   "jian",
-   "Ji'an",
-   "Jianyang"
-  ],
-  [
-   "changdou",
-   "Changdou",
-   "Changdu"
-  ]
- ],
- "dupes": [
-  "taizhou",
-  "yichun"
- ],
- "missing_added": [
-  "bitu",
-  "chaohu",
-  "dali",
-  "gannan",
-  "honghe",
-  "hoting",
-  "huaning",
-  "jiaxian",
-  "juancheng",
-  "karakax",
-  "kashgar",
-  "kuytun",
-  "laohekou",
-  "leiyang",
-  "liangshan",
-  "libo",
-  "lingyuan",
-  "linxia",
-  "lufeng",
-  "luoping",
-  "luzhi",
-  "qiqihar",
-  "rongcheng",
-  "taizhou_js",
-  "wenshan",
-  "wulingyuan",
-  "xiangxi",
-  "xichang",
-  "xilinhot",
-  "xuwen",
-  "yanbian",
-  "yichun_hlj",
-  "yongchuan",
-  "yongxi",
-  "yuxian",
-  "yuzhou",
-  "zhaodong",
-  "zhouzhuang"
- ],
- "total": 333
+ "en_fixed": [],
+ "dupes": [],
+ "missing_added": [],
+ "total": 359
 }
