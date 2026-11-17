@@ -15,6 +15,9 @@ jobs:
       - name: HTML 完整性校验（标签配平 / JSON-LD / 资源存在 / title / description / h1）
         run: python3 tools/cw_html_check.py .
 
+      - name: CTA 城市预填校验（?city= 参数不得指向同名他城）
+        run: python3 tools/cw_check_cta_city.py .
+
       - name: 站点体检（OG / 内链 / 薄页 / 图片体积 / sitemap / robots）
         run: python3 tools/cw_audit.py .
 
