@@ -54,6 +54,12 @@ ALIAS = {
     "哈米Hami": "hami",
     "信仰Xinxiang": "xinxiang",
     "南洋Nanyang": "nanyang",
+    # 源目录里以县级市/县命名、但站点用的是上级地级市页
+    "北京Beijing": "beijing",
+    "华宁Huaning": "haidong",
+    "墨玉Karakax": "hoting",
+    "禄丰Lufeng": "chuxiong",
+    "郏县Jiaxian": "pingdingshan",
 }
 
 
