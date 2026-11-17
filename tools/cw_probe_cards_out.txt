@@ -1,0 +1,25 @@
+total=333 visible=280 withImg=280
+CARD0 name=Beijing
+cardRect=[77,2762,300,188]
+imgRect=[77,2762,300,188] nat=420x315
+capRect=[77,2762,300,134]
+capPos=absolute align=center just=center disp=flex dir=column
+nmRect=[167,2786,119,54] disp=block fs=24px lh=38.4px
+cnRect=[195,2846,64,34] disp=block fs=16px txt=北京
+overlap=no
+CARD1 name=Tianjin
+cardRect=[401,2762,300,188]
+imgRect=[401,2762,300,188] nat=420x315
+capRect=[401,2762,300,134]
+capPos=absolute align=center just=center disp=flex dir=column
+nmRect=[491,2786,118,54] disp=block fs=24px lh=38.4px
+cnRect=[519,2846,64,34] disp=block fs=16px txt=天津
+overlap=no
+CARD2 name=Shanghai
+cardRect=[725,2762,300,188]
+imgRect=[725,2762,300,188] nat=576x383
+capRect=[725,2762,300,134]
+capPos=absolute align=center just=center disp=flex dir=column
+nmRect=[799,2786,150,54] disp=block fs=24px lh=38.4px
+cnRect=[843,2846,64,34] disp=block fs=16px txt=上海
+overlap=no
